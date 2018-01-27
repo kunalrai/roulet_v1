@@ -1,0 +1,538 @@
+﻿
+@{
+    ViewBag.Title = "game";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12 ">
+        <div class="portlet box green" id="timer-box">
+            <div class="portlet-title">
+                <div class="caption" id="timer">
+                    <h1><span id="timer_text"></span></h1>
+                </div>
+            </div>
+        </div>
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-comments"></i>BETS
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-scrollable">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th> Bet</th>
+                                <th> 1</th>
+                                <th> 5</th>
+                                <th> 10 </th>
+                                <th> 50 </th>
+                                <th> 100 </th>
+                                <th> 500 </th>
+                                <th> 1000 </th>
+                                <th> 5000 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>00</td>
+                                <td id="10-1"></td>
+                                <td id="10-5"></td>
+                                <td id="10-10"></td>
+                                <td id="10-50"></td>
+                                <td id="10-100"></td>
+                                <td id="10-500"></td>
+                                <td id="10-1000"></td>
+                                <td id="10-5000"></td>
+                            </tr>
+                              <tr>
+                                  <td>0</td>
+                                  <td id="0-1"></td>
+                                  <td id="0-5"></td>
+                                  <td id="0-10"></td>
+                                  <td id="0-50"></td>
+                                  <td id="0-100"></td>
+                                  <td id="0-500"></td>
+                                  <td id="0-1000"></td>
+                                  <td id="0-5000"></td>
+                              </tr>
+                            @*<tr>
+                                <td>00</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>*@
+                            <tr>
+                                <td>1</td>
+                                <td id="1-1"></td>
+                                <td id="1-5"></td>
+                                <td id="1-10"></td>
+                                <td id="1-50"></td>
+                                <td id="1-100"></td>
+                                <td id="1-500"></td>
+                                <td id="1-1000"></td>
+                                <td id="1-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td id="2-1"></td>
+                                <td id="2-5"></td>
+                                <td id="2-10"></td>
+                                <td id="2-50"></td>
+                                <td id="2-100"></td>
+                                <td id="2-500"></td>
+                                <td id="2-1000"></td>
+                                <td id="2-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td id="3-1"></td>
+                                <td id="3-5"></td>
+                                <td id="3-10"></td>
+                                <td id="3-50"></td>
+                                <td id="3-100"></td>
+                                <td id="3-500"></td>
+                                <td id="3-1000"></td>
+                                <td id="3-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td id="4-1"></td>
+                                <td id="4-5"></td>
+                                <td id="4-10"></td>
+                                <td id="4-50"></td>
+                                <td id="4-100"></td>
+                                <td id="4-500"></td>
+                                <td id="4-1000"></td>
+                                <td id="4-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td id="5-1"></td>
+                                <td id="5-5"></td>
+                                <td id="5-10"></td>
+                                <td id="5-50"></td>
+                                <td id="5-100"></td>
+                                <td id="5-500"></td>
+                                <td id="5-1000"></td>
+                                <td id="5-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td id="6-1"></td>
+                                <td id="6-5"></td>
+                                <td id="6-10"></td>
+                                <td id="6-50"></td>
+                                <td id="6-100"></td>
+                                <td id="6-500"></td>
+                                <td id="6-1000"></td>
+                                <td id="6-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td id="7-1"></td>
+                                <td id="7-5"></td>
+                                <td id="7-10"></td>
+                                <td id="7-50"></td>
+                                <td id="7-100"></td>
+                                <td id="7-500"></td>
+                                <td id="7-1000"></td>
+                                <td id="7-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td id="8-1"></td>
+                                <td id="8-5"></td>
+                                <td id="8-10"></td>
+                                <td id="8-50"></td>
+                                <td id="8-100"></td>
+                                <td id="8-500"></td>
+                                <td id="8-1000"></td>
+                                <td id="8-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>9</td>
+                                <td id="9-1"></td>
+                                <td id="9-5"></td>
+                                <td id="9-10"></td>
+                                <td id="9-50"></td>
+                                <td id="9-100"></td>
+                                <td id="9-500"></td>
+                                <td id="9-1000"></td>
+                                <td id="9-5000"></td>
+                            </tr>
+
+                            <tr>
+                                <td>10</td>
+                                <td id="0-1"></td>
+                                <td id="0-5"></td>
+                                <td id="0-10"></td>
+                                <td id="0-50"></td>
+                                <td id="0-100"></td>
+                                <td id="0-500"></td>
+                                <td id="0-1000"></td>
+                                <td id="0-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td id="11-1"></td>
+                                <td id="11-5"></td>
+                                <td id="11-10"></td>
+                                <td id="11-50"></td>
+                                <td id="11-100"></td>
+                                <td id="11-500"></td>
+                                <td id="11-1000"></td>
+                                <td id="11-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td id="12-1"></td>
+                                <td id="12-5"></td>
+                                <td id="12-10"></td>
+                                <td id="12-50"></td>
+                                <td id="12-100"></td>
+                                <td id="12-500"></td>
+                                <td id="12-1000"></td>
+                                <td id="12-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>13</td>
+                                <td id="13-1"></td>
+                                <td id="13-5"></td>
+                                <td id="13-10"></td>
+                                <td id="13-50"></td>
+                                <td id="13-100"></td>
+                                <td id="13-500"></td>
+                                <td id="13-1000"></td>
+                                <td id="13-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td id="14-1"></td>
+                                <td id="14-5"></td>
+                                <td id="14-10"></td>
+                                <td id="14-50"></td>
+                                <td id="14-100"></td>
+                                <td id="14-500"></td>
+                                <td id="14-1000"></td>
+                                <td id="14-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td id="15-1"></td>
+                                <td id="15-5"></td>
+                                <td id="15-10"></td>
+                                <td id="15-50"></td>
+                                <td id="15-100"></td>
+                                <td id="15-500"></td>
+                                <td id="15-1000"></td>
+                                <td id="15-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>16</td>
+                                <td id="16-1"></td>
+                                <td id="16-5"></td>
+                                <td id="16-10"></td>
+                                <td id="16-50"></td>
+                                <td id="16-100"></td>
+                                <td id="16-500"></td>
+                                <td id="16-1000"></td>
+                                <td id="16-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>17</td>
+                                <td id="17-1"></td>
+                                <td id="17-5"></td>
+                                <td id="17-10"></td>
+                                <td id="17-50"></td>
+                                <td id="17-100"></td>
+                                <td id="17-500"></td>
+                                <td id="17-1000"></td>
+                                <td id="17-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>18</td>
+                                <td id="18-1"></td>
+                                <td id="18-5"></td>
+                                <td id="18-10"></td>
+                                <td id="18-50"></td>
+                                <td id="18-100"></td>
+                                <td id="18-500"></td>
+                                <td id="18-1000"></td>
+                                <td id="18-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>19</td>
+                                <td id="19-1"></td>
+                                <td id="19-5"></td>
+                                <td id="19-10"></td>
+                                <td id="19-50"></td>
+                                <td id="19-100"></td>
+                                <td id="19-500"></td>
+                                <td id="19-1000"></td>
+                                <td id="19-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td id="20-1"></td>
+                                <td id="20-5"></td>
+                                <td id="20-10"></td>
+                                <td id="20-50"></td>
+                                <td id="20-100"></td>
+                                <td id="20-500"></td>
+                                <td id="20-1000"></td>
+                                <td id="20-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>21</td>
+                                <td id="21-1"></td>
+                                <td id="21-5"></td>
+                                <td id="21-10"></td>
+                                <td id="21-50"></td>
+                                <td id="21-100"></td>
+                                <td id="21-500"></td>
+                                <td id="21-1000"></td>
+                                <td id="21-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>22</td>
+                                <td id="22-1"></td>
+                                <td id="22-5"></td>
+                                <td id="22-10"></td>
+                                <td id="22-50"></td>
+                                <td id="22-100"></td>
+                                <td id="22-500"></td>
+                                <td id="22-1000"></td>
+                                <td id="22-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>23</td>
+                                <td id="23-1"></td>
+                                <td id="23-5"></td>
+                                <td id="23-10"></td>
+                                <td id="23-50"></td>
+                                <td id="23-100"></td>
+                                <td id="23-500"></td>
+                                <td id="23-1000"></td>
+                                <td id="23-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>24</td>
+                                <td id="24-1"></td>
+                                <td id="24-5"></td>
+                                <td id="24-10"></td>
+                                <td id="24-50"></td>
+                                <td id="24-100"></td>
+                                <td id="24-500"></td>
+                                <td id="24-1000"></td>
+                                <td id="24-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>25</td>
+                                <td id="25-1"></td>
+                                <td id="25-5"></td>
+                                <td id="25-10"></td>
+                                <td id="25-50"></td>
+                                <td id="25-100"></td>
+                                <td id="25-500"></td>
+                                <td id="25-1000"></td>
+                                <td id="25-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>26</td>
+                                <td id="26-1"></td>
+                                <td id="26-5"></td>
+                                <td id="26-10"></td>
+                                <td id="26-50"></td>
+                                <td id="26-100"></td>
+                                <td id="26-500"></td>
+                                <td id="26-1000"></td>
+                                <td id="26-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>27</td>
+                                <td id="27-1"></td>
+                                <td id="27-5"></td>
+                                <td id="27-10"></td>
+                                <td id="27-50"></td>
+                                <td id="27-100"></td>
+                                <td id="27-500"></td>
+                                <td id="27-1000"></td>
+                                <td id="27-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>28</td>
+                                <td id="28-1"></td>
+                                <td id="28-5"></td>
+                                <td id="28-10"></td>
+                                <td id="28-50"></td>
+                                <td id="28-100"></td>
+                                <td id="28-500"></td>
+                                <td id="28-1000"></td>
+                                <td id="28-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>29</td>
+                                <td id="29-1"></td>
+                                <td id="29-5"></td>
+                                <td id="29-10"></td>
+                                <td id="29-50"></td>
+                                <td id="29-100"></td>
+                                <td id="29-500"></td>
+                                <td id="29-1000"></td>
+                                <td id="29-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>30</td>
+                                <td id="30-1"></td>
+                                <td id="30-5"></td>
+                                <td id="30-10"></td>
+                                <td id="30-50"></td>
+                                <td id="30-100"></td>
+                                <td id="30-500"></td>
+                                <td id="30-1000"></td>
+                                <td id="30-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>31</td>
+                                <td id="31-1"></td>
+                                <td id="31-5"></td>
+                                <td id="31-10"></td>
+                                <td id="31-50"></td>
+                                <td id="31-100"></td>
+                                <td id="31-500"></td>
+                                <td id="31-1000"></td>
+                                <td id="31-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>32</td>
+                                <td id="32-1"></td>
+                                <td id="32-5"></td>
+                                <td id="32-10"></td>
+                                <td id="32-50"></td>
+                                <td id="32-100"></td>
+                                <td id="32-500"></td>
+                                <td id="32-1000"></td>
+                                <td id="32-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>33</td>
+                                <td id="33-1"></td>
+                                <td id="33-5"></td>
+                                <td id="33-10"></td>
+                                <td id="33-50"></td>
+                                <td id="33-100"></td>
+                                <td id="33-500"></td>
+                                <td id="33-1000"></td>
+                                <td id="33-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>34</td>
+                                <td id="34-1"></td>
+                                <td id="34-5"></td>
+                                <td id="34-10"></td>
+                                <td id="34-50"></td>
+                                <td id="34-100"></td>
+                                <td id="34-500"></td>
+                                <td id="34-1000"></td>
+                                <td id="34-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>35</td>
+                                <td id="35-1"></td>
+                                <td id="35-5"></td>
+                                <td id="35-10"></td>
+                                <td id="35-50"></td>
+                                <td id="35-100"></td>
+                                <td id="35-500"></td>
+                                <td id="35-1000"></td>
+                                <td id="35-5000"></td>
+                            </tr>
+                            <tr>
+                                <td>36</td>
+                                <td id="36-1"></td>
+                                <td id="36-5"></td>
+                                <td id="36-10"></td>
+                                <td id="36-50"></td>
+                                <td id="36-100"></td>
+                                <td id="36-500"></td>
+                                <td id="36-1000"></td>
+                                <td id="36-5000"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="portlet light ">
+            <div class="portlet-title">
+                <div class="caption">
+                    <span class="caption-subject bold uppercase">Must select</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-scrollable">
+                    <table class="table table-bordered" id="buttons-table">
+                        <tbody>
+                            <tr>
+                                <td><button type="button" class="btn btn-default  must">1</button></td>
+                                <td> <button type="button" class="btn btn-default must">2</button></td>
+                                <td> <button type="button" class="btn btn-default must">3</button> </td>
+                                <td> <button type="button" class="btn btn-default must">4</button> </td>
+                                <td> <button type="button" class="btn btn-default must">5</button> </td>
+                                <td> <button type="button" class="btn btn-default must">6</button> </td>
+                                <td> <button type="button" class="btn btn-default must">7</button> </td>
+                                <td> <button type="button" class="btn btn-default must">8</button> </td>
+                                <td> <button type="button" class="btn btn-default must">9</button> </td>
+                                <td> <button type="button" class="btn btn-default must">10</button> </td>
+                            </tr>
+                            <tr>
+                                <td><button type="button" class="btn btn-default must">11</button></td>
+                                <td> <button type="button" class="btn btn-default must">12</button></td>
+                                <td> <button type="button" class="btn btn-default must">13</button> </td>
+                                <td> <button type="button" class="btn btn-default must">14</button> </td>
+                                <td> <button type="button" class="btn btn-default must">15</button> </td>
+                                <td> <button type="button" class="btn btn-default must">16</button> </td>
+                                <td> <button type="button" class="btn btn-default must">17</button> </td>
+                                <td> <button type="button" class="btn btn-default must">18</button> </td>
+                                <td> <button type="button" class="btn btn-default must">19</button> </td>
+                                <td> <button type="button" class="btn btn-default must">20</button> </td>
+                            </tr>
+                            <tr>
+                                <td><button type="button" class="btn btn-default must">21</button></td>
+                                <td> <button type="button" class="btn btn-default must">22</button></td>
+                                <td> <button type="button" class="btn btn-default must">23</button> </td>
+                                <td> <button type="button" class="btn btn-default must">24</button> </td>
+                                <td> <button type="button" class="btn btn-default must">25</button> </td>
+                                <td> <button type="button" class="btn btn-default must">26</button> </td>
+                                <td> <button type="button" class="btn btn-default must">27</button> </td>
+                                <td> <button type="button" class="btn btn-default must">28</button> </td>
+                                <td> <button type="button" class="btn btn-default must">29</button> </td>
+                                <td> <button type="button" class="btn btn-default must">30</button> </td>
+                            </tr>
+                            <tr>
+                                <td><button type="button" class="btn btn-default must">31</button></td>
+                                <td><button type="button" class="btn btn-default must">32</button></td>
+                                <td><button type="button" class="btn btn-default must">33</button></td>
+                                <td><button type="button" class="btn btn-default must">34</button></td>
+                                <td><button type="button" class="btn btn-default must">35</button></td>
+                                <td><button type="button" class="btn btn-default must">36</button></td>
+                                <td><button type="button" class="btn btn-default must">0</button></td>
+                                <td> <button type="button" class="btn btn-default must">00</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

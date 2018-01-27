@@ -1,0 +1,208 @@
+﻿
+@{
+
+    Newtonsoft.Json.Linq.JObject CurrentUser = Authentication.UserFromCookie();
+
+    int current_user_access = CurrentUser.Value<int>("access_level");
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    Dictionary<int, string> access_levels = new Dictionary<int, string>();
+
+    int  current = 0;
+
+    access_levels.Add(0, "User");
+
+    access_levels.Add(1, "Main");
+
+    access_levels.Add(2, "Area Manager");
+
+    if (ViewBag.access!= null) {
+
+        current = ViewBag.access;
+
+    }
+    else if(ViewBag.access_level != null)
+    {
+
+        current = ViewBag.access_level;
+
+    }
+
+    var actionName = HttpContext.Current.Request.RequestContext.RouteData.Values["action"].ToString().ToLowerInvariant();
+
+}
+
+<!-- BEGIN PAGE HEADER-->
+
+<h1 class="page-title">
+    @(current==0?"User Profile" :(current==2?"Area Manager Profile":"Main Profile") )
+</h1>
+<!-- END PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+
+        <!-- BEGIN PROFILE CONTENT -->
+
+        <div class="profile-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="portlet light ">
+                        <div class="portlet-title tabbable-line">
+                            <div class="caption">
+                                <i class="icon-user font-dark"></i>
+                                <span class="caption-subject font-dark sbold uppercase">@(current==0?"User Profile" :(current==2?"Area Manager Profile":"Main Profile") )</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <form role="form" id="update-profile">
+                                <input type="hidden" name="id" value="@if (ViewBag.id != null) { @ViewBag.id; }" id="user-id" />
+                                <div class="form-group">
+                                    <label class="control-label">First Name</label>
+                                    <input type="text" placeholder="First Name" class="form-control" value="@if (ViewBag.name != null) { @ViewBag.name; }" name="name" required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">UserName</label>
+                                    <input type="text" placeholder="UserName" readonly="readonly" class="form-control" value="@if (ViewBag.email != null) { @ViewBag.email; }" name="email" required />
+                                </div>
+                                <div class="form-group">
+                                    add
+                                    <label class="control-label">Password</label>
+                                    <input type="text" placeholder="Password" maxlength="5" class="form-control" value="@if (ViewBag.password != null) { @ViewBag.password; }" id="password" name="password" required />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">PIN</label>
+                                    <input type="number" placeholder="PIN" class="form-control" value="@if (ViewBag.pin != null) { @ViewBag.pin; }" name="pin" required maxlength="4" id="pin" />
+                                </div>
+
+                                @*added by sumit*@
+                                <div class="form-group">
+                                    <label class="control-label">Point to User</label>
+                                    <input type="text" placeholder="Pont to user" class="form-control" onkeypress="return isNumberKey(event)" value="@if (ViewBag.point != null) { @ViewBag.point; }" name="point" required maxlength="5" max="500" id="point" />
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Phone Number</label>
+                                    <input type="text" placeholder="Phone Number" class="form-control" value="@if (ViewBag.phone != null) { @ViewBag.phone; }" name="phone" required maxlength="10" id="phone" />
+                                </div>
+
+                                <div class="form-group" style="display:@(current==2?"block":"none");">
+                                    <label class="control-label">Precentage Commission</label>
+                                    <input type="number"   placeholder="Precentage Commission"  class="form-control" value="@if (ViewBag.commission != null) { @ViewBag.commission; }" name="commission" required maxlength="3" max="100" min="0" id="commission" />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Address</label>
+                                    <textarea rows="5" cols="3" placeholder="Address" class="form-control" value="@if (ViewBag.address != null) { @ViewBag.address; }" name="address" required maxlength="500" id="address">@if (ViewBag.address != null) { @ViewBag.address; }</textarea>
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" id="hdnstateid" name="hdnstateid" value="@if (ViewBag.stateid != null) { @ViewBag.stateid; }" />
+                                    <label class="control-label">Select State</label>
+                                    @Html.DropDownList("state", new SelectList(ViewBag.state, "Value", "Text"), "--Select State--", new { @id = "ddstate", @class = "form-control edited" , @required= "required" })
+                                </div>
+                                <div class="form-group">
+                                    <input type="hidden" id="hdndistrictid" name="hdndistrictid" value="@if (ViewBag.districtid != null) { @ViewBag.districtid; }" />
+<label class="control-label">Select District</label>
+                                    <select id="ddldistrict" class="form-control edited" required= "required">
+                                        <option value="0">--Select District--</option>
+                                    </select>
+                                </div>
+                                @*ended by sumit*@
+                                <div class="form-group">
+                                    <label class="control-label">Role</label>
+                                    <select class="form-control edited" name="access_level" disabled required>
+                                        @foreach (var lavel in access_levels)
+            {
+                if (current == lavel.Key)
+                {
+                            <option value="@lavel.Key" selected>@lavel.Value</option>
+}
+else
+{
+                            <option value="@lavel.Key"> @lavel.Value </option>
+}
+}
+                                    </select>
+                                </div>
+                                @{
+        if ((current == 0) || (current == 1))
+        {
+                            <input type="hidden" id="area_manger_h" value="@if (ViewBag.manager != null) { @ViewBag.manager; }" />
+                            <div class="form-group">
+                                <label class="control-label">Area manager</label>
+                                <select class="form-control edited" name="area_manger" id="area_manger"></select>
+                            </div>
+}
+                                }
+
+                                @{
+        if (current == 0)
+        {
+                            <input type="hidden" id="main_h" value="@if (ViewBag.main != null) { @ViewBag.main; }" />
+                            <div class="form-group">
+                                <label class="control-label">Main</label>
+                                <select class="form-control edited" name="main" id="main"></select>
+                            </div>
+}
+                                }
+
+
+                                <div class="form-actions">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <button class="btn green pull-right col-md-12"> Save </button>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <a class="btn green pull-right col-md-12" id="reset"> Reset PIN </a>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </form>
+                          
+                        </div>
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+        <!-- END PROFILE CONTENT -->
+    </div>
+
+    <!-- AJAX LOADING -->
+
+    <div class="modal fade" id="ajax">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src"~/www/assets/global/img/loading-spinner-grey.gif"  class="loading"/>
+                    <span> &nbsp;&nbsp;Saving... </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END AJAX LOADING -->
+    <!-- NOTIFICATION MODAL -->
+    <div id="updated" class="modal fade in" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Notification</h4>
+                </div>
+                <div class="modal-body">
+                    <p>User's password has been reset. Notification email has been sent to <span id="reseted-email"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn green">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END NOTIFICATION MODAL -->
+</div>
+
+
+
+
+
+

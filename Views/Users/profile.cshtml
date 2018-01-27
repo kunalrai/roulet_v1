@@ -1,0 +1,149 @@
+﻿
+@{
+
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    Dictionary<int, string> access_levels = new Dictionary<int, string>();
+    access_levels.Add(7, "CEO");
+    int current = 0;
+
+    if (ViewBag.access_level != null)
+    {
+        current = ViewBag.access_level;
+        access_levels.Add(6, "Admin");
+    }
+
+    access_levels.Add(5, "Upper Management");
+    access_levels.Add(4, "Logistics Manager");
+    access_levels.Add(3, "Logistics");
+    access_levels.Add(2, "Sales Manager");
+    access_levels.Add(1, "Team Leader");
+    access_levels.Add(0, "Sales Person");
+    access_levels.Add(-1, "Locked Out");
+    access_levels.Add(-2, "Disabled");
+
+}
+
+<!-- BEGIN PAGE HEADER-->
+
+<h1 class="page-title">
+    User profile
+</h1>
+<!-- END PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+
+        <!-- BEGIN PROFILE CONTENT -->
+
+        <div class="profile-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="portlet light ">
+                        <div class="portlet-title tabbable-line">
+                            <div class="caption">
+                                <i class="icon-user font-dark"></i>
+                                <span class="caption-subject font-dark sbold uppercase">User profile</span>
+                            </div>
+                        </div>
+                        <div class="portlet-body">
+                            <form role="form" id="update-profile">
+                                <input type="hidden" name="id" value="@if (ViewBag.id != null) { @ViewBag.id; }" id="user-id" />
+                                <div class="form-group">
+                                    <label class="control-label">First Name</label>
+                                    <input type="text" placeholder="First Name" class="form-control" value="@if (ViewBag.name != null) { @ViewBag.name; }" name="name" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Last Name</label>
+                                    <input type="text" placeholder="Last Name" class="form-control" value="@if (ViewBag.lastname != null) { @ViewBag.lastname; }" name="lastname" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Access</label>
+                                    <select class="form-control edited" name="access_level"  disabled>
+                                        @foreach (var lavel in access_levels)
+                                        {
+                                            if (current == lavel.Key)
+                                            {
+                                            <option value="@lavel.Key" selected>@lavel.Value</option>
+                                            }
+                                            else
+                                            {
+                                            <option value="@lavel.Key"> @lavel.Value </option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Email</label>
+                                    <input type="email" placeholder="Email" class="form-control" value="@if (ViewBag.email != null) { @ViewBag.email; }" name="email" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">DID</label>
+                                    <input type="text" placeholder="DID" class="form-control" value="@if (ViewBag.did != null) { @ViewBag.did; }" name="did" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Title</label>
+                                    <input type="text" placeholder="Title" class="form-control" value="@if (ViewBag.title != null) { @ViewBag.title; }" name="title" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Rehash Days</label>
+                                    <input type="text" placeholder="Rehash Days" class="form-control" value="@if (ViewBag.rehash_days != null) { @ViewBag.rehash_days; }" name="rehash-days" disabled />
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label">Discount Authority</label>
+                                    <input type="text" placeholder="Discount Authority" class="form-control" value="@if (ViewBag.discount_authority != null) { @ViewBag.discount_authority; }" name="discount-authority"  disabled/>
+                                </div>
+                         
+
+                            </form>
+                          
+                        </div>
+                    </div>
+                </div>
+              
+            </div>
+        </div>
+        <!-- END PROFILE CONTENT -->
+    </div>
+
+    <!-- AJAX LOADING -->
+
+    <div class="modal fade" id="ajax">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src"~/www/assets/global/img/loading-spinner-grey.gif"  class="loading"/>
+                    <span> &nbsp;&nbsp;Saving... </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END AJAX LOADING -->
+
+    <!-- NOTIFICATION MODAL -->
+
+    <div id="updated" class="modal fade in" tabindex="-1" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                    <h4 class="modal-title">Notification</h4>
+                </div>
+                <div class="modal-body">
+                    <p>User's password has been reset. Notification email has been sent to <span id="reseted-email"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn green">OK</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- END NOTIFICATION MODAL -->
+
+</div>
+
+
+
+
+
+

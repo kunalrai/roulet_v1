@@ -1,0 +1,52 @@
+﻿#users-table_wrapper .row{
+   display: none;
+}
+#buttons-table button{
+   width: 60px;
+   height: 60px;
+   border-radius: 50%!important;
+   display: inline-block;
+}
+#buttons-table tr td{
+   text-align: center;
+}
+.btn-default:active{
+   background-color: #17C4BB!important;
+}
+.btn-default:hover{
+   background-color: #17C4BB!important;
+}
+.must_active{
+   background:  #17C4BB!important;
+   color: #fff;
+}
+.form-horizontal .control-label{
+  font-size: 20px;
+}
+.form-horizontal h3{
+   margin-top: 9px;
+}
+.select-date{
+  margin-right: 40px;
+  margin-top: 15px;
+}
+#logs-table_wrapper .row{
+  display: none;
+}
+#logs-table{
+  margin: 0!important;
+}
+.form-horizontal .control-label{
+  text-align :left;
+}
+#mains-table_wrapper .row {
+    display: none;
+}
+#managers-table_wrapper .row {
+    display: none;
+}
+#timer-box{
+    position: fixed;
+    top: 0;
+    z-index: 10000;
+}

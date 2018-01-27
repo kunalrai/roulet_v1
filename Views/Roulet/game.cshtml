@@ -1,0 +1,1709 @@
+﻿
+@{
+    Layout = null;
+    Newtonsoft.Json.Linq.JObject user = Authentication.UserFromCookie();
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/www/css/style.css">
+</head>
+<body>
+    <input type="hidden" value="@{if (user["id"] != null) {@user["id"]}}" id="user_id" />
+    <input type="hidden" value="07fe02e9-5ba8-4bd1-8f72-b1dd4336418c" id="game_id" />
+    <input type="hidden" value="" id="hidden_bets" />
+    <div class="center">
+        <div class="title"></div>
+        <div class="score">
+            <p class="score_text" id="pointuser">0.00</p>
+        </div>
+        <div class="winner">
+            <p class="score_text" id="win_score">0</p>
+        </div>
+        <div class="timer">
+            <div class="timer_text" id="timer_text">
+
+            </div>
+        </div>
+        <div class="right_timer">
+            <p class="last_buttons" id="last_button_1"></p>
+            <p class="last_buttons" id="last_button_2"></p>
+            <p class="last_buttons" id="last_button_3"></p>
+            <p class="last_buttons" id="last_button_4"></p>
+            <p class="last_buttons" id="last_button_5"></p>
+        </div>
+        <button class="take" id="transfer">Take</button>
+        <button class="bet">Bet Ok</button>
+        <button class="cancel-bet">Cancel bet</button>
+        <div class="coins_container">
+            <div class="coin coin-active" id="coin1">
+                <button id="coins_1" value="1"></button>
+            </div>
+            <div class="coin" id="coin2">
+                <button id="coins_2" value="5"></button>
+            </div>
+            <div class="coin" id="coin3">
+                <button id="coins_3" value="10"></button>
+            </div>
+            <div class="coin" id="coin4">
+                <button id="coins_4" value="50"></button>
+            </div>
+            <div class="coin" id="coin5">
+                <button id="coins_5" value="100"></button>
+            </div>
+            <div class="coin" id="coin6">
+                <button id="coins_6" value="500"></button>
+            </div>
+            <div class="coin" id="coin7">
+                <button id="coins_7" value="1000"></button>
+            </div>
+            <div class="coin" id="coin8">
+                <button id="coins_8" value="5000"></button>
+            </div>
+        </div>
+        <div class="perspoective">
+            <div class="roulet-bg">
+                <div class="roulet-wrapper">
+                    <div class="roulet" id="roulet">
+                    </div>
+                    <div id="ballWrapper" class="ballWrapper">
+                        <div id="ball" class="ball"></div>
+                    </div>
+                </div>
+                <div class="almaz">
+
+                </div>
+            </div>
+
+        </div>
+        <div class="keyboard">
+               @*<div class="bets">2</div>*@
+            @*<div class="keyboard_overlay" id="keyboard_overlay"></div>*@
+            <img src="~/www/img/keyped.png" usemap="#keypad" class="keypad" />
+            <map name="keypad" id="keypad">
+
+                <area href="#" shape="poly" coords="3.5,4.5,    57.5,4.5,   57.5,72,   3.5,72" id="00" />
+                <area href="#" shape="poly" coords="3.5,75.5,   57.5,75.5,  57.5,143,  3.5,143" id="0" />
+                <area href="#" shape="poly" coords="61.5,147,   284.5,147,  284.5,183, 61.5,183" id="one_to_twelve" />
+                <area href="#" shape="poly" coords="289,147,    513,147,    513,183,   289,183" id="two_to_twelve" />
+                <area href="#" shape="poly" coords="516,147,    740.5,147,  740.5,183, 516,183" id="three_to_twelve" />
+                <area href="#" shape="poly" coords="86,186,     210,186,    210,222,   86,222" id="one_to_eighteen" />
+                <area href="#" shape="poly" coords="214,186,    305,186,    305,220,   214,220" id="even" />
+                <area href="#" shape="poly" coords="308,186,    399,186,    399,220,   308,220" id="red" />
+                <area href="#" shape="poly" coords="402,186,    494,186,    494,220,   402,220" id="black" />
+                <area href="#" shape="poly" coords="497,186,    587.5,186,  587.5,220, 496,220" id="add" />
+                <area href="#" shape="poly" coords="591,186,    715,186,    715,220,   591,220" id="nineteen_to_thyrtysix" />
+
+                <!-- ROW 1 -->
+                <!-- 11 -->
+
+                <area href="#" shape="poly" coords="61.7,4.5,   114.2,4.5,  114.2,48,  61.7,48" id="3" />
+                <area href="#" shape="poly" coords="118.6,4.5,  171.9,4.5,  172,48,    118.6,48" id="6" />
+                <area href="#" shape="poly" coords="175.8,4.5,  228.2,4.5,  229,48,    175.8,48" id="9" />
+                <area href="#" shape="poly" coords="232.4,4.5,  285,4.5,    285,48,    232.4,48" id="12" />
+                <area href="#" shape="poly" coords="289.7,4.5,  342,4.5,    342,48,    289.7,48" id="15">
+                <area href="#" shape="poly" coords="346.7,4.5,  399,4.5,    399,48,    346.7,48" id="18" />
+                <area href="#" shape="poly" coords="402.8,4.5,  455,4.5,    455,48,    402.8,48" id="21" />
+                <area href="#" shape="poly" coords="460,4.5,    513,4.5,    513,48,    460,48" id="24" />
+                <area href="#" shape="poly" coords="517,4.5,    569.8,4.5,  569.8,48,  517,48" id="27" />
+                <area href="#" shape="poly" coords="573,4.5,    627,4.5,    627,48,    573,48" id="30" />
+                <area href="#" shape="poly" coords="630.8,4.5,  683.9,4.5,  683.9,48,  630.8,48" id="33" />
+                <area href="#" shape="poly" coords="688,4.5,    740.8,4.5,  740.8,48,  688,48" id="36" />
+                <area href="#" shape="poly" coords="744.7,4.5,  797,4.5,    797,48,    744.7,48" id="row_1_max" />
+
+                <!-- ROW 2 -->
+                <!-- 24 -->
+
+                <area href="#" shape="poly" coords="61.7,51.9,    114.2,51.9,   114.2,95.1,   61.7,95.1" id="2" />
+                <area href="#" shape="poly" coords="118.6,51.9,   171.9,51.9,   172,95.1,     118.6,95.1" id="5" />
+                <area href="#" shape="poly" coords="175.8,51.9,   228.2,51.9,   229,95.1,     175.8,95.1" id="8" />
+                <area href="#" shape="poly" coords="232.4,51.9,   285,51.9,     285,95.1,     232.4,95.1" id="11" />
+                <area href="#" shape="poly" coords="289.7,51.9,   342,51.9,     342,95.1,     289.7,95.1" id="14" />
+                <area href="#" shape="poly" coords="346.7,51.9,   399,51.9,     399,95.1,     346.7,95.1" id="17" />
+                <area href="#" shape="poly" coords="402.8,51.9,   455,51.9,     455,95.1,     402.8,95.1" id="20" />
+                <area href="#" shape="poly" coords="460,51.9,     514,51.9,     513,95.1,     460,95.1" id="23" />
+                <area href="#" shape="poly" coords="517,51.9,     569.8,51.9,   569.8,95.1,   517,95.1" id="26" />
+                <area href="#" shape="poly" coords="573,51.9,     627,51.9,     627,95.1,     573,95.1" id="29" />
+                <area href="#" shape="poly" coords="630.8,51.9,   683.9,51.9,   683.9,95.1,   630.8,95.1" id="32" />
+                <area href="#" shape="poly" coords="688,51.9,     740.8,51.9,   740.8,95.1,   688,95.1" id="35" />
+                <area href="#" shape="poly" coords="744.7,51.9,   797,51.9,     797,95.1,     744.7,95.1" id="row_2_max" />
+
+                <!-- ROW 3 -->
+
+                <area href="#" shape="poly" coords="61.7,99.7,   114.2,99.7,  114.2,143,  61.7,143" id="1" />
+                <area href="#" shape="poly" coords="118.6,99.7,  171.9,99.7,  172,143,    118.6,143" id="4" />
+                <area href="#" shape="poly" coords="175.8,99.7,  228.2,99.7,  229,143,    175.8,143" id="7" />
+                <area href="#" shape="poly" coords="232.4,99.7,  285,99.7,    285,143,    232.4,143" id="10" />
+                <area href="#" shape="poly" coords="289.7,99.7,  342,99.7,    342,143,    289.7,143" id="13" />
+                <area href="#" shape="poly" coords="346.7,99.7,  399,99.7,    399,143,    346.7,143" id="16" />
+                <area href="#" shape="poly" coords="402.8,99.7,  455,99.7,    455,143,    402.8,143" id="19" />
+                <area href="#" shape="poly" coords="460,99.7,    513,99.7,    513,143,    460,143" id="22" />
+                <area href="#" shape="poly" coords="517,99.7,    569.8,99.7,  569.8,143,  517,143" id="25" />
+                <area href="#" shape="poly" coords="573,99.7,    627,99.7,    627,143,    573,143" id="28" />
+                <area href="#" shape="poly" coords="630.8,99.7,  683.9,99.7,  683.9,143,  630.8,143" id="31" />
+                <area href="#" shape="poly" coords="688,99.7,    740.8,99.7,  740.8,143,  688,143" id="34" />
+                <area href="#" shape="poly" coords="744.7,99.7,  797,99.7,    797,143,    744.7,143" id="row_3_max" />
+
+            </map>
+
+            <a href="#" class="square" id="sq1" data-area1="0" data-area2="11" data-val="[-1,3]"></a>
+            <a href="#" class="square" id="sq2" data-area1="11" data-area2="12" data-val="[3,6]"></a>
+            <a href="#" class="square" id="sq3" data-area1="12" data-area2="13" data-val="[6,9]"></a>
+            <a href="#" class="square" id="sq4" data-area1="13" data-area2="14" data-val=[9,12]></a>
+            <a href="#" class="square" id="sq5" data-area1="14" data-area2="15" data-val="[12,15]"></a>
+            <a href="#" class="square" id="sq6" data-area1="15" data-area2="16"data-val=[15,18]></a>
+            <a href="#" class="square" id="sq7" data-area1="16" data-area2="17"data-val=[18,21]></a>
+            <a href="#" class="square" id="sq8" data-area1="17" data-area2="18"data-val=[21,24]></a>
+            <a href="#" class="square" id="sq9" data-area1="18" data-area2="19"data-val=[24,27]></a>
+            <a href="#" class="square" id="sq10" data-area1="19" data-area2="20"data-val=[27,30]></a>
+            <a href="#" class="square" id="sq11" data-area1="20" data-area2="21"data-val=[30,33]></a>
+            <a href="#" class="square" id="sq12" data-area1="21" data-area2="22"data-val=[33,36]></a>
+
+            <!-- Row 2 -->
+
+            <a href="#" class="square" id="sq14" data-area1="24" data-area2="25" data-val="[2,5]"></a>
+            <a href="#" class="square" id="sq15" data-area1="25" data-area2="26" data-val="[5,8]"></a>
+            <a href="#" class="square" id="sq16" data-area1="26" data-area2="27" data-val="[8,11]"></a>
+            <a href="#" class="square" id="sq17" data-area1="27" data-area2="28" data-val="[11,14]"></a>
+            <a href="#" class="square" id="sq18" data-area1="28" data-area2="29" data-val="[14,17]"></a>
+            <a href="#" class="square" id="sq19" data-area1="29" data-area2="30" data-val="[17,20]"></a>
+            <a href="#" class="square" id="sq20" data-area1="30" data-area2="31" data-val="[20,23]"></a>
+            <a href="#" class="square" id="sq21" data-area1="31" data-area2="32" data-val="[23,26]"></a>
+            <a href="#" class="square" id="sq22" data-area1="32" data-area2="33" data-val="[26,29]"></a>
+            <a href="#" class="square" id="sq23" data-area1="33" data-area2="34" data-val="[29,32]"></a>
+            <a href="#" class="square" id="sq24" data-area1="34" data-area2="35" data-val="[32,35]"></a>
+
+
+            <a href="#" class="square" id="sq26" data-area1="1" data-area2="37"></a>
+            <a href="#" class="square" id="sq27" data-area1="37" data-area2="38" data-val="[1,4]"></a>
+            <a href="#" class="square" id="sq28" data-area1="38" data-area2="39" data-val="[4,7]"></a>
+            <a href="#" class="square" id="sq29" data-area1="39" data-area2="40" data-val="[7,10]"></a>
+            <a href="#" class="square" id="sq30" data-area1="40" data-area2="41" data-val="[10,13]"></a>
+            <a href="#" class="square" id="sq31" data-area1="41" data-area2="42" data-val="[13,16]"></a>
+            <a href="#" class="square" id="sq32" data-area1="42" data-area2="43" data-val="[16,19]"></a>
+            <a href="#" class="square" id="sq33" data-area1="43" data-area2="44" data-val="[19,22]"></a>
+            <a href="#" class="square" id="sq34" data-area1="44" data-area2="45" data-val="[22,25]"></a>
+            <a href="#" class="square" id="sq35" data-area1="45" data-area2="46" data-val="[25,28]"></a>
+            <a href="#" class="square" id="sq36" data-area1="46" data-area2="47" data-val="[28,31]"></a>
+            <a href="#" class="square" id="sq37" data-area1="47" data-area2="48" data-val="[31,34]"></a>
+
+            <a href="#" class="cube three_square" id="c1" data-area1="0" data-area2="11" data-area3="24" data-val="[-1,3,2]"></a>
+            <a href="#" class="cube four_square" id="c2" data-area1="11" data-area2="12" data-area3="24" data-area4="25"  data-val="[3,6,2,5]"></a>
+            <a href="#" class="cube four_square" id="c3" data-area1="12" data-area2="13" data-area3="25" data-area4="26"  data-val="[6,9,5,8]"></a>
+            <a href="#" class="cube four_square" id="c4" data-area1="13" data-area2="14" data-area3="26" data-area4="27"  data-val="[9,12,8,11]"></a>
+            <a href="#" class="cube four_square" id="c5" data-area1="14" data-area2="15" data-area3="27" data-area4="28"  data-val="[12,15,11,14]"></a>
+            <a href="#" class="cube four_square" id="c6" data-area1="15" data-area2="16" data-area3="28" data-area4="29"  data-val="[15,18,14,17]"></a>
+            <a href="#" class="cube four_square" id="c7" data-area1="16" data-area2="17" data-area3="29" data-area4="30"  data-val="[18,21,20,23]"></a>
+            <a href="#" class="cube four_square" id="c8" data-area1="17" data-area2="18" data-area3="30" data-area4="31"  data-val="[21,24,20,20]"></a>
+            <a href="#" class="cube four_square" id="c9" data-area1="18" data-area2="19" data-area3="31" data-area4="32"  data-val="[24,27,23,26]"></a>   
+            <a href="#" class="cube four_square" id="c10" data-area1="19" data-area2="20" data-area3="32" data-area4="33" data-val="[27,30,26,29]"></a>
+            <a href="#" class="cube four_square" id="c11" data-area1="20" data-area2="21" data-area3="33" data-area4="34" data-val="[30,33,29,32]"></a>
+            <a href="#" class="cube four_square" id="c12" data-area1="21" data-area2="22" data-area3="34" data-area4="35" data-val="[33,36,32,35]"></a>
+
+            <a href="#" class="cube three_square" id="c14" data-area1="1" data-area2="24" data-area3="37" data-val="[0,2,1]"></a>
+            <a href="#" class="cube four_square" id="c15" data-area1="24" data-area2="25" data-area3="37" data-area4="38" data-val="[2,5,1,4]"></a>
+            <a href="#" class="cube four_square" id="c16" data-area1="25" data-area2="26" data-area3="38" data-area4="39" data-val="[5,8,4,7]"></a>
+            <a href="#" class="cube four_square" id="c17" data-area1="26" data-area2="27" data-area3="39" data-area4="40" data-val="[8,11,7,10]"></a>
+            <a href="#" class="cube four_square" id="c18" data-area1="27" data-area2="28" data-area3="40" data-area4="41" data-val="[11,14,10,13]"></a>
+            <a href="#" class="cube four_square" id="c19" data-area1="28" data-area2="29" data-area3="41" data-area4="42" data-val="[14,17,13,16]"></a>
+            <a href="#" class="cube four_square" id="c20" data-area1="29" data-area2="30" data-area3="42" data-area4="43" data-val="[17,20,16,19]"></a>
+            <a href="#" class="cube four_square" id="c21" data-area1="30" data-area2="31" data-area3="43" data-area4="44" data-val="[20,23,19,22]"></a>
+            <a href="#" class="cube four_square" id="c22" data-area1="31" data-area2="32" data-area3="44" data-area4="45" data-val="[23,26,22,25]"></a>
+            <a href="#" class="cube four_square" id="c23" data-area1="32" data-area2="33" data-area3="45" data-area4="46" data-val="[26,29,25,28]"></a>
+            <a href="#" class="cube four_square" id="c24" data-area1="33" data-area2="34" data-area3="46" data-area4="47" data-val="[29,32,28,31]"></a>
+            <a href="#" class="cube four_square" id="c25" data-area1="34" data-area2="35" data-area3="47" data-area4="48" data-val="[32,35,31,34]"></a>
+            <a href="#" class="cube three_square" id="c27" data-area1="0" data-area2="1" data-area3="24" data-val="[-1,0,2]"></a>
+
+            <a href="#" class="group-cube" id="c28" data-area="0,1,11,24,37"></a>
+            <a href="#" class="group-cube" id="cg29" data-area="11,24,37,12,25,38" data-val="[1,2,3,4,5,6]"></a>
+            <a href="#" class="group-cube" id="cg31" data-area="12,13,25,26,38,39" data-val="[4,5,6,7,8,9]"></a>
+            <a href="#" class="group-cube" id="cg32" data-area="13,14,26,27,39,40" data-val="[7,8,9,10,11,12]"></a>
+            <a href="#" class="group-cube" id="cg33" data-area="14,15,27,28,40,41" data-val="[10,11,12,13,14,15]"></a>
+            <a href="#" class="group-cube" id="cg34" data-area="15,16,28,29,41,42" data-val="[13,14,15,16,17,18]"></a>
+            <a href="#" class="group-cube" id="cg35" data-area="16,17,29,30,42,43" data-val="[16,17,18,19,20,21]"></a>
+            <a href="#" class="group-cube" id="cg36" data-area="17,18,30,31,43,44" data-val="[19,20,21,22,23,24]"></a>
+            <a href="#" class="group-cube" id="cg37" data-area="18,19,31,32,44,45" data-val="[22,23,24,25,26,27]"></a>
+            <a href="#" class="group-cube" id="cg38" data-area="19,20,32,33,45,46" data-val="[25,26,27,28,29,30]"></a>
+            <a href="#" class="group-cube" id="cg39" data-area="20,21,33,34,46,47" data-val="[28,29,30,31,32,33]"></a>
+            <a href="#" class="group-cube" id="cg40" data-area="21,22,34,35,47,48" data-val="[31,32,33,34,35,36]"></a>
+
+            <buttom class="keypad-button number" style="left: 60px; top: 4px; background: url(/img/3.png) center center no-repeat; background-size: 53px;" data-id="3"></buttom>
+            <buttom class="keypad-button number" style="left: 117px; top: 4px; background: url(/img/6.png) center center no-repeat; background-size: 53px;" data-id="6"></buttom>
+            <buttom class="keypad-button number" style="left: 174px; top: 4px; background: url(/img/9.png) center center no-repeat; background-size: 53px;" data-id="9"></buttom>
+            <buttom class="keypad-button number" style="left: 231px; top: 4px; background: url(/img/12.png) center center no-repeat; background-size: 53px;" data-id="12"></buttom>
+            <buttom class="keypad-button number" style="left: 288px; top: 4px; background: url(/img/15.png) center center no-repeat; background-size: 53px;" data-id="15"></buttom>
+            <buttom class="keypad-button number" style="left: 345px; top: 4px; background: url(/img/18.png) center center no-repeat; background-size: 53px;" data-id="18"></buttom>
+            <buttom class="keypad-button number" style="left: 402px; top: 4px; background: url(/img/21.png) center center no-repeat; background-size: 53px;" data-id="21"></buttom>
+            <buttom class="keypad-button number" style="left: 459px; top: 4px; background: url(/img/24.png) center center no-repeat; background-size: 53px;" data-id="24"></buttom>
+            <buttom class="keypad-button number" style="left: 516px; top: 4px; background: url(/img/27.png) center center no-repeat; background-size: 53px;" data-id="27"></buttom>
+            <buttom class="keypad-button number" style="left: 573px; top: 4px; background: url(/img/30.png) center center no-repeat; background-size: 53px;" data-id="30"></buttom>
+            <buttom class="keypad-button number" style="left: 630px; top: 4px; background: url(/img/33.png) center center no-repeat; background-size: 53px;" data-id="33"></buttom>
+            <buttom class="keypad-button number" style="left: 687px; top: 4px; background: url(/img/36.png) center center no-repeat; background-size: 53px;" data-id="36"></buttom>
+
+            <buttom class="keypad-button number" style="left: 60px; top: 51px; background: url(/img/2.png) center center no-repeat; background-size: 53px;" data-id="2"></buttom>
+            <buttom class="keypad-button number" style="left: 117px; top: 51px; background: url(/img/5.png) center center no-repeat; background-size: 53px;" data-id="5"></buttom>
+            <buttom class="keypad-button number" style="left: 174px; top: 51px; background: url(/img/8.png) center center no-repeat; background-size: 53px;" data-id="8"></buttom>
+            <buttom class="keypad-button number" style="left: 231px; top: 51px; background: url(/img/11.png) center center no-repeat; background-size: 53px;" data-id="11"></buttom>
+            <buttom class="keypad-button number" style="left: 288px; top: 51px; background: url(/img/14.png) center center no-repeat; background-size: 53px;" data-id="14"></buttom>
+            <buttom class="keypad-button number" style="left: 345px; top: 51px; background: url(/img/17.png) center center no-repeat; background-size: 53px;" data-id="17"></buttom>
+            <buttom class="keypad-button number" style="left: 402px; top: 51px; background: url(/img/20.png) center center no-repeat; background-size: 53px;" data-id="20"></buttom>
+            <buttom class="keypad-button number" style="left: 459px; top: 51px; background: url(/img/23.png) center center no-repeat; background-size: 53px;" data-id="23"></buttom>
+            <buttom class="keypad-button number" style="left: 516px; top: 51px; background: url(/img/26.png) center center no-repeat; background-size: 53px;" data-id="26"></buttom>
+            <buttom class="keypad-button number" style="left: 573px; top: 51px; background: url(/img/29.png) center center no-repeat; background-size: 53px;" data-id="29"></buttom>
+            <buttom class="keypad-button number" style="left: 630px; top: 51px; background: url(/img/32.png) center center no-repeat; background-size: 53px;" data-id="32"></buttom>
+            <buttom class="keypad-button number" style="left: 687px; top: 51px; background: url(/img/35.png) center center no-repeat; background-size: 53px;" data-id="35"></buttom>
+
+            <buttom class="keypad-button number" style="left: 60px; top: 98px; background: url(/img/1.png) center center no-repeat; background-size: 53px;" data-id="1"></buttom>
+            <buttom class="keypad-button number" style="left: 117px; top: 98px; background: url(/img/4.png) center center no-repeat; background-size: 53px;" data-id="4"></buttom>
+            <buttom class="keypad-button number" style="left: 174px; top: 98px; background: url(/img/7.png) center center no-repeat; background-size: 53px;" data-id="7"></buttom>
+            <buttom class="keypad-button number" style="left: 231px; top: 98px; background: url(/img/10.png) center center no-repeat; background-size: 53px;" data-id="10"></buttom>
+            <buttom class="keypad-button number" style="left: 288px; top: 98px; background: url(/img/13.png) center center no-repeat; background-size: 53px;" data-id="13"></buttom>
+            <buttom class="keypad-button number" style="left: 345px; top: 98px; background: url(/img/16.png) center center no-repeat; background-size: 53px;" data-id="16"></buttom>
+            <buttom class="keypad-button number" style="left: 402px; top: 98px; background: url(/img/19.png) center center no-repeat; background-size: 53px;" data-id="19"></buttom>
+            <buttom class="keypad-button number" style="left: 459px; top: 98px; background: url(/img/22.png) center center no-repeat; background-size: 53px;" data-id="22"></buttom>
+            <buttom class="keypad-button number" style="left: 516px; top: 98px; background: url(/img/25.png) center center no-repeat; background-size: 53px;" data-id="25"></buttom>
+            <buttom class="keypad-button number" style="left: 573px; top: 98px; background: url(/img/28.png) center center no-repeat; background-size: 53px;" data-id="28"></buttom>
+            <buttom class="keypad-button number" style="left: 630px; top: 98px; background: url(/img/31.png) center center no-repeat; background-size: 53px;" data-id="31"></buttom>
+            <buttom class="keypad-button number" style="left: 687px; top: 98px; background: url(/img/34.png) center center no-repeat; background-size: 53px;" data-id="34"></buttom>
+
+            <buttom class="keypad-button number" style="left: 3px; top: 15px; background: url(/img/37.png) center center no-repeat; background-size: 53px;" data-id="00"></buttom>
+            <buttom class="keypad-button number" style="left: 3px; top: 88px; background: url(/img/0.png) center center no-repeat; background-size: 53px;" data-id="0"></buttom>
+
+            <buttom class="keypad-button number not-button betthreesare" style="right: 3px; top: 4px; background: url(/img/2to1.png) center center no-repeat; background-size: 50px;" data-id="row_1_max" data-val="[3,6,9,12,15,18,21,24,27,30,33,36]"></buttom>
+            <buttom class="keypad-button number not-button betthreesare" style="right: 3px; top: 51px; background: url(/img/2to1.png) center center no-repeat; background-size: 50px;" data-id="row_2_max" data-val="[2,5,8,11,14,17,20,23,26,29,32,35]"></buttom>
+            <buttom class="keypad-button number not-button betthreesare" style="right: 3px; top: 98px; background: url(/img/2to1.png) center center no-repeat; background-size: 50px;" data-id="row_3_max" data-val="[1,4,7,10,13,16,19,22,25,28,31,34]"></buttom>
+
+            <buttom class="keypad-button group-number not-button betthreesare" style="left: 60px; top: 147px; background: url(/img/1to12.png) center center no-repeat; background-size: 153px;" data-id="one_to_twelve"  data-val="[1,2,3,4,5,6,7,8,9,10,11,12]"></buttom>
+            <buttom class="keypad-button group-number not-button betthreesare"  style="left: 290px; top: 147px; background: url(/img/2to12.png) center center no-repeat; background-size: 153px;" data-id="two_to_twelve" data-val="[13,14,15,16,17,18,19,20,21,22,23,24]"></buttom>
+            <buttom class="keypad-button group-number not-button betthreesare" style="left: 520px; top: 147px; background: url(/img/3to12.png) center center no-repeat; background-size: 153px;" data-id="three_to_twelve" data-val="[25,26,27,28,29,30,31,32,33,34,35,36]"></buttom>
+
+            <buttom class="keypad-button group-small not-button bettwosare" style="left: 87px; top: 187px; background: url(/img/1to18.png) center center no-repeat; background-size: 145px;" data-id="one_to_eighteen" data-val="[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18]"></buttom>
+            <buttom class="keypad-button group-small not-button bettwosare" style="right: 87px; top: 187px; background: url(/img/19to36.png) center center no-repeat; background-size: 145px;" data-id="nineteen_to_thyrtysix" data-val="[19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36]"></buttom>
+
+            <buttom class="keypad-button button-category not-button even" style="left: 214px; top: 187px; background: url(/img/even.png) center center no-repeat; background-size: 100px;" data-id="even" data-val="[2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36]"></buttom>
+            <buttom class="keypad-button button-category not-button odd" style="right: 214px; top: 187px; background: url(/img/add.png) center center no-repeat; background-size: 100px;" data-id="add" data-val="[1,3,5,7,9,11,13,15,17,19,21,23,25,27,29,31,33,35]"></buttom>
+
+            <buttom class="keypad-button button-category not-button red" style="left: 309.6px; top: 187px; background: url(/img/red.png) center center no-repeat; background-size: 100px;" data-id="red" data-val="[1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]"></buttom>
+            <buttom class="keypad-button button-category not-button black" style="right: 309.6px; top: 187px; background: url(/img/black.png) center center no-repeat; background-size: 100px;" data-id="black" data-val="[2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35]"></buttom>
+
+        </div>
+        <div class="betguide" id="Bet_Guide"></div>
+        <div class="bottom_row">
+            <button class="total_bet"></button>
+            <button class="exit">Exit</button>
+        </div>
+    </div>
+
+    <script src="~/www/js/jquery-1.9.1.min.js"></script>
+    <script src="~/www/js/jquery-rotate.js"></script>
+    <script src="~/www/js/jquery.maphilight.js"></script>
+
+
+    <script type="text/javascript">
+
+        $.messages = {
+            straight: "This is Straight bet can Win points = Bet X 36",
+            rect: "This Rectangle can Win Points = Bet X 18",
+            group_cube: "This Square bet can Win points = Bet X 6",
+            four_square: "This Rectangle can Win Points = Bet X 9",
+            cube: "This cube bet can Win points = Bet X 3",
+            even: "This is Even bet can Win Points = Bet X 2",
+            odd: "This is Odd bet can Win Points = Bet X 2",
+            black: "This is Black bet can Win Points = Bet X 2",
+            red: "This is Red bet can Win Points = Bet X 2",
+            one_by_two:"This group bet can Win points = Bet X 2",
+            one_to_twelve: "This is cube bet can Win Points = Bet X 3",
+            row: "This row can Win Points = Bet x 3",
+            bet_time_over: "Bet time is Over",
+            three_square: "This box bet can Win Points = Bet X 12"
+        }
+            $.Game = {
+             bets: [],
+             busy: false,
+             mybets: [],
+             find: function () {
+
+                 var user_id = $("#user_id").val();
+
+                 var data = {
+                    id: user_id
+                 }
+
+                if (!$.Game.busy) {
+
+                    $.Game.busy = true;
+
+                    $.ajax({
+                    type: "POST",
+                        url: "/games/find/",
+                        data: JSON.stringify(data),
+                        success: function (response) {
+
+                            $.Game.busy = false;
+
+                            if (response.must_bet) {
+
+                                $.Roulet.must = response.must_bet;
+
+
+                                $.Game.getuserpoints();
+
+
+                            }
+
+                        }
+                    }).always(function () { $.User.TotalBet(); });
+
+                }
+
+
+             },
+             getuserpoints: function () {
+
+                 var user_id = $("#user_id").val();
+                 var data = {
+                     id: user_id
+                 }
+
+                return $.ajax({
+                     type: "POST",
+                     url: "/user/get/",
+                     data: JSON.stringify(data),
+                     success: function (response) {
+                         if (response) {
+                             console.log(response.pointuser);
+                             $("#pointuser").text(response.pointuser + ".00");
+                             $("#win_score").text(response.Winning_point);
+
+                             if (response.pointuser <= 0) {
+
+                                 $.User.hasEnoughPoints = false;
+                                 
+                             }
+                         }
+
+                     }
+                 });
+
+             },
+             calcultepoints: function (must_bet) {
+                 
+
+                 var user_id = $("#user_id").val();
+                 $.ajax({
+                     type: "POST",
+                     url: "/user/spinroulette/",
+
+                   
+                     contentType: 'application/json',
+                     data: JSON.stringify({
+                         'myArray': $.Game.mybets,
+                         "must_bet": must_bet,
+                         "userid": user_id
+                        }),
+                     success: function (response) {
+                         if (response) {
+                             console.log(response);
+                             
+                             $("#win_score").text(response);
+                         }
+
+                     },
+                     error: (status, err) => { console.log(status); }
+
+                 }).always(function () {
+                     $.Game.mybets = [];
+                 });
+             },
+
+            subscribe: function () {
+            setInterval(function () {
+
+                    $.Game.find();
+
+            }, 5000)
+            },
+             start: function () {
+
+            var game_id = $("#game_id").val();
+            var user_id = $("#user_id").val();
+
+            var data = {
+                game_id: game_id,
+                user_id: user_id
+            }
+
+               $.ajax({
+                    type: "POST",
+                    url: "/games/start/",
+                    data: JSON.stringify(data),
+                    success: function (response) {
+
+                        $.Game.subscribe();
+
+                        var now = new Date();
+
+                        var unix = Math.round(+new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds()) / 1000);
+
+                        if ((unix - response.time) > 1000) {
+
+                            var difference = (unix - response.time) / 1000;
+
+                            var seconds = response.seconds;
+
+                            var startSeconds = seconds - difference;
+
+                            $.Roulet.FirstRun(startSeconds);
+                        
+                        }
+                        else {
+
+                            $.Roulet.FirstRun(response.seconds);
+
+                        }
+
+                    }
+               });
+            },
+             Bet: function (bet) {
+                
+                $.Game.bets.push(bet);
+            
+             },
+             MyBet: function (bet) {
+
+                 var data = {
+                     coin:  $.Roulet.bet ,
+                     bet_pos: bet  
+                 }
+
+                 $.Game.mybets.push(data);
+             },
+            isExist: function (id) {
+                
+                 var hidden_bets = $.Game.bets;
+
+                 if (hidden_bets.length > 0) {
+
+                    for (var i = 0; i < hidden_bets.length; i++) {
+
+                        if (id == hidden_bets[i]) {
+                           
+                            return true;
+                        }
+
+                    }
+
+                }
+
+                return false;
+            },
+            RemoveBet: function (id) {
+
+                var hidden_bets = $.Game.bets;
+
+                if (hidden_bets.length > 0) {
+
+                    for (var i = 0; i < hidden_bets.length; i++) {
+
+                        if (id == hidden_bets[i]) {
+
+                            hidden_bets.splice(i, 1);
+                        }
+
+                    }
+
+                }
+
+                $.Game.bets = hidden_bets;
+
+                /* MYBETs remove */
+            
+            },
+            RemoveMyBet: function (id) {
+                var hidden_bets = $.Game.mybets;
+                if (hidden_bets.length > 0) {
+
+                    for (var i = 0; i < hidden_bets.length; i++) {
+
+                        if (id == hidden_bets[i]) {
+
+                            hidden_bets.splice(i, 1);
+                        }
+
+                    }
+
+                }
+                $.Game.mybets = hidden_bets;
+
+            },
+            TransferWinningPoints: function () {
+                var game_id = $("#game_id").val();
+                var user_id = $("#user_id").val();
+                var data = {
+                    game_id: game_id,
+                    user_id: user_id,
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "/user/transferwinningpoints/",
+                    data: JSON.stringify(data)
+                }).always(function () {
+                    $.Game.find();
+                });
+            }
+
+
+        }
+            $.User = {
+                canBet: true,
+                hasEnoughPoints: true,
+                Bet: function () {
+
+                    var game_id = $("#game_id").val();
+                    var user_id = $("#user_id").val();
+
+                    var data = {
+                        game_id: game_id,
+                        user_id: user_id,
+                        coin: $.Roulet.bet,
+                        bets: $.Game.bets,
+                        mybets: $.Game.mybets
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/games/bet/",
+                        data: JSON.stringify(data)
+                    });
+                    $.ajax({
+                        type: "POST",
+                        url: "/games/updatepoints/",
+                        data: JSON.stringify(data),
+
+                    }).always(function () {
+
+                            $.Game.find();
+                        });
+                    this.TotalBet();
+                },
+                CancelBet: function () {
+                    var game_id = $("#game_id").val();
+                    var user_id = $("#user_id").val();
+
+                    var data = {
+                        game_id: game_id,
+                        user_id: user_id,
+                        coin: $.Roulet.bet,
+                        bets: $.Game.bets,
+                        mybets: $.Game.mybets
+                    }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/games/cancelbet/",
+                        data: JSON.stringify(data),
+
+                    }).always(function () {
+
+                        $.Game.find();
+                    });
+                },
+                TotalBet: function () {
+                    try {
+                        var sum = 0;
+                        $.Game.mybets.forEach((x) => sum = sum + Number(x.coin));
+                        $(".total_bet").text(sum);
+                    }
+                    catch (e){
+                        $(".total_bet").text(0);
+                    }
+                   
+                }
+            }
+           $(window).bind("beforeunload", function () {
+
+                 var answer = confirm("Do you really want to close?");
+
+                 if (answer) {
+                      
+
+                     var user_id = $("#user_id").val();
+
+                     var data = {
+                         user_id: user_id
+                     }
+
+                     $.ajax({
+                         type: "POST",
+                         url: "/games/end/",
+                         data: JSON.stringify(data),
+                         success: function (response) {
+
+
+
+                         }
+                     });
+
+
+                 }
+                  
+              
+             });
+
+	       $(document).ready(function(){
+
+	             var user_id = $("#user_id").val();
+	             
+	             var betsHTML = function (left,top,value,coin) { return "<div class='bets' style='left:" + left + ";top:" + top + "px;' data-val='[" + value + "]'>" + coin + "</div>"; }
+
+	             $.Game.start();
+
+	             $.Game.getuserpoints();
+
+                 $.fn.maphilight.defaults = {
+                     fill: true,
+	                 fillColor: '00a900',
+	                 fillOpacity: 1,
+	                 stroke: true,
+	                 strokeColor: '00a900',
+	                 strokeOpacity: 1,
+	                 strokeWidth: 0,
+	                 fade: true,
+	                 alwaysOn: false,
+	                 neverOn: false,
+	                 groupBy: false,
+	                 wrapClass: true,
+	                 shadow: false,
+	                 shadowX: 0,
+	                 shadowY: 0,
+	                 shadowRadius: 6,
+	                 shadowColor: '000000',
+	                 shadowOpacity: 0.8,
+	                 shadowPosition: 'outside',
+	                 shadowFrom: false
+                 }
+
+                 var allAreas = $("#keypad").children();
+
+                 $(".keypad").maphilight();
+
+                 $(".keypad-button").mouseover(function(event){
+
+                      var area = $(this).attr("data-id")
+
+                      $("#"+area).mouseover()
+                      $(".betguide").text("This is Straight Bet Win Points = Bet x 36");
+                 });
+
+                 $(".keypad-button").mouseout(function(event){
+
+                      var area = $(this).attr("data-id")
+
+                      $("#"+area).mouseout()
+
+                      $(".betguide").text("");
+                 });
+
+                 $(".betthreesare").mouseover((e) => $(".betguide").text($.messages.cube));
+
+
+
+                 $("#red").mouseover(function(event){
+
+                       var area = [11,13,14,16,17,19,20,22,25,28,31,34,37,39,42,43,45,48];
+
+                       for (var i = 0; i < area.length ; i++) {
+
+                           allAreas.eq(area[i]).mouseover();
+
+                       }
+                       
+
+                 });
+
+
+                 $(".red").mouseover((e) => $(".betguide").text($.messages.red) );
+
+                 $(".black").mouseover((e) => $(".betguide").text($.messages.black));
+
+                 $(".even").mouseover((e) => $(".betguide").text($.messages.even));
+
+                 $(".odd").mouseover((e) => $(".betguide").text($.messages.odd));
+
+                 $(".bettwosare").mouseover((e) => $(".betguide").text($.messages.one_by_two));
+
+                 $(".cube").mouseover((e) => $(".betguide").text($.messages.cube));
+                 
+                 $(".four_square").mouseover((e) => $(".betguide").text($.messages.four_square));
+
+                 $(".group-cube").mouseover((e) => $(".betguide").text($.messages.group_cube));
+
+                 $(".three_square").mouseover((e) => $(".betguide").text($.messages.three_square));
+                 
+
+
+                 $("#black").mouseover(function(event){
+
+                      var area = [12,15,18,21,24,26,27,29,30,32,33,35,38,40,41,44,46,47];
+
+                      for (var i = 0; i < area.length ; i++) {
+
+                          allAreas.eq(area[i]).mouseover();
+
+                       }
+
+                      
+                 });
+
+                 $("#row_1_max").mouseover(function(event){
+
+                      var area = [11,12,13,14,,15,16,17,18,19,20,21,22];
+ 
+                      for (var i = 0; i < area.length ; i++) {
+
+                          allAreas.eq(area[i]).mouseover();
+                      }
+
+                      
+
+                 });
+
+                 $("#row_2_max").mouseover(function(event){
+
+                      var area = [24,25,26,27,28,29,30,31,32,33,34,35];
+
+                      for (var i = 0; i < area.length ; i++) {
+
+                          allAreas.eq(area[i]).mouseover();
+
+                       }
+                      
+                 });
+
+                 $("#row_3_max").mouseover(function(event){
+
+                       var area = [37,38,39,40,41,42,43,44,45,46,47,48];
+
+                       for (var i = 0; i < area.length ; i++) {
+
+                            allAreas.eq(area[i]).mouseover();
+
+                       }
+                 });
+
+                 $("#one_to_twelve").mouseover(function(event){
+
+                        var area = [11,12,13,14,24,25,26,27,37,38,39,40];
+
+                        for (var i = 0; i < area.length ; i++) {
+
+                           allAreas.eq(area[i]).mouseover();
+
+                        }
+                 });
+
+                 $("#two_to_twelve").mouseover(function(event){
+
+                     var area = [15,16,17,18,28,29,30,31,41,42,43,44];
+
+                     for (var i = 0; i < area.length ; i++) {
+
+                         allAreas.eq(area[i]).mouseover();
+
+                     }
+                 });
+
+                 $("#three_to_twelve").mouseover(function(event){
+
+                       var area = [19,20,21,22, 32,33,34,35, 45,46,47,48];
+
+                       for (var i = 0; i < area.length ; i++) {
+
+                           allAreas.eq(area[i]).mouseover();
+
+                       }
+                 });
+
+                 $("#one_to_eighteen").mouseover(function(event){
+
+                      var area = [11,12,13,14,15,16,24,25,26,27,28,29,37,38,39,40,41,42];
+
+                      for (var i = 0; i < area.length ; i++) {
+
+                           allAreas.eq(area[i]).mouseover();
+
+                      }
+                  });
+
+                 $("#nineteen_to_thyrtysix").mouseover(function(event){
+
+                       var area = [17,18,19,20,21,22, 30,31,32,33,34,35, 43,44,45,46,47,48];
+
+                       for (var i = 0; i < area.length ; i++) {
+
+                           allAreas.eq(area[i]).mouseover();
+
+                       }
+                 });
+
+                 $("#even").mouseover(function(event){
+
+                       var area = [12,14,16,18,20,22, 24,26,28,30,32,34, 38,40,42,44,46,48];
+
+                       for (var i = 0; i < area.length ; i++) {
+
+                          allAreas.eq(area[i]).mouseover();
+
+                       }
+                 });
+
+                 $("#add").mouseover(function(event){
+
+                       var area = [11,13,15,17,19,21, 25,27,29,31,33,35, 37,39,41,43,45,47];
+
+                       for (var i = 0; i < area.length ; i++) {
+
+                           allAreas.eq(area[i]).mouseover();
+
+                       }
+                 });
+
+                
+
+                 $(".square").mouseover(function(event){
+
+                       var area1 = $(this).attr("data-area1") ? parseInt($(this).attr("data-area1")) : null;
+
+                       var area2 = $(this).attr("data-area2") ? parseInt($(this).attr("data-area2")) : null;
+
+                       var area3 = $(this).attr("data-area3") ? parseInt($(this).attr("data-area3")) : null;
+
+
+
+                       if(area1 != null){
+
+                            allAreas.eq(area1).mouseover();
+
+                        }
+
+                       if(area2){
+
+                            allAreas.eq(area2).mouseover();
+
+                       }
+
+                       if(area3){
+
+                            allAreas.eq(area3).mouseover();
+
+                       }
+
+
+                  });
+
+                 $(".square").mouseout(function(event){
+
+                       var area1 = $(this).attr("data-area1") ? parseInt($(this).attr("data-area1")) : null;
+
+                       var area2 = $(this).attr("data-area2") ? parseInt($(this).attr("data-area2")) : null;
+
+                       var area3 = $(this).attr("data-area3") ? parseInt($(this).attr("data-area3")) : null;
+
+
+                       if(area1 != null){
+
+                            allAreas.eq(area1).mouseout();
+
+                       }
+
+                       if(area2){
+
+                            allAreas.eq(area2).mouseout();
+
+                       }
+
+                       if(area3){
+
+                            allAreas.eq(area3).mouseout();
+
+                       }
+
+                      
+
+                });
+
+                 $(".group-cube").mouseover(function(event){
+
+                      var area = $(this).attr("data-area");
+
+                      area = area.split(",");
+
+                      for (var i = 0; i < area.length ; i++) {
+
+                            allAreas.eq(parseInt(area[i])).mouseover();
+
+                      }
+
+                     
+                 });
+
+                 $(".group-cube").mouseout(function(event){
+
+                      var area = $(this).attr("data-area");
+
+                      area = area.split(",");
+
+                      for (var i = 0; i < area.length ; i++) {
+
+                            allAreas.eq(parseInt(area[i])).mouseout();
+
+                       }
+                     
+                 });
+
+                 $(".cube").mouseover(function(event){
+
+                        var area1 = $(this).attr("data-area1") ? parseInt($(this).attr("data-area1")) : null;
+
+                        var area2 = $(this).attr("data-area2") ? parseInt($(this).attr("data-area2")) : null;
+
+                        var area3 = $(this).attr("data-area3") ? parseInt($(this).attr("data-area3")) : null;
+
+                        var area4 = $(this).attr("data-area4") ? parseInt($(this).attr("data-area4")) : null;
+
+
+                        if(area1 != null){
+
+                             allAreas.eq(area1).mouseover();
+
+                        }
+
+                        if(area2){
+
+                            allAreas.eq(area2).mouseover();
+
+                       }
+
+                       if(area3){
+
+                           allAreas.eq(area3).mouseover();
+
+                      }
+
+                      if(area4){
+
+                           allAreas.eq(area4).mouseover();
+
+                       }
+                });
+
+                 $(".cube").mouseout(function(event){
+
+                      var area1 = $(this).attr("data-area1") ? parseInt($(this).attr("data-area1")) : null;
+
+                      var area2 = $(this).attr("data-area2") ? parseInt($(this).attr("data-area2")) : null;
+
+                      var area3 = $(this).attr("data-area3") ? parseInt($(this).attr("data-area3")) : null;
+
+                      var area4 = $(this).attr("data-area4") ? parseInt($(this).attr("data-area4")) : null;
+
+
+                      if(area1 != null){
+
+                          allAreas.eq(area1).mouseout();
+
+                     }
+
+                     if(area2){
+
+                          allAreas.eq(area2).mouseout();
+
+                     }
+
+                     if(area3){
+
+                          allAreas.eq(area3).mouseout();
+
+                     }
+
+                    if(area4){
+
+                          allAreas.eq(area4).mouseout();
+
+                     }
+
+                    
+
+                 });
+
+                 $(".exit").click(function () {
+
+                     var user_id = $("#user_id").val();
+
+                     var data = {
+                         user_id: user_id
+                     }
+
+                     $.ajax({
+                         type: "POST",
+                         url: "/games/end/",
+                         data: JSON.stringify(data),
+                         success: function (response) {
+
+                             //location.href = "/roulet/index/";
+
+                         }
+                     });
+
+                    
+
+                 });
+
+                 function betelementexists(data_val, bets) {
+
+                     var bets_el = $(".bets[data-val='[" + data_val + "]']");
+
+                     if (bets_el.length > 0) {
+
+                         bets_el.trigger("click");
+
+                         return true;
+                     }
+                     else {
+
+                         $(".keyboard").prepend(bets);
+                         return false;
+                     }
+                 }
+
+                 $(".cube").click(function (event) {
+
+                     event.preventDefault();
+                     if (!$.User.canBet) { return;}
+                    
+                     var top = parseInt($(this).css("top"));
+
+                     var left = parseInt($(this).css("left"));
+
+                 
+                     if ($(this).attr("data-val") == undefined)
+                     {
+                         return;
+                     }
+                     var data_val = JSON.parse($(this).attr("data-val"));
+
+                     $.Game.MyBet(data_val);
+
+                     var val = [];
+
+                     for (var i = 0 ; i < data_val.length; i++) {
+
+                         if (!$.Game.isExist(data_val[i])) {
+
+                             $.Game.Bet(data_val[i]);
+
+                             val.push(data_val[i]);
+
+                         }
+
+                     }
+
+
+                     var coin = $.Roulet.bet;
+                     var bets = "<div class='bets' style='left:" + (left - 27.5) + "px;top:" + (top - 22.5) + "px;' data-val='[" + data_val + "]'>"+coin+"</div>"
+                     
+                     if (betelementexists(data_val, bets)) {
+                         return;
+                     }
+
+                     $.User.Bet();
+                    
+
+                 });
+
+                 $(".square").click(function (e) {
+
+                     e.preventDefault();
+                     if (!$.User.canBet) { return; }
+
+                     var top = parseInt($(this).css("top"));
+
+                     var left = parseInt($(this).css("left"));
+
+                     if ($(this).attr("data-val") == undefined) {
+                         return;
+                     }
+
+                     var data_val = JSON.parse($(this).attr("data-val"));
+
+                     var val = [];
+
+
+                     for (var i = 0 ; i < data_val.length; i++) {
+
+                         if (!$.Game.isExist(data_val[i])) {
+
+                             $.Game.Bet(data_val[i]);
+
+                             val.push(data_val[i]);
+
+                         }
+
+                     }
+                     var coin = $.Roulet.bet;
+
+                     var bets = "<div class='bets betssquare' style='left:" + (left - 14.5) + "px;top:" + (top - 5.5) + "px;' data-val='["+data_val + "]'>"+coin+"</div>"
+
+                     if (betelementexists(data_val, bets)) {
+                         return;
+                     }
+
+                     $.User.Bet();
+
+                     $.Game.MyBet(data_val);
+                 })
+
+                 
+
+                 $(".keypad-button").click(function (event) {
+                     event.preventDefault()
+
+                     var value;
+                     var top = parseInt($(this).css("top"));
+
+                     var left = $(this).css("left");
+
+                     var coin = $.Roulet.bet;
+
+                     var bets;
+
+                     if ($(this).hasClass("not-button")) {
+
+                         if ($(this).attr("data-val") == undefined) {
+                             return;
+                         }
+
+                         value = JSON.parse($(this).attr("data-val"));
+
+                         var className = "";
+
+                         if ($(this).hasClass("group-number")) {
+
+                             className = "betononetotwelve";
+
+                         }
+
+                         if ($(this).hasClass("group-small")) {
+
+                             className = "betononetoeighteen";
+                         }
+
+                         if ($(this).hasClass("even") || $(this).hasClass("odd") || $(this).hasClass("red") || $(this).hasClass("black")) {
+
+                             className = "beteven";
+                         }
+
+                         bets = "<div class='bets " + className + "' style='left:" + left + ";top:" + top + "px;' data-val='[" + value + "]'>" + coin + "</div>"
+
+                     }
+                     else {
+
+                         if ($(this).attr("data-id") == undefined) {
+                             return;
+                         }
+                         value = parseInt($(this).attr("data-id"));
+
+                         bets = "<div class='bets' style='left:" + left + ";top:" + top + "px;' data-val='" + value + "'>" + coin + "</div>"
+                     }
+
+                     if ($.User.canBet) {
+
+                         $.Game.Bet(value);
+
+                         $.Game.MyBet(value);
+
+                         $(".keyboard").prepend(bets);
+
+                         $.User.Bet();
+                     }
+
+                 });
+
+                 $(document).on("click", ".bets", function () {
+
+                     value = JSON.parse($(this).attr("data-val"));
+
+                     if ($.User.canBet) {  
+
+                         $.Game.MyBet(value);
+
+                         var coin =Number( $.Roulet.bet )+Number( $(this).text());
+
+                         $(this).text(coin);
+
+                         $.User.Bet();
+
+                     }
+
+                 });
+
+                 $(".group-cube").click(function (e) {
+
+                     e.preventDefault();
+
+                     if (!$.User.canBet && $.User.hasEnoughPoints ) { return; }
+
+                     var top = parseInt($(this).css("top"));
+
+                     var left = parseInt($(this).css("left"));
+
+                     if ($(this).attr("data-val") == undefined) {
+                         return;
+                     }
+
+                     var data_val = JSON.parse($(this).attr("data-val"));
+
+                     var val = [];
+
+                     $.Game.MyBet(data_val);
+                   
+                     var coin = $.Roulet.bet;
+
+                     var bets = "<div class='bets' style='left:" + (left - 27.5) + "px;top:" + (top - 19.5) + "px;' data-val='[" + data_val + "]'>" + coin + "</div>"
+
+                     if (betelementexists(data_val, bets)) return;
+
+                     $.User.Bet();
+                 });
+
+                 $(".cancel-bet").click(function (e) {
+
+                     e.preventDefault();
+
+                     if (!$.User.canBet) return;
+
+                     $.User.CancelBet();
+
+                     $.Game.mybets = []; $(".bets").remove()
+                 })
+
+                 $("#transfer").click(function () {
+                     $.Game.TransferWinningPoints();
+                     $("#win_score").text(0);
+                 })
+
+                 $(".coin button").click(function (e) {
+
+                     e.preventDefault();
+                     $.Game.find();
+                     var hidden_bets = $("#hidden_bets").val();
+
+                     if (hidden_bets) {
+
+                         hidden_bets = JSON.parse(hidden_bets);
+
+                     } else {
+
+                         hidden_bets = [];
+
+                     }
+
+                     $(".coin").removeClass("coin-active");
+
+                     $(this).parent().addClass("coin-active");
+
+                     var value = $(this).val();
+
+                     $.Roulet.bet = value;
+
+                     var game_id = $("#game_id").val();
+                     var user_id = $("#user_id").val();
+
+                     var data = {
+                         game_id: game_id,
+                         user_id: user_id,
+                         coin: value,
+                         bets: JSON.stringify(hidden_bets)
+                     }
+
+                     $.ajax({
+                         type: "POST",
+                         url: "/games/bet/",
+                         data: JSON.stringify(data)
+                     });
+
+                 });
+	       });
+
+
+           $.Roulet = {
+               playAudio: function () {
+                   var audio = new Audio('/sound/wheelStart.wav');
+                   //audio.play();
+               }
+
+
+           }
+
+	       $.Roulet.last = [];
+
+           $.Roulet.PushLast = function (id) {
+
+               if ($.Roulet.last.length == 5) {
+                   $.Roulet.last = $.Roulet.last.splice(0, 1);
+               }
+
+               if ($.Roulet.last.length == 0) {
+                   $.Roulet.last[0] = id;
+               } else {
+                   $.Roulet.last[$.Roulet.last.length] = id
+
+               }
+
+
+               var reversed = $.Roulet.last.reverse();
+
+               if (reversed[0] != null) {
+
+                   $("#last_button_5").text(reversed[0]);
+               }
+
+               if (reversed[1] != null) {
+
+                   $("#last_button_4").text(reversed[1]);
+
+               }
+
+               if (reversed[2] != null) {
+
+                   $("#last_button_3").text(reversed[2]);
+
+               }
+
+               if (reversed[3] != null) {
+
+                   $("#last_button_2").text(reversed[3]);
+
+               }
+
+               if (reversed[4] != null) {
+
+                   $("#last_button_1").text(reversed[4]);
+
+               }
+
+           }
+
+	       $.Roulet.must = 00;
+
+	       $.Roulet.bet = 1;
+
+	       $.Roulet.randomInteger = function (min, max) {
+
+            var rand = min + Math.random() * (max - min)
+
+               rand = Math.round(rand);
+
+            return rand;
+
+        }
+
+           $.Roulet.sections = [{"id":2,"min":0,"max":9.47},{"id":14,"min":9.47,"max":18.94},{"id":35,"min":18.94,"max":28.410000000000004},{"id":23,"min":28.410000000000004,"max":37.88},{"id":4,"min":37.88,"max":47.35},{"id":16,"min":47.35,"max":56.82},{"id":33,"min":56.82,"max":66.29},{"id":21,"min":66.29,"max":75.76},{"id":6,"min":75.76,"max":85.23},{"id":18,"min":85.23,"max":94.7},{"id":31,"min":94.7,"max":104.17},{"id":19,"min":104.17,"max":113.64},{"id":8,"min":113.64,"max":123.11},{"id":12,"min":123.11,"max":132.58},{"id":29,"min":132.58,"max":142.05},{"id":25,"min":142.05,"max":151.52},{"id":10,"min":151.52,"max":160.99},{"id":27,"min":160.99,"max":170.46},{"id":"00","min":170.46,"max":179.93},{"id":1,"min":179.93,"max":189.4},{"id":13,"min":189.4,"max":198.87},{"id":36,"min":198.87,"max":208.34},{"id":24,"min":208.34,"max":217.81},{"id":3,"min":217.81,"max":227.28},{"id":15,"min":227.28,"max":236.75},{"id":34,"min":236.75,"max":246.22},{"id":22,"min":246.22,"max":255.69},{"id":5,"min":255.69,"max":265.16},{"id":17,"min":265.16,"max":274.63000000000005},{"id":32,"min":274.63000000000005,"max":284.1000000000001},{"id":20,"min":284.1000000000001,"max":293.5700000000001},{"id":7,"min":293.5700000000001,"max":303.04000000000013},{"id":11,"min":303.04000000000013,"max":312.51000000000016},{"id":30,"min":312.51000000000016,"max":321.9800000000002},{"id":26,"min":321.9800000000002,"max":331.4500000000002},{"id":9,"min":331.4500000000002,"max":340.92000000000024},{"id":28,"min":340.92000000000024,"max":350.39000000000027},{"id":0,"min":350.39000000000027,"max":359.8600000000003}];
+
+           $.Roulet.Higlite = function (id) {
+
+               $.Roulet.PushLast(id);
+
+               var overed = false;
+
+               var button = $("#" + id);
+
+               if ($.Game.isExist(id)) {
+
+                      var game_id = $("#game_id").val();
+
+                      var data = {
+                          user_id: game_id,
+                          coin: $.Roulet.bet,
+                          type:"win"
+                      }
+
+                      $.ajax({
+                          type: "POST",
+                          url: "/logs/log/",
+                          data: JSON.stringify(data)
+                      });
+
+                     
+
+                    }
+                    else {
+
+                       var game_id = $("#game_id").val();
+
+                       var data = {
+                          user_id: game_id,
+                          coin: $.Roulet.bet,
+                          type: "loose"
+                       }
+
+                   $.ajax({
+            type: "POST",
+                       url: "/logs/log/",
+                       data: JSON.stringify(data)
+                   });
+
+               }
+
+               $.Game.bets = [];
+
+               $(".bets").remove();
+
+               for (var i = 1; i <= 20; i++) {
+
+                   (function(index) {
+
+            setTimeout(function() {
+
+                if(overed){
+
+                    overed = false;
+
+                    button.mouseout();
+
+                }else{
+
+                       overed = true;
+
+                       button.mouseover();
+
+                   }
+
+                  }, i * 500);
+
+                 })(i);
+               }
+
+               setTimeout(function(){
+
+                   $("#keyboard_overlay").hide();
+
+               },10000);
+
+	       }
+
+	       $.Roulet.GetNumber = function(gradus){
+
+            var section = null;
+
+            for(var i = 0; i < $.Roulet.sections.length; i++){
+
+                if ($.Roulet.sections[i].id == $.Roulet.must) {
+
+                    section = $.Roulet.sections[i];
+
+                }
+
+            }
+            if ($.Roulet.must == -1) {
+                section = $.Roulet.sections[18]; //"00" waala section highlight
+            }
+
+            var min =  section["min"];
+
+            var max =  section["max"];
+
+            var midle = min + ((max - min ) / 2);
+
+            $("#roulet").css({"transform":"rotate(" + midle + "deg)"});
+
+            $.Roulet.Higlite(section.id);
+            $.Game.calcultepoints($.Roulet.must);
+
+         }
+
+           $.Roulet.RunBall = function(){
+
+            setTimeout(function(){
+
+               $("#ball").removeClass("ball-animated");
+
+                setTimeout(function(){
+
+                   $("#ball").addClass("ball-animated");
+
+                },300)
+
+           },200);
+
+           $("#keyboard_overlay").show();
+
+            var duration = 700;
+
+            var rotation = function (){
+
+                if(duration > 2400){
+
+                        $("#roulet").stopRotate();
+
+                        $("#ballWrapper").stopRotate();
+
+                        $.Roulet.GetNumber($("#roulet").getRotateAngle()[0]);
+
+                    return;
+
+                }
+
+                var random = $.Roulet.randomInteger(450,600);
+
+                duration += random;
+
+                     $("#ballWrapper").rotate({
+                          angle:-1,
+                          animateTo:-360,
+                          callback: rotation,
+                          duration: duration,
+                          easing: function (x,t,b,c,d){
+                        return c*(t/d)+b;
+                    }
+                });
+
+
+            }
+
+
+            rotation();
+
+        }
+
+           $.Roulet.RunRullet = function(){
+
+            var duration = 400;
+
+            var rotationRullet = function (){
+
+                if(duration > 2800){
+
+                    return;
+
+                }
+
+                var random = $.Roulet.randomInteger(400,500);
+
+                duration += random;
+
+                rotationRulletObj = $("#roulet").rotate({
+                    angle:0,
+                       animateTo:360,
+                       callback: rotationRullet,
+                       duration: duration,
+                       easing: function (x,t,b,c,d){
+                        return c*(t/d)+b;
+                    }
+                });
+            }
+
+            rotationRullet();
+
+        }
+
+           $.Roulet.RunRound = function(){
+          
+               this.playAudio();
+
+                $.Roulet.RunBall();
+
+                $.Roulet.RunRullet();
+
+           }
+
+           $.Roulet.FirstRun = function(seconds){
+
+            var d = new Date(99, 5, 24, 11, 33, 59, 0);
+
+            var now = new Date();
+
+            var current_sec = d.getSeconds() - now.getSeconds();
+
+            var timerInterval = setInterval(function(){
+
+                if(current_sec > (0)){
+
+                    current_sec--;
+
+                    current_sec = current_sec.toString().length == 1 ? "0" + current_sec : current_sec;
+
+                    $("#timer_text").text("0:" + current_sec);
+
+                    $.Roulet.block(current_sec);
+
+                    }else{
+
+                    clearInterval(timerInterval);
+
+                         $.Roulet.Run();
+
+                         $.Roulet.RunRound();
+
+                        
+
+                    }
+
+            },1000);
+
+        }
+           $.Roulet.block = function (current_sec) {
+               if (Number(current_sec) <= 10 || Number(current_sec) >= 50) {
+
+                   $.User.canBet = true;
+
+                   $(".betguide").text($.messages.bet_time_over);
+
+               } else {
+
+                   $.User.canBet = true;
+
+                   $(".betguide").text("You can Bet Now");
+                   
+
+               }
+           }
+
+           $.Roulet.Run = function () {
+
+               var current_sec = 60;
+
+               var timerInterval = setInterval(function () {
+
+                   if (current_sec > (0)) {
+
+                       current_sec--;
+
+                       current_sec = current_sec.toString().length == 1 ? "0" + current_sec : current_sec;
+
+                       $("#timer_text").text("0:" + current_sec);
+
+                       $.Roulet.block(current_sec);
+
+                   } else {
+
+                       clearInterval(timerInterval);
+
+                       $.Roulet.Run();
+
+                       $.Roulet.RunRound();
+
+
+                   }
+
+               }, 1000);
+
+        }
+
+    </script>
+</body>
+</html>
