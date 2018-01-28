@@ -383,6 +383,9 @@
                                  $.User.hasEnoughPoints = false;
                                  
                              }
+                             else {
+                                 $.User.hasEnoughPoints = true;
+                             }
                          }
 
                      }
@@ -1083,7 +1086,7 @@
                  $(".cube").click(function (event) {
 
                      event.preventDefault();
-                     if (!$.User.canBet) { return;}
+                     if (!$.User.canBet && !$.User.hasEnoughPoints && !userhasEnoughPoints()) { return;}
                     
                      var top = parseInt($(this).css("top"));
 
@@ -1128,7 +1131,7 @@
                  $(".square").click(function (e) {
 
                      e.preventDefault();
-                     if (!$.User.canBet) { return; }
+                     if (!$.User.canBet && !$.User.hasEnoughPoints && !userhasEnoughPoints()) { return; }
 
                      var top = parseInt($(this).css("top"));
 
@@ -1172,72 +1175,85 @@
                  $(".keypad-button").click(function (event) {
                      event.preventDefault()
 
-                     var value;
-                     var top = parseInt($(this).css("top"));
+                    
 
-                     var left = $(this).css("left");
+                         var value;
 
-                     var coin = $.Roulet.bet;
+                         var top = parseInt($(this).css("top"));
 
-                     var bets;
+                         var left = $(this).css("left");
 
-                     if ($(this).hasClass("not-button")) {
+                         var coin = $.Roulet.bet;
 
-                         if ($(this).attr("data-val") == undefined) {
-                             return;
+                         var bets;
+
+                         if ($(this).hasClass("not-button")) {
+
+                             if ($(this).attr("data-val") == undefined) {
+                                 return;
+                             }
+
+                             value = JSON.parse($(this).attr("data-val"));
+
+                             var className = "";
+
+                             if ($(this).hasClass("group-number")) {
+
+                                 className = "betononetotwelve";
+
+                             }
+
+                             if ($(this).hasClass("group-small")) {
+
+                                 className = "betononetoeighteen";
+                             }
+
+                             if ($(this).hasClass("even") || $(this).hasClass("odd") || $(this).hasClass("red") || $(this).hasClass("black")) {
+
+                                 className = "beteven";
+                             }
+
+                             bets = "<div class='bets " + className + "' style='left:" + left + ";top:" + top + "px;' data-val='[" + value + "]'>" + coin + "</div>"
+
+                         }
+                         else {
+
+                             if ($(this).attr("data-id") == undefined) {
+                                 return;
+                             }
+                             value = parseInt($(this).attr("data-id"));
+
+                             bets = "<div class='bets' style='left:" + left + ";top:" + top + "px;' data-val='" + value + "'>" + coin + "</div>"
                          }
 
-                         value = JSON.parse($(this).attr("data-val"));
+                         if ($.User.canBet && $.User.hasEnoughPoints && userhasEnoughPoints()) {
 
-                         var className = "";
+                             $.Game.Bet(value);
 
-                         if ($(this).hasClass("group-number")) {
+                             $.Game.MyBet(value);
 
-                             className = "betononetotwelve";
+                             $(".keyboard").prepend(bets);
 
+                             $.User.Bet();
                          }
-
-                         if ($(this).hasClass("group-small")) {
-
-                             className = "betononetoeighteen";
-                         }
-
-                         if ($(this).hasClass("even") || $(this).hasClass("odd") || $(this).hasClass("red") || $(this).hasClass("black")) {
-
-                             className = "beteven";
-                         }
-
-                         bets = "<div class='bets " + className + "' style='left:" + left + ";top:" + top + "px;' data-val='[" + value + "]'>" + coin + "</div>"
-
-                     }
-                     else {
-
-                         if ($(this).attr("data-id") == undefined) {
-                             return;
-                         }
-                         value = parseInt($(this).attr("data-id"));
-
-                         bets = "<div class='bets' style='left:" + left + ";top:" + top + "px;' data-val='" + value + "'>" + coin + "</div>"
-                     }
-
-                     if ($.User.canBet) {
-
-                         $.Game.Bet(value);
-
-                         $.Game.MyBet(value);
-
-                         $(".keyboard").prepend(bets);
-
-                         $.User.Bet();
-                     }
+                   
 
                  });
+
+                 function userhasEnoughPoints() {
+
+                     var balavailable = true;
+
+                     var bal = $("#pointuser").text();
+
+                     return Number(bal) >= Number($.Roulet.bet);
+                 }
 
                  $(document).on("click", ".bets", function () {
 
                      value = JSON.parse($(this).attr("data-val"));
 
-                     if ($.User.canBet) {  
+                     if ($.User.canBet && $.User.hasEnoughPoints && userhasEnoughPoints()) {  
 
                          $.Game.MyBet(value);
 
@@ -1255,7 +1271,7 @@
 
                      e.preventDefault();
 
-                     if (!$.User.canBet && $.User.hasEnoughPoints ) { return; }
+                     if (!$.User.canBet && !$.User.hasEnoughPoints && !userhasEnoughPoints() ) { return; }
 
                      var top = parseInt($(this).css("top"));
 
@@ -1269,13 +1285,15 @@
 
                      var val = [];
 
-                     $.Game.MyBet(data_val);
+                   
                    
                      var coin = $.Roulet.bet;
 
                      var bets = "<div class='bets' style='left:" + (left - 27.5) + "px;top:" + (top - 19.5) + "px;' data-val='[" + data_val + "]'>" + coin + "</div>"
 
                      if (betelementexists(data_val, bets)) return;
+
+                     $.Game.MyBet(data_val);
 
                      $.User.Bet();
                  });
@@ -1659,7 +1677,7 @@
            $.Roulet.block = function (current_sec) {
                if (Number(current_sec) <= 10 || Number(current_sec) >= 50) {
 
-                   $.User.canBet = true;
+                   $.User.canBet = false;
 
                    $(".betguide").text($.messages.bet_time_over);
 
