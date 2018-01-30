@@ -271,8 +271,11 @@ jQuery(document).ready(function () {
     //Main.bindEvents();
     //Managers.init();
     //Managers.bindEvents();
-    BindManager(2, "area_manger", "area_manger_h");
-    BindManager(3, "area_main");
+    //Area Manager = 2
+    //Main ==1
+    //User == 0
+    
+ 
 
 
     onStateChange("ddstate", "ddldistrict");
@@ -283,7 +286,7 @@ jQuery(document).ready(function () {
     $("#ddldistrict").change(function () {
 
         var stateid = $("#ddstate").val();
-        var distictid = this.selectedIndex;
+        var distictid = this.selectedOptions[0].value
 
         Filters.init(stateid, distictid);
        
@@ -293,8 +296,11 @@ jQuery(document).ready(function () {
 
 
         var stateid = $("#ddstate_u").val();
-        var distictid = this.selectedIndex;
+        var distictid = this.selectedOptions[0].value
         Users.init(stateid, distictid);
+        filter(stateid, distictid,2, "area_manger_user");
+
+        filter(stateid, distictid,1, "main_user");
     });
 
 
@@ -302,8 +308,10 @@ jQuery(document).ready(function () {
 
 
         var stateid = $("#ddstate_m").val();
-        var distictid = this.selectedIndex;
+        var distictid = this.selectedOptions[0].value
         Main.init(stateid, distictid);
+        filter(stateid,distictid,2, "area_manger_main");
+
     });
 
     Filters.bindEvents();
@@ -368,6 +376,35 @@ function BindManager(level,element,hdnElement) {
                 $("#" + element).html(optionsHtml);
 
                 Select($("#" + hdnElement), $("#" + element));
+
+            }
+
+        }
+    });
+}
+
+function filter(state, district, level,element) {
+
+    $.ajax({
+        type: "GET",
+        url: "/auth/filter?state=" + state + "&districtid=" + district + "&access_level="+ level,
+        dataType: 'json',
+        contentType: "application/json",
+        success: function (response) {
+
+            var responseJson = response.data;
+
+            if ((responseJson) && (responseJson.length > 0)) {
+
+                var optionsHtml = "<option></option>";
+
+                for (var i = 0; i < responseJson.length; i++) {
+
+                    optionsHtml += "<option value='" + responseJson[i]["id"] + "'>" + responseJson[i]["name"] + "</option>";
+
+                }
+
+                $("#" + element).html(optionsHtml);
 
             }
 

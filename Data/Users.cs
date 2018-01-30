@@ -35,8 +35,8 @@ namespace database
             SQL query = @"
               IF NOT EXISTS(SELECT * FROM [dbo].[users] WHERE [email] = @email)
                 BEGIN
-                   INSERT INTO [dbo].[users](id, name, email, password, access_level, pin, ref, main,PointUser,PhoneNumber,Commision,Address,StateId,DistrictId)
-                                      VALUES(@id, @name, @email, @password , @access_level, @pin, @ref, @main,@pointuser,@phonenumber,@commission,@address,@stateid,@districtid)
+                   INSERT INTO [dbo].[users](id, name, email, password, access_level, pin, ref, main,PointUser,PhoneNumber,Commision,Address,StateId,DistrictId,datecreated,createdby)
+                                      VALUES(@id, @name, @email, @password , @access_level, @pin, @ref, @main,@pointuser,@phonenumber,@commission,@address,@stateid,@districtid,@datecreated,@createdby)
                 END
                exec create_ledger @id,0,@pointuser,0;
             ";
@@ -50,14 +50,23 @@ namespace database
             query.Parameters.Add("main", args["main"] != null ? args.Value<string>("main") : (object)DBNull.Value);
 
 
-            query.Parameters.Add("pointuser", args["point"] != null ? args.Value<string>("point") : (object)DBNull.Value);
+            query.Parameters.Add("pointuser", args["point"] != null ? args.Value<int>("point") : (object)DBNull.Value);
             query.Parameters.Add("phonenumber", args["phone"] != null ? args.Value<string>("phone") : (object)DBNull.Value);
-            query.Parameters.Add("commission", args["commission"] != null ? args.Value<string>("commission") : (object)DBNull.Value);
+            if (args["commission"] == null || args["commission"].ToString() == "")
+            {
+                query.Parameters.Add("commission",  (object)DBNull.Value);
+            }
+            else
+            {
+                query.Parameters.Add("commission", args["commission"] != null ? args.Value<string>("commission") : (object)DBNull.Value);
+            }
             query.Parameters.Add("address", args["address"] != null ? args.Value<string>("address") : (object)DBNull.Value);
             query.Parameters.Add("stateid", args["main"] != null ? args.Value<string>("ddstate") : (object)DBNull.Value);
             query.Parameters.Add("districtid", args["main"] != null ? args.Value<string>("ddldistrict") : (object)DBNull.Value);
             query.Parameters.Add("pin", CreatePin());
-
+            query.Parameters.Add("datecreated", DateTime.UtcNow);
+            JObject CurrentUser = Authentication.UserFromCookie();
+            query.Parameters.Add("createdby", CurrentUser.Value<string>("id"));
             int result = query.Execute(true);
 
             if (result > 0){
@@ -86,7 +95,7 @@ namespace database
                    ,commision=@commission
                    ,address=@address
                    ,stateid=@stateid
-                   ,districtid=@districtid
+                   ,districtid=@districtid,datecreated = @datecreated,createdby= @createdby
                    WHERE [id] = @id
 
                 END
@@ -107,6 +116,9 @@ namespace database
             query.Parameters.Add("address", args["address"] != null ? args.Value<string>("address") : (object)DBNull.Value);
             query.Parameters.Add("stateid", args["ddstate"] != null ? args.Value<string>("ddstate") : (object)DBNull.Value);
             query.Parameters.Add("districtid", args["ddldistrict"] != null ? args.Value<string>("ddldistrict") : (object)DBNull.Value);
+            query.Parameters.Add("datecreated", DateTime.UtcNow);
+            JObject CurrentUser = Authentication.UserFromCookie();
+            query.Parameters.Add("createdby", CurrentUser.Value<string>("id"));
             int result = query.Execute(true);
 
             if (result > 0){
@@ -160,7 +172,7 @@ namespace database
                ,[access_level]
                FROM [dbo].[users]
                WHERE [access_level] = @access_level
-                order by [name]
+                order by [datecreated] desc
             ";
 
             query.Parameters.Add("access_level", level);

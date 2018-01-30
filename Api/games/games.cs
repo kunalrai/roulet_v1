@@ -16,7 +16,7 @@ namespace crm
     {
         public static Task Start(IOwinContext ctx)
         {
-            t.Change(0, 1000 * 60 * 1);
+            //t.Change(0, 1000 * 60 * 1);
 
             if (!Authentication.Check(ctx))
             {
