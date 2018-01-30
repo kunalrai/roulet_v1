@@ -180,17 +180,19 @@ function bindEventsCommon(el,access_level) {
             if (el == "u") {
                 var stateid = $("#ddstate_u").val();
                 var district = $("#ddldistrict_u").val();
-
+                Users.init(stateid, district);
                 Users.reloadTable(stateid, district);
             }
             else if (el == "m") {
                 var stateid = $("#ddstate_m").val();
                 var district = $("#ddldistrict_m").val();
+                Main.init(stateid, district);
                 Main.reloadTable(stateid, district);
             }
             else if (el == "am") {
                 var stateid = $("#ddstate").val();
                 var district = $("#ddldistrict").val();
+                AreaManager.init(stateid, district);
                 AreaManager.reload(stateid, district);
             }
 
