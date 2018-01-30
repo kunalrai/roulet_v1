@@ -233,8 +233,9 @@ namespace Auth
             string userid = Convert.ToString(ctx.Parametr("userid"));
             int credit = Convert.ToInt32(ctx.Parametr("credit"));
             int debit = Convert.ToInt32(ctx.Parametr("debit"));
+            int access_level = Convert.ToInt32(ctx.Parametr("access_level"));
 
-            var result = database.Users.CreateLedger(userid, credit, debit);
+            var result = database.Users.CreateLedger(userid, credit, debit, access_level);
 
 
             return ctx.JSON(result);

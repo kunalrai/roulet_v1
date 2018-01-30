@@ -57,9 +57,9 @@
             grid.getDataTable().ajax.url("/auth/filter?state=" + state + "&districtid=" + district + "&access_level=0").load();
 
         },
-        bindEvents: function () {
+        bindEvents: function (access_level) {
             $("#users-table").on("click", "button", function (event) {
-                bindEventsCommon.call(this,"u");
+                bindEventsCommon.call(this, "u", access_level);
 
             });
 
@@ -72,6 +72,7 @@
 
 var Main = function () {
     grid = null;
+    access_level = 1;
     responseUsers = [];
     return {
         init: function (state, district) {
@@ -128,13 +129,13 @@ var Main = function () {
             grid.getDataTable().ajax.url("/auth/filter?state=" + state + "&districtid=" + district + "&access_level=1").load();
 
         },
-        bindEvents: function () {
+        bindEvents: function (access_level) {
 
            
 
             $("#mains-table").on("click", "button", function (event) {
 
-                bindEventsCommon.call(this, "m");
+                bindEventsCommon.call(this, "m",access_level);
                  
 
             });
@@ -146,7 +147,7 @@ var Main = function () {
 
 }();
 
-function bindEventsCommon(el) {
+function bindEventsCommon(el,access_level) {
 
     var button = $(this);
     var id = button.attr("data-id");
@@ -170,20 +171,27 @@ function bindEventsCommon(el) {
             beforeSend: function (request) {
                 request.setRequestHeader("_Autorize", $.Auth.getAuthCookie());
             },
-            url: '/users/createledger?userid=' + data.id + '&credit=' + cr + '&debit=' + dr + '',
+            url: '/users/createledger?userid=' + data.id + '&credit=' + cr + '&debit=' + dr + '&access_level=' + access_level+'',
             data: JSON.stringify(data)
 
         }).done(function () {
 
             $("#ajax").modal("hide");
             if (el == "u") {
-                Users.reloadTable(1, 1);
+                var stateid = $("#ddstate_u").val();
+                var district = $("#ddldistrict_u").val();
+
+                Users.reloadTable(stateid, district);
             }
             else if (el == "m") {
-                Main.reloadTable(1, 1);
+                var stateid = $("#ddstate_m").val();
+                var district = $("#ddldistrict_m").val();
+                Main.reloadTable(stateid, district);
             }
             else if (el == "am") {
-                Filters.reload(1, 1);
+                var stateid = $("#ddstate").val();
+                var district = $("#ddldistrict").val();
+                AreaManager.reload(stateid, district);
             }
 
         });
@@ -191,7 +199,7 @@ function bindEventsCommon(el) {
 
 }
 
-var Filters = function () {
+var AreaManager = function () {
     grid = null;
     responseUsers = [];
     return {
@@ -251,9 +259,9 @@ var Filters = function () {
 
         },
       
-        bindEvents: function () {
+        bindEvents: function (access_level) {
             $("#managers-table").on("click", "button", function (event) {
-                bindEventsCommon.call(this, "am");
+                bindEventsCommon.call(this, "am",access_level);
                 
                
             });
@@ -288,7 +296,7 @@ jQuery(document).ready(function () {
         var stateid = $("#ddstate").val();
         var distictid = this.selectedOptions[0].value
 
-        Filters.init(stateid, distictid);
+        AreaManager.init(stateid, distictid);
        
     })
 
@@ -300,7 +308,8 @@ jQuery(document).ready(function () {
         Users.init(stateid, distictid);
         filter(stateid, distictid,2, "area_manger_user");
 
-        filter(stateid, distictid,1, "main_user");
+        filter(stateid, distictid, 1, "main_user");
+        Users.reloadTable(stateid, distictid);
     });
 
 
@@ -310,13 +319,14 @@ jQuery(document).ready(function () {
         var stateid = $("#ddstate_m").val();
         var distictid = this.selectedOptions[0].value
         Main.init(stateid, distictid);
-        filter(stateid,distictid,2, "area_manger_main");
+        filter(stateid, distictid, 2, "area_manger_main");
+        Main.reloadTable(stateid, distictid);
 
     });
 
-    Filters.bindEvents();
-    Users.bindEvents();
-    Main.bindEvents();
+    AreaManager.bindEvents(2);
+    Users.bindEvents(0);
+    Main.bindEvents(1);
 });
 
 function onStateChange(element,districtElement) {

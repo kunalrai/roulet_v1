@@ -38,7 +38,7 @@ namespace database
                    INSERT INTO [dbo].[users](id, name, email, password, access_level, pin, ref, main,PointUser,PhoneNumber,Commision,Address,StateId,DistrictId,datecreated,createdby)
                                       VALUES(@id, @name, @email, @password , @access_level, @pin, @ref, @main,@pointuser,@phonenumber,@commission,@address,@stateid,@districtid,@datecreated,@createdby)
                 END
-               exec create_ledger @id,0,@pointuser,0;
+               exec create_ledger @id,@pointuser,0,0,@access_level;
             ";
 
             query.Parameters.Add("id", id);
@@ -61,8 +61,8 @@ namespace database
                 query.Parameters.Add("commission", args["commission"] != null ? args.Value<string>("commission") : (object)DBNull.Value);
             }
             query.Parameters.Add("address", args["address"] != null ? args.Value<string>("address") : (object)DBNull.Value);
-            query.Parameters.Add("stateid", args["main"] != null ? args.Value<string>("ddstate") : (object)DBNull.Value);
-            query.Parameters.Add("districtid", args["main"] != null ? args.Value<string>("ddldistrict") : (object)DBNull.Value);
+            query.Parameters.Add("stateid", args["ddstate"] != null ? args.Value<string>("ddstate") : (object)DBNull.Value);
+            query.Parameters.Add("districtid", args["ddldistrict"] != null ? args.Value<string>("ddldistrict") : (object)DBNull.Value);
             query.Parameters.Add("pin", CreatePin());
             query.Parameters.Add("datecreated", DateTime.UtcNow);
             JObject CurrentUser = Authentication.UserFromCookie();
@@ -99,7 +99,7 @@ namespace database
                    WHERE [id] = @id
 
                 END
-                exec create_ledger @id,0,@pointuser,0;
+               
             ";
 
             query.Parameters.Add("id", Guid.Parse(args.Value<string>("id")));
@@ -618,9 +618,9 @@ namespace database
         }
 
 
-        public static bool CreateLedger(string userid,int credit,int debit)
+        public static bool CreateLedger(string userid,int credit,int debit,int access_level)
         {
-            SQL query = @"exec create_ledger @userid,@credit,@debit;
+            SQL query = @"exec create_ledger @userid,@credit,@debit,0,@access_level;
                     Update [dbo].[users]
                     set  pointUSer = (select top 1 current_bal from ledger where userid = @userid
                     order by balance_date desc)
@@ -629,6 +629,8 @@ namespace database
             query.Parameters.Add("userid", userid);
             query.Parameters.Add("credit", credit);
             query.Parameters.Add("debit", debit);
+            query.Parameters.Add("access_level", access_level);
+
 
             int result = query.Execute(true);
 
