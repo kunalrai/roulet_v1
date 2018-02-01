@@ -1086,88 +1086,90 @@
                  $(".cube").click(function (event) {
 
                      event.preventDefault();
-                     if (!$.User.canBet && !$.User.hasEnoughPoints && !userhasEnoughPoints()) { return;}
-                    
-                     var top = parseInt($(this).css("top"));
+                     if ($.User.canBet && $.User.hasEnoughPoints && userhasEnoughPoints()) {
 
-                     var left = parseInt($(this).css("left"));
+                         var top = parseInt($(this).css("top"));
 
-                 
-                     if ($(this).attr("data-val") == undefined)
-                     {
-                         return;
-                     }
-                     var data_val = JSON.parse($(this).attr("data-val"));
+                         var left = parseInt($(this).css("left"));
 
-                     $.Game.MyBet(data_val);
 
-                     var val = [];
+                         if ($(this).attr("data-val") == undefined) {
+                             return;
+                         }
+                         var data_val = JSON.parse($(this).attr("data-val"));
 
-                     for (var i = 0 ; i < data_val.length; i++) {
+                         $.Game.MyBet(data_val);
 
-                         if (!$.Game.isExist(data_val[i])) {
+                         var val = [];
 
-                             $.Game.Bet(data_val[i]);
+                         for (var i = 0; i < data_val.length; i++) {
 
-                             val.push(data_val[i]);
+                             if (!$.Game.isExist(data_val[i])) {
+
+                                 $.Game.Bet(data_val[i]);
+
+                                 val.push(data_val[i]);
+
+                             }
 
                          }
 
+
+                         var coin = $.Roulet.bet;
+                         var bets = "<div class='bets' style='left:" + (left - 27.5) + "px;top:" + (top - 22.5) + "px;' data-val='[" + data_val + "]'>" + coin + "</div>"
+
+                         if (betelementexists(data_val, bets)) {
+                             return;
+                         }
+
+                         $.User.Bet();
+
                      }
-
-
-                     var coin = $.Roulet.bet;
-                     var bets = "<div class='bets' style='left:" + (left - 27.5) + "px;top:" + (top - 22.5) + "px;' data-val='[" + data_val + "]'>"+coin+"</div>"
-                     
-                     if (betelementexists(data_val, bets)) {
-                         return;
-                     }
-
-                     $.User.Bet();
-                    
-
                  });
 
                  $(".square").click(function (e) {
 
                      e.preventDefault();
-                     if (!$.User.canBet && !$.User.hasEnoughPoints && !userhasEnoughPoints()) { return; }
-
-                     var top = parseInt($(this).css("top"));
-
-                     var left = parseInt($(this).css("left"));
-
-                     if ($(this).attr("data-val") == undefined) {
-                         return;
-                     }
-
-                     var data_val = JSON.parse($(this).attr("data-val"));
-
-                     var val = [];
+                     if ($.User.canBet && $.User.hasEnoughPoints && userhasEnoughPoints()) {
 
 
-                     for (var i = 0 ; i < data_val.length; i++) {
 
-                         if (!$.Game.isExist(data_val[i])) {
+                         var top = parseInt($(this).css("top"));
 
-                             $.Game.Bet(data_val[i]);
+                         var left = parseInt($(this).css("left"));
 
-                             val.push(data_val[i]);
-
+                         if ($(this).attr("data-val") == undefined) {
+                             return;
                          }
 
+                         var data_val = JSON.parse($(this).attr("data-val"));
+
+                         var val = [];
+
+
+                         for (var i = 0; i < data_val.length; i++) {
+
+                             if (!$.Game.isExist(data_val[i])) {
+
+                                 $.Game.Bet(data_val[i]);
+
+                                 val.push(data_val[i]);
+
+                             }
+
+                         }
+                         var coin = $.Roulet.bet;
+
+                         var bets = "<div class='bets betssquare' style='left:" + (left - 14.5) + "px;top:" + (top - 5.5) + "px;' data-val='[" + data_val + "]'>" + coin + "</div>"
+
+                         if (betelementexists(data_val, bets)) {
+                             return;
+                         }
+
+                         $.User.Bet();
+
+                         $.Game.MyBet(data_val);
                      }
-                     var coin = $.Roulet.bet;
-
-                     var bets = "<div class='bets betssquare' style='left:" + (left - 14.5) + "px;top:" + (top - 5.5) + "px;' data-val='["+data_val + "]'>"+coin+"</div>"
-
-                     if (betelementexists(data_val, bets)) {
-                         return;
-                     }
-
-                     $.User.Bet();
-
-                     $.Game.MyBet(data_val);
                  })
 
                  
@@ -1271,31 +1273,32 @@
 
                      e.preventDefault();
 
-                     if (!$.User.canBet && !$.User.hasEnoughPoints && !userhasEnoughPoints() ) { return; }
+                     if ($.User.canBet && $.User.hasEnoughPoints && userhasEnoughPoints()) {
 
-                     var top = parseInt($(this).css("top"));
+                         var top = parseInt($(this).css("top"));
 
-                     var left = parseInt($(this).css("left"));
+                         var left = parseInt($(this).css("left"));
 
-                     if ($(this).attr("data-val") == undefined) {
-                         return;
+                         if ($(this).attr("data-val") == undefined) {
+                             return;
+                         }
+
+                         var data_val = JSON.parse($(this).attr("data-val"));
+
+                         var val = [];
+
+
+
+                         var coin = $.Roulet.bet;
+
+                         var bets = "<div class='bets' style='left:" + (left - 27.5) + "px;top:" + (top - 19.5) + "px;' data-val='[" + data_val + "]'>" + coin + "</div>"
+
+                         if (betelementexists(data_val, bets)) return;
+
+                         $.Game.MyBet(data_val);
+
+                         $.User.Bet();
                      }
-
-                     var data_val = JSON.parse($(this).attr("data-val"));
-
-                     var val = [];
-
-                   
-                   
-                     var coin = $.Roulet.bet;
-
-                     var bets = "<div class='bets' style='left:" + (left - 27.5) + "px;top:" + (top - 19.5) + "px;' data-val='[" + data_val + "]'>" + coin + "</div>"
-
-                     if (betelementexists(data_val, bets)) return;
-
-                     $.Game.MyBet(data_val);
-
-                     $.User.Bet();
                  });
 
                  $(".cancel-bet").click(function (e) {
