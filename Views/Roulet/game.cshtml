@@ -64,6 +64,7 @@
                 <button id="coins_8" value="5000"></button>
             </div>
         </div>
+        <button class="cancel-specific-bet">Cancel Specific Bet</button>
         <div class="perspoective">
             <div class="roulet-bg">
                 <div class="roulet-wrapper">
@@ -290,7 +291,10 @@
             <buttom class="keypad-button button-category not-button black" style="right: 309.6px; top: 187px; background: url(/img/black.png) center center no-repeat; background-size: 100px;" data-id="black" data-val="[2,4,6,8,10,11,13,15,17,20,22,24,26,28,29,31,33,35]"></buttom>
 
         </div>
-        <div class="betguide" id="Bet_Guide"></div>
+      
+            <div class="betguide" id="Bet_Guide"></div>
+
+       
         <div class="bottom_row">
             <button class="total_bet"></button>
             <button class="exit">Exit</button>
@@ -664,6 +668,8 @@
 	             var betsHTML = function (left,top,value,coin) { return "<div class='bets' style='left:" + left + ";top:" + top + "px;' data-val='[" + value + "]'>" + coin + "</div>"; }
 
 	             $.Game.start();
+
+	             $.Roulet.init();
 
 	             $.Game.getuserpoints();
 
@@ -1261,9 +1267,13 @@
 
                          var coin =Number( $.Roulet.bet )+Number( $(this).text());
 
-                         $(this).text(coin);
+                         if (Number(coin) <= 5000) {
 
-                         $.User.Bet();
+                             $(this).text(coin);
+
+                             $.User.Bet();
+                         }
+                       
 
                      }
 
@@ -1365,9 +1375,33 @@
                playAudio: function () {
                    var audio = new Audio('/sound/wheelStart.wav');
                    //audio.play();
+               },
+
+               init: function () {
+                   var game_id = $("#game_id").val();
+
+                   var data = {
+                       id: game_id
+                   }
+
+                   $.ajax({
+                       type: "POST",
+                       url: "/games/find-game/",
+                       data: JSON.stringify(data)
+                   }).then(function (data, textStatus, jqXHR) {
+
+                       console.log(data.data[0]);
+                       if (data.data[0].last_five_must_bet)
+                            $.Roulet.last = data.data[0].last_five_must_bet.slice(0,5);
+                       showlastfivetext();
+                      // $.Roulet.last 
+
+                   }, function (jqXHR, textStatus, errorThrown) {
+
+                       console.log(errorThrown);
+
+                   });
                }
-
-
            }
 
 	       $.Roulet.last = [];
@@ -1386,37 +1420,102 @@
                }
 
 
+              
+
+               showlastfivetext();
+
+           }
+
+
+           function setcolor(val,btn) {
+               var red = $(".red").attr("data-val").replace("[", "").replace("]", "").split(',');
+               var black = $(".black").attr("data-val").replace("[", "").replace("]", "").split(',');
+
+
+               var r = red.find((element) => { return element == val; }) ? true : false;
+               var b = black.find((element) => { return element == val; }) ? true : false;
+
+
+               if (r) {
+                   $("#"+ btn).css("color", "red");
+               }
+               else if (b) {
+                   $("#"+btn).css("color", "white");
+
+               }
+               else {
+                   $("#"+ btn).css("color", "green");
+
+               }
+           }
+
+           function showlastfivetext() {
+
+
                var reversed = $.Roulet.last.reverse();
 
                if (reversed[0] != null) {
 
-                   $("#last_button_5").text(reversed[0]);
+                   var btn = "last_button_5";
+
+                   var val = reversed[0];
+
+                   $("#" + btn).text(val);
+
+                   setcolor(val, btn)
+                  
                }
 
                if (reversed[1] != null) {
 
-                   $("#last_button_4").text(reversed[1]);
+                   //$("#last_button_4").text(reversed[1]);
 
+                   var btn = "last_button_4";
+
+                   var val = reversed[1];
+
+                   $("#" + btn).text(val);
+
+                   setcolor(val, btn)
                }
 
                if (reversed[2] != null) {
 
-                   $("#last_button_3").text(reversed[2]);
+                  // $("#last_button_3").text(reversed[2]);
+
+                   var btn = "last_button_3";
+
+                   var val = reversed[2];
+
+                   $("#" + btn).text(val);
+
+                   setcolor(val, btn)
 
                }
 
                if (reversed[3] != null) {
 
-                   $("#last_button_2").text(reversed[3]);
+                  // $("#last_button_2").text(reversed[3]);
+                   var btn = "last_button_2";
 
+                   var val = reversed[3];
+
+                   $("#" + btn).text(val);
+
+                   setcolor(val, btn)
                }
 
                if (reversed[4] != null) {
 
-                   $("#last_button_1").text(reversed[4]);
+                   //$("#last_button_1").text(reversed[4]);
+                   var btn = "last_button_1";
 
+                   var val = reversed[4];
+
+                   $("#" + btn).text(val);
+
+                   setcolor(val, btn)
                }
-
            }
 
 	       $.Roulet.must = 00;

@@ -377,7 +377,7 @@ $.Game = {
 
                         var first = response[0];
 
-
+                       
                         if ((first) && (first.must_bet)) {
 
                             var musts = $(".must");
@@ -392,6 +392,8 @@ $.Game = {
                                 }
 
                             });
+
+                            $.Game.last_five = first.last_five_must_bet;
 
                         }
 
@@ -470,7 +472,8 @@ $.Game = {
 
         var data = {
             id: game_id,
-            must_bet: number
+            must_bet: number,
+            last:this.last_five
         }
 
         $.Game.busy = true;
@@ -487,6 +490,19 @@ $.Game = {
         });
 
 
+    },
+    last_five: [],
+    SetLastFiveBets: function (number) {
+        
+        if (this.last_five.length == 6) {
+            this.last_five.shift();
+            this.last_five.push(number);
+        }
+        else {
+            this.last_five.push(number);
+        }
+      
+      
     }
 }
 
@@ -528,8 +544,11 @@ jQuery(document).ready(function () {
 
         $(this).addClass("must_active");
 
+        $.Game.SetLastFiveBets(number);
+
         $.Game.must_bet(number);
 
+        
     });
 
 });

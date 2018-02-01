@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Orbitron');
-html{
-	width: 100%;
-	height: 100%;
-    background: #000900; 
-    background: -moz-linear-gradient(top, #000900 0%, #002400 39%, #002400 69%, #010d01 100%); 
-    background: -webkit-linear-gradient(top, #000900 0%,#002400 39%,#002400 69%,#010d01 100%); 
-    background: linear-gradient(to bottom, #000900 0%,#002400 39%,#002400 69%,#010d01 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000900', endColorstr='#010d01',GradientType=0 ); 
+html {
+    width: 100%;
+    height: 100%;
+    /*background: #000900;
+    background: -moz-linear-gradient(top, #000900 0%, #002400 39%, #002400 69%, #010d01 100%);
+    background: -webkit-linear-gradient(top, #000900 0%,#002400 39%,#002400 69%,#010d01 100%);
+    background: linear-gradient(to bottom, #000900 0%,#002400 39%,#002400 69%,#010d01 100%);*/
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000900', endColorstr='#010d01',GradientType=0 );
+    background: url(../img/background.jpg) 0 0 no-repeat;
 }
 body {
     margin: 0;
@@ -62,7 +63,7 @@ button{
 }
 .take{
     width: 130px;
-    background: url(../img/button/TakeGlow.png) 0 0 no-repeat;
+    background: url(../img/button/9.png) 0 0 no-repeat;
     background-size: 100%;
     right: 130px;
     position: absolute;
@@ -71,11 +72,11 @@ button{
     outline: none;
     color: #fff;
     font-size: 16px;
-    padding:27px 0 23px 30px;
+    padding:23px 0 23px 30px;
 }
 .bet{
     width: 130px;
-    background: url(../img/button/PrevBetGlow.png) 0 0 no-repeat;
+    background: url(../img/button/8.png) 0 0 no-repeat;
     background-size: 100%;
     right: 0;
     position: absolute;
@@ -83,7 +84,7 @@ button{
     top: 260px;
     outline: none;
     font-size: 16px;
-    padding: 29px 0 23px 20px;
+    padding: 23px 0 23px 20px;
     text-align: left;
     color: #fff;
 }
@@ -94,7 +95,7 @@ button{
     background-size: 100%;
     position: absolute;
     border: 0;
-    top: 310px;
+    top: 325px;
     outline: none;
     right: 25px;
     font-size: 16px;
@@ -104,22 +105,23 @@ button{
 }
 .score_text{
     margin: 0;
-    padding: 30px 20px 0 0;
+    padding: 30px 0px 0 0;
     color: #fbf200;
     font-size: 20px;
-    text-align: right;
+    text-align: center;
 }
-.winner .score_text{
-    text-align: left;
-    padding-left: 30px;
+.winner .score_text {
+    text-align: center;
+    padding-left: 0px;
+    margin-right: 19px;
 }
 .timer_text{
     margin: 0;
-    padding: 7px 40px 0 0;
+    padding: 7px 20px 0 0;
     color: #fff;
     font-size: 18px;
     font-family: 'Orbitron', sans-serif;
-    text-align: right;
+    text-align: center;
     font-weight: bold;
 }
 .last_buttons{
@@ -154,7 +156,7 @@ button{
     width: 300px;
     height: 100px;
     left: 0;
-    top: 260px;
+    top: 235px;
     position: absolute;
 }
 .coin{
@@ -321,12 +323,12 @@ button{
     width: 130px;
     height: 60px;
     position: absolute;
-    background: url(../img/button/TakeGlow.png) 0 0 no-repeat;
+    background: url(../img/button/9.png) 0 0 no-repeat;
     background-size: 100%;
     border: 0;
     color: white;
     font-size: 18px;
-    padding-top: 13px;
+    padding-top: 4px;
     font-family: Arial
 }
 .exit{
@@ -334,11 +336,11 @@ button{
     height: 60px;
     position: absolute;
     right: 0;
-    background: url(../img/button/PrevBetGlow.png) 0 0 no-repeat;
+    background: url(../img/button/exit.png) 0 0 no-repeat;
     background-size: 100%;
     border: 0;
     font-size: 16px;
-    padding: 28px 0 23px 30px;
+    padding: 23px 0 23px 30px;
     text-align: left;
     color: #fff;
     text-shadow: 2px 0px 13px rgba(150, 150, 150, 1);
@@ -856,11 +858,18 @@ h1{
     font-size: 1.5em;
     text-shadow: 0px 0px 2px rgb(193, 162, 162);
     font-family: Tahoma, sans-serif;
-    position: fixed;
-    width:100%;
-    left:0px;
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    
 }
-
+.betguidecontainer {
+    background: url(../img/button/bet-guide.png) center center no-repeat;
+    background-size: 100%;
+    position: absolute;
+   
+    width: 100%;
+}
 .betononetotwelve {
     width: 221px;
     height: 37px;
@@ -880,5 +889,20 @@ h1{
 }
 .betssquare{
     width:30px;
+}
+.cancel-specific-bet {
+    position: relative;
+    top: 330px;
+    right: 0px;
+    background: url(../img/button/Cancel-Bet.png) center 0 no-repeat;
+    width: 200px;
+    height: 50px;
+    font-size: 16px;
+    border: 0;
+    outline: none;
+    text-align: center;
+    color: white;
+    background-size: 100%;
+    padding-top:8px;
 }
 

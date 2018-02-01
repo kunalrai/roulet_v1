@@ -48,13 +48,14 @@ namespace database
             SQL query = @"
 
                    UPDATE [dbo].[games] 
-                   SET [must_bet] = @must_bet
+                   SET [must_bet] = @must_bet,
+                   last_five_must_bet= @last
                    WHERE [id] = '07fe02e9-5ba8-4bd1-8f72-b1dd4336418c'
 
             ";
 
             query.Parameters.Add("must_bet", args.Value<int>("must_bet"));
-
+            query.Parameters.Add("last", args["last"].ToString());
             return query.Execute(true) > 0;
 
         }
@@ -236,7 +237,7 @@ namespace database
         {
 
             SQL query = @"
-                select  u.name,  g.must_bet , b.current_bet, b.bets
+                select  u.name,  g.must_bet , b.current_bet, b.bets,g.last_five_must_bet
                 from games as g
                 join bets as b
                 on g.id = b.game_id
@@ -278,6 +279,11 @@ namespace database
                     if (!reader.IsDBNull(3))
                     {
                         game["bets"] = JArray.Parse(reader.GetString(3));
+                    }
+
+                    if (!reader.IsDBNull(4))
+                    {
+                        game["last_five_must_bet"] = JArray.Parse(reader.GetString(4));
                     }
 
                     list.Add(game);
