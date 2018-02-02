@@ -292,7 +292,8 @@
 
         </div>
       
-            <div class="betguide" id="Bet_Guide"></div>
+        <div class="betguideback"></div>
+        <div class="betguide" id="Bet_Guide"></div>
 
        
         <div class="bottom_row">
@@ -1373,8 +1374,13 @@
 
            $.Roulet = {
                playAudio: function () {
-                   var audio = new Audio('/sound/wheelStart.wav');
-                   //audio.play();
+                   var first = new Audio('/sound/wheelStart.wav');
+                   var second = new Audio('/sound/wheelEnd.wav');
+                   first.addEventListener('ended', function () {
+                       setTimeout(() => second.play(), 1000);
+                       
+                   });
+                   //first.play();
                },
 
                init: function () {
@@ -1453,69 +1459,24 @@
 
 
                var reversed = $.Roulet.last.reverse();
+               var j = 5;
+               for (var i = 0 ; i < 5; i++ ) {
+                   
+                   if (reversed[i] != null) {
 
-               if (reversed[0] != null) {
+                       var btn = "last_button_"+j;
 
-                   var btn = "last_button_5";
+                       var val = reversed[i] < 0 ? "00" : reversed[i];
 
-                   var val = reversed[0];
+                       $("#" + btn).text(val);
 
-                   $("#" + btn).text(val);
+                       setcolor(val, btn)
 
-                   setcolor(val, btn)
-                  
+                   }
+                   j--;
                }
 
-               if (reversed[1] != null) {
-
-                   //$("#last_button_4").text(reversed[1]);
-
-                   var btn = "last_button_4";
-
-                   var val = reversed[1];
-
-                   $("#" + btn).text(val);
-
-                   setcolor(val, btn)
-               }
-
-               if (reversed[2] != null) {
-
-                  // $("#last_button_3").text(reversed[2]);
-
-                   var btn = "last_button_3";
-
-                   var val = reversed[2];
-
-                   $("#" + btn).text(val);
-
-                   setcolor(val, btn)
-
-               }
-
-               if (reversed[3] != null) {
-
-                  // $("#last_button_2").text(reversed[3]);
-                   var btn = "last_button_2";
-
-                   var val = reversed[3];
-
-                   $("#" + btn).text(val);
-
-                   setcolor(val, btn)
-               }
-
-               if (reversed[4] != null) {
-
-                   //$("#last_button_1").text(reversed[4]);
-                   var btn = "last_button_1";
-
-                   var val = reversed[4];
-
-                   $("#" + btn).text(val);
-
-                   setcolor(val, btn)
-               }
+               
            }
 
 	       $.Roulet.must = 00;

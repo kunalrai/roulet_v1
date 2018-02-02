@@ -329,9 +329,10 @@ button{
     color: white;
     font-size: 18px;
     padding-top: 4px;
-    font-family: Arial
+    font-family: Arial;
+    margin: 34px 0px 0px 0px;
 }
-.exit{
+.exit {
     width: 130px;
     height: 60px;
     position: absolute;
@@ -344,10 +345,11 @@ button{
     text-align: left;
     color: #fff;
     text-shadow: 2px 0px 13px rgba(150, 150, 150, 1);
+    margin: 34px 0px 0px 0px;
 }
 .keyboard{
     width: 800px;
-    margin: 20px auto 0;
+    margin: 0px auto 0;
     position: relative;
 }
 .keyboard_overlay{
@@ -905,4 +907,13 @@ h1{
     background-size: 100%;
     padding-top:8px;
 }
-
+.betguideback {
+    background: url(../img/button/bet-guide.png) center 0 no-repeat;
+    background-size: 100%;
+    width: 771px;
+    height: 60px;
+    position: absolute;
+    top: 630px;
+    left: 0;
+    margin: -14px 0px 0px 138px;
+}
