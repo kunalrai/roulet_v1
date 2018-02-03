@@ -8,6 +8,7 @@ html {
     background: linear-gradient(to bottom, #000900 0%,#002400 39%,#002400 69%,#010d01 100%);*/
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000900', endColorstr='#010d01',GradientType=0 );
     background: url(../img/background.jpg) 0 0 no-repeat;
+    background-size:100%;
 }
 body {
     margin: 0;
@@ -37,7 +38,7 @@ button{
 .score{
     width: 230px;
     height: 85px;
-    background: url(../img/score.png) 0 0 no-repeat;
+    background: url(../img/button/score.png) 0 0 no-repeat;
     background-size: 100%;
     left: 0;
     top: 100px;
@@ -49,8 +50,28 @@ button{
     background: url(../img/timer.png) 0 0 no-repeat;
     background-size: 100%;
     left: 0;
-    top: 180px;
+    top: 216px;
     position: absolute;
+    padding-top:8px;
+}
+.timera {
+    width: 260px;
+    height: 50px;
+    background: url(../img/button/timera.png) 0 0 no-repeat;
+    background-size: 100%;
+    left: 0;
+    top: 200px;
+    position: absolute;
+    padding-top:24px;
+}
+.timer_text {
+    margin: 0;
+    padding: 0px 20px 0 0;
+    color: #fff;
+    font-size: 18px;
+    font-family: 'Orbitron', sans-serif;
+    text-align: center;
+    font-weight: bold;
 }
 .right_timer{
     width: 260px;
@@ -58,7 +79,7 @@ button{
     background: url(../img/timer.png) 0 0 no-repeat;
     background-size: 100%;
     right: 0;
-    top: 180px;
+    top: 218px;
     position: absolute;
 }
 .take{
@@ -68,7 +89,20 @@ button{
     right: 130px;
     position: absolute;
     border: 0;
-    top: 260px;
+    top: 305px;
+    outline: none;
+    color: #fff;
+    font-size: 16px;
+    padding:23px 0 23px 30px;
+}
+.takea{
+    width: 130px;
+    background: url(../img/button/takea.png) 0 0 no-repeat;
+    background-size: 100%;
+    right: 130px;
+    position: absolute;
+    border: 0;
+    top: 305px;
     outline: none;
     color: #fff;
     font-size: 16px;
@@ -81,7 +115,7 @@ button{
     right: 0;
     position: absolute;
     border: 0;
-    top: 260px;
+    top: 305px;
     outline: none;
     font-size: 16px;
     padding: 23px 0 23px 20px;
@@ -95,18 +129,19 @@ button{
     background-size: 100%;
     position: absolute;
     border: 0;
-    top: 325px;
+    top: 351px;
     outline: none;
     right: 25px;
     font-size: 16px;
     padding: 19px 0 23px 0px;
     text-align: center;
     color: #fff;
+    margin-top: 5px;
 }
 .score_text{
     margin: 0;
-    padding: 30px 0px 0 0;
-    color: #fbf200;
+    padding: 50px 0px 0 0;
+    color: #fff;
     font-size: 20px;
     text-align: center;
 }
@@ -115,15 +150,7 @@ button{
     padding-left: 0px;
     margin-right: 19px;
 }
-.timer_text{
-    margin: 0;
-    padding: 7px 20px 0 0;
-    color: #fff;
-    font-size: 18px;
-    font-family: 'Orbitron', sans-serif;
-    text-align: center;
-    font-weight: bold;
-}
+
 .last_buttons{
     position: absolute;
     top: 0;
@@ -163,6 +190,7 @@ button{
     width: 75px;
     height: 50px;
     position: absolute;
+    margin-top:29px;
 }
 .coin-active{
     background: url(../img/coins/light.png) center center no-repeat;
@@ -246,7 +274,7 @@ button{
 .winner{
     width: 230px;
     height: 85px;
-    background: url(../img/winner.png) 0 0 no-repeat;
+    background: url(../img/button/winner.png) 0 0 no-repeat;
     background-size: 100%;
     right: 0;
     top: 100px;
@@ -261,7 +289,7 @@ button{
     width: 425px;
     height: 335px;
     perspective: 1000px;
-    margin: 0 auto;
+    margin: 0px 0px 0px 306px;
 }
 .almaz{
     width: 100px;
@@ -330,7 +358,7 @@ button{
     font-size: 18px;
     padding-top: 4px;
     font-family: Arial;
-    margin: 34px 0px 0px 0px;
+  
 }
 .exit {
     width: 130px;
@@ -345,7 +373,7 @@ button{
     text-align: left;
     color: #fff;
     text-shadow: 2px 0px 13px rgba(150, 150, 150, 1);
-    margin: 34px 0px 0px 0px;
+    
 }
 .keyboard{
     width: 800px;
@@ -856,13 +884,14 @@ h1{
 }
 .betguide {
     text-align: center;
-    color: white;
+    color: green;
     font-size: 1.5em;
     text-shadow: 0px 0px 2px rgb(193, 162, 162);
     font-family: Tahoma, sans-serif;
     position: absolute;
     width: 100%;
     left: 0px;
+    padding-top:9px;
     
 }
 .betguidecontainer {
@@ -894,7 +923,7 @@ h1{
 }
 .cancel-specific-bet {
     position: relative;
-    top: 330px;
+    top: 354px;
     right: 0px;
     background: url(../img/button/Cancel-Bet.png) center 0 no-repeat;
     width: 200px;
@@ -910,10 +939,10 @@ h1{
 .betguideback {
     background: url(../img/button/bet-guide.png) center 0 no-repeat;
     background-size: 100%;
-    width: 771px;
+    width: 699px;
     height: 60px;
     position: absolute;
     top: 630px;
     left: 0;
-    margin: -14px 0px 0px 138px;
+    margin: -8px 0px 0px 153px;
 }
