@@ -7,8 +7,8 @@ html {
     background: -webkit-linear-gradient(top, #000900 0%,#002400 39%,#002400 69%,#010d01 100%);
     background: linear-gradient(to bottom, #000900 0%,#002400 39%,#002400 69%,#010d01 100%);*/
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000900', endColorstr='#010d01',GradientType=0 );
-    background: url(../img/background.jpg) 0 0 no-repeat;
-    background-size:100%;
+    background: url(../img/background.jpg) scroll no-repeat center;
+    background-size: cover;
 }
 body {
     margin: 0;
@@ -122,6 +122,22 @@ button{
     text-align: left;
     color: #fff;
 }
+
+.beta {
+    width: 130px;
+    background: url(../img/button/betoka.png) 0 0 no-repeat;
+    background-size: 100%;
+    right: 0;
+    position: absolute;
+    border: 0;
+    top: 305px;
+    outline: none;
+    font-size: 16px;
+    padding: 23px 0 23px 20px;
+    text-align: left;
+    color: #fff;
+}
+
 .cancel-bet{
     width: 200px;
     height: 50px;

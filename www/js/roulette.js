@@ -284,10 +284,14 @@ $.Game = {
 
 $.User = {
     wincurrentgame: false,
+
     canBet: true,
+
     usercanbet: function () {
 
         if ($.User.canBet && $.User.hasEnoughPoints && this.userhasEnoughPoints() && !$.User.wincurrentgame) {
+
+            $.ui.blinkbetokbtn();
 
             return true;
         }
@@ -295,9 +299,12 @@ $.User = {
 
             return false;
         }
+
+
     },
 
     hasEnoughPoints: true,
+
     Bet: function () {
 
         var game_id = $("#game_id").val();
@@ -327,7 +334,8 @@ $.User = {
         });
         this.TotalBet();
     },
-    CancelBet: function () {
+
+    CancelBet: function (betsvalue) {
         var game_id = $("#game_id").val();
         var user_id = $("#user_id").val();
 
@@ -336,7 +344,7 @@ $.User = {
             user_id: user_id,
             coin: $.Roulet.bet,
             bets: $.Game.bets,
-            mybets: $.Game.mybets
+            mybets: betsvalue// $.Game.mybets
         }
 
         $.ajax({
@@ -349,6 +357,7 @@ $.User = {
             $.Game.find();
         });
     },
+
     TotalBet: function () {
         try {
             var sum = 0;
@@ -377,6 +386,7 @@ $.User = {
     return balSufficient;
 }
 }
+
 $(window).bind("beforeunload", function () {
 
     var answer = confirm("Do you really want to close?");
@@ -406,6 +416,7 @@ $(window).bind("beforeunload", function () {
 
 
 });
+
 $.count = 0;
 
 $.TakeBlinkFunction = function () {
@@ -425,14 +436,58 @@ $.TakeBlinkFunction = function () {
 }
 
 $.ui = {
+    duration: 500,
 
     timercount: 0,
 
-    takecount:0,
+    takecount: 0,
+
+    timerbetok:0,
 
     timerInterval: 0,
 
+    betokInterval : 0,
+
     isrunning: false,
+
+    isbetokblinking:false,
+
+    cancelspecificbet: $("#cancelspecificbet"),
+
+    betok: $("#betok"),
+
+    onbetok: function () {
+
+       $.ui.cleartimerbetok();
+
+       this.isbetokblinking = false;
+    },
+
+    blinkbetokbtn: function () {
+
+        console.log("btn betok");
+
+        if (!this.isbetokblinking) {
+
+            this.isbetokblinking = true;
+
+            this.betokInterval = setInterval(() => { this.timerbetok++; $.ui.blink("betok", "bet", "beta", this.timerbetok); }, this.duration);
+        }
+
+    },
+
+    cleartimerbetok: function () {
+
+        clearInterval(this.betokInterval);
+
+        this.isbetokblinking = false;
+
+        this.timerbetok = 0;
+
+        $.ui.blink("betok", "beta", "bet", this.timerbetok); 
+
+      
+    },
 
     blinktimer: function () {
 
@@ -446,6 +501,7 @@ $.ui = {
     },
 
     cleartimerblink: function () {
+
         if (this.isrunning) {
 
             this.timercount = 0;
@@ -458,6 +514,7 @@ $.ui = {
         }
 
     },
+
     blink: function (el, normal, hovered, timercount) {
 
         var btn = $("#" + el);
@@ -476,12 +533,38 @@ $.ui = {
             btn.addClass(normal);
         }
         
+    },
+
+    oncancelspecificbet: function () {
+        
+        var data = $.Game.mybets.splice(-1, 1);
+
+        if ($.Game.mybets.length == 0) {
+
+            $.ui.cleartimerbetok();
+
+        }
+
+        if (data[0]) {
+
+            $(".bets[data-val='" + data[0].bet_pos + "']").remove();
+
+            $(".bets[data-val='[" + data[0].bet_pos + "]']").remove();
+
+            $.User.CancelBet(data);
+
+            
+
+        }
+    },
+
+    attachevents: function () {
+
+        this.cancelspecificbet.click(this.oncancelspecificbet);
+
+        this.betok.click(this.onbetok);
     }
 };
-
-
-
-
 
 $(document).ready(function () {
 
@@ -1102,9 +1185,11 @@ $(document).ready(function () {
 
         if (!$.User.canBet) return;
 
-        $.User.CancelBet();
+        $.User.CancelBet($.Game.mybets);
 
         $.Game.mybets = []; $(".bets").remove()
+
+        $.ui.cleartimerbetok();
     })
 
     $("#takebtn").click(function () {
@@ -1189,6 +1274,9 @@ $(document).ready(function () {
         });
 
     });
+
+
+    $.ui.attachevents();
 
     function ongameexit() {
         var user_id = $("#user_id").val();
