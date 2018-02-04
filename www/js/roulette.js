@@ -744,6 +744,8 @@ $.ui = {
 
 $(document).ready(function () {
 
+    $.Roulet.loadingsound();
+
     var user_id = $("#user_id").val();
 
     var betsHTML = function (left, top, value, coin) { return "<div class='bets' style='left:" + left + ";top:" + top + "px;' data-val='[" + value + "]'>" + coin + "</div>"; }
@@ -1130,7 +1132,15 @@ $(document).ready(function () {
     });
 
     $(".exit").click(function () {
-        $.Roulet.exitsound(ongameexit);
+
+        var answer = confirm("Do you really want to close?");
+
+        if (answer) {
+
+            $.Roulet.exitsound(ongameexit);
+            
+        }
+
 
     });
 
@@ -1455,6 +1465,9 @@ $(document).ready(function () {
     $.ui.attachevents();
 
     function ongameexit() {
+
+       
+
         var user_id = $("#user_id").val();
 
         var data = {
@@ -1544,6 +1557,13 @@ $.Roulet = {
         var loose = new Audio('/sound/lose.wav');
 
         loose.play();
+    },
+
+    loadingsound: function () {
+
+        var loading = new Audio('/sound/loading.wav');
+
+        loading.play();
     },
 
     init: function () {
