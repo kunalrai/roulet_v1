@@ -15,16 +15,22 @@
     three_square: "This box bet can Win Points = Bet X 12",
     hasenoughpoints: "Score Insufficient",
     asktoplacebet: "Place Bet to start game .Minimum Bet =1",
-    afterwinmessage: "Congratulation You Win",
+    wingame: "Congratulations!!! You Win",
     whenrouletterolling: "FOR AMUSEMENT ONLY NO CASH VALUE",
-    afterbetplaced: "You can either make Bet or Press BETOK Button",
-
+    makebet: "You can either make Bet or Press BETOK Button",
+    betaccepted: "Your Bet Has Been Accepted",
+    loosegame:"Game Over. Press PreBetOK Button or Make Bet"
 
 }
 $.Game = {
     bets: [],
+
     busy: false,
+
+    prevbet: [],
+
     mybets: [],
+
     find: function () {
 
         var user_id = $("#user_id").val();
@@ -49,9 +55,7 @@ $.Game = {
 
                         $.Roulet.must = response.must_bet;
 
-
-                        $.Game.getuserpoints();
-
+                        $.Game.init();
 
                     }
 
@@ -62,7 +66,8 @@ $.Game = {
 
 
     },
-    getuserpoints: function () {
+
+    init: function () {
 
         var user_id = $("#user_id").val();
         var data = {
@@ -81,6 +86,13 @@ $.Game = {
                     $("#pointuser").text(response.pointuser + ".00");
 
                     $("#win_score").text(response.Winning_point);
+
+                    if (response.Winning_point && response.Winning_point > 0) {
+
+                        $.User.wincurrentgame = true;
+
+                       
+                    }
 
                     if (response.pointuser <= 0) {
 
@@ -103,8 +115,6 @@ $.Game = {
         $.ajax({
             type: "POST",
             url: "/user/spinroulette/",
-
-
             contentType: 'application/json',
             data: JSON.stringify({
                 'myArray': $.Game.mybets,
@@ -112,6 +122,7 @@ $.Game = {
                 "userid": user_id
             }),
             success: function (response) {
+
                 if (response) {
                     console.log(response);
 
@@ -119,7 +130,12 @@ $.Game = {
 
                         $.User.wincurrentgame = true;
 
-                        $(".betguide").text($.messages.afterwinmessage);
+
+                    }
+                    else {
+
+                        $.User.loosegame = true;
+
                     }
 
                     $("#win_score").text(response);
@@ -129,6 +145,15 @@ $.Game = {
             error: (status, err) => { console.log(status); }
 
         }).always(function () {
+
+            if ($.Game.mybets.length> 0){
+
+                $.Game.prevbet = $.Game.mybets;
+
+            }
+
+            $.User.reset();
+
             $.Game.mybets = [];
         });
     },
@@ -144,11 +169,12 @@ $.Game = {
 
                 $.User.wincurrentgame = true;
 
-                $.removetakeinterval = setInterval($.TakeBlinkFunction, 500);
+                $.removetakeinterval = setInterval($.TakeBlinkFunction, $.ui.duration);
             }
 
         }, 5000)
     },
+
     start: function () {
 
         var game_id = $("#game_id").val();
@@ -191,11 +217,13 @@ $.Game = {
             }
         });
     },
+
     Bet: function (bet) {
 
         $.Game.bets.push(bet);
 
     },
+
     MyBet: function (bet) {
 
         var data = {
@@ -205,6 +233,7 @@ $.Game = {
 
         $.Game.mybets.push(data);
     },
+
     isExist: function (id) {
 
         var hidden_bets = $.Game.bets;
@@ -224,6 +253,7 @@ $.Game = {
 
         return false;
     },
+
     RemoveBet: function (id) {
 
         var hidden_bets = $.Game.bets;
@@ -246,6 +276,7 @@ $.Game = {
         /* MYBETs remove */
 
     },
+
     RemoveMyBet: function (id) {
         var hidden_bets = $.Game.mybets;
         if (hidden_bets.length > 0) {
@@ -263,19 +294,28 @@ $.Game = {
         $.Game.mybets = hidden_bets;
 
     },
+
     TransferWinningPoints: function () {
         var game_id = $("#game_id").val();
+
         var user_id = $("#user_id").val();
+
         var data = {
+
             game_id: game_id,
+
             user_id: user_id,
         }
+
         $.ajax({
             type: "POST",
             url: "/user/transferwinningpoints/",
             data: JSON.stringify(data)
-        }).always(function () {
-            $.Game.find();
+        }).
+            always(function () {
+
+                $.Game.find();
+
         });
     }
 
@@ -283,13 +323,34 @@ $.Game = {
 }
 
 $.User = {
+    IsPrevBetBtn: false,
+
     wincurrentgame: false,
+
+    betaccepted:false,
 
     canBet: true,
 
+    loosegame : false,
+
+    reset: function () {
+
+        this.betaccepted = false;
+
+        this.IsPrevBetBtn = false;
+
+        this.wincurrentgame = false;
+
+        this.canBet = true;
+
+        this.loosegame = false
+
+    },
+
     usercanbet: function () {
 
-        if ($.User.canBet && $.User.hasEnoughPoints && this.userhasEnoughPoints() && !$.User.wincurrentgame) {
+        if ($.User.canBet && $.User.hasEnoughPoints
+            && this.userhasEnoughPoints() && !$.User.wincurrentgame && !$.User.betaccepted) {
 
             $.ui.blinkbetokbtn();
 
@@ -423,8 +484,6 @@ $.TakeBlinkFunction = function () {
 
     var winscore = Number($("#win_score").text());
 
-    console.log($.count);
-
     if (winscore > 0) {
 
         $.ui.takecount++;
@@ -436,7 +495,7 @@ $.TakeBlinkFunction = function () {
 }
 
 $.ui = {
-    duration: 500,
+    duration: 400,
 
     timercount: 0,
 
@@ -456,22 +515,125 @@ $.ui = {
 
     betok: $("#betok"),
 
+    
+
+    onprevbetclick: function () {
+
+
+        $.User.IsPrevBetBtn = false;
+
+        $.ui.betok.text("Bet Ok");
+
+        var arr = [];
+
+        $.Game.prevbet.map((value, index, obj) => {
+
+            var data = undefined;
+            arr.map((v, i, o) => {
+
+                if (v.bet_pos == value.bet_pos) {
+
+                    data = v;
+
+                    data.bet_pos = value.bet_pos;
+
+                    data.coin = data.coin + value.coin;
+
+                    arr[i] = data;
+                }
+            });
+
+            if (data == undefined) {
+
+                arr.push(value);
+            }
+            
+
+        });
+
+        
+
+        arr.map((value, index, obj) => {
+            if (Array.isArray(value.bet_pos)) {
+               
+                if (value.bet_pos.length == 2) {
+
+                    $.Roulet.bet = value.coin;
+
+                    var square = $(".square[data-val='[" + value.bet_pos + "]']");
+
+                    square.trigger("click");
+
+                }
+                else if (value.bet_pos.length == 3 || value.bet_pos.length == 4) {
+
+                    $.Roulet.bet = value.coin;
+
+                    var cube = $(".cube[data-val='[" + value.bet_pos + "]']");
+
+                    cube.trigger("click");
+
+                }
+                else if (value.bet_pos.length == 6 ) {
+
+                    $.Roulet.bet = value.coin;
+
+                    var group_cube = $(".group_cube[data-val='[" + value.bet_pos + "]']");
+
+                    group_cube.trigger("click");
+
+                } else {
+
+                    var keypadbtn = $(".keypad-button[data-val='[" + value.bet_pos + "]']");
+
+                    $.Roulet.bet = value.coin;
+
+                    keypadbtn.trigger("click");
+
+                }
+
+            }
+            else {
+
+                var keypadbtn = $(".keypad-button[data-id='" + value.bet_pos + "']");
+
+                $.Roulet.bet = value.coin;
+
+                keypadbtn.trigger("click");
+
+            }
+        });
+    },
+
     onbetok: function () {
 
-       $.ui.cleartimerbetok();
+        if ($.User.IsPrevBetBtn) {
 
-       this.isbetokblinking = false;
+            $.ui.onprevbetclick();
+
+        }
+
+        else {
+
+            $.ui.cleartimerbetok();
+
+            $.User.betaccepted = true;
+
+            this.isbetokblinking = false;
+
+        }
+        
     },
 
     blinkbetokbtn: function () {
-
-        console.log("btn betok");
 
         if (!this.isbetokblinking) {
 
             this.isbetokblinking = true;
 
             this.betokInterval = setInterval(() => { this.timerbetok++; $.ui.blink("betok", "bet", "beta", this.timerbetok); }, this.duration);
+
+            $.User.betaccepted = false;
         }
 
     },
@@ -481,6 +643,8 @@ $.ui = {
         clearInterval(this.betokInterval);
 
         this.isbetokblinking = false;
+
+        $.User.betaccepted = false;
 
         this.timerbetok = 0;
 
@@ -495,7 +659,7 @@ $.ui = {
 
             this.isrunning = true;
 
-            this.timerInterval = setInterval(() => { this.timercount++; $.ui.blink("timer", "timer", "timera", this.timercount) }, 500);
+            this.timerInterval = setInterval(() => { this.timercount++; $.ui.blink("timer", "timer", "timera", this.timercount) }, $.ui.duration);
 
         }
     },
@@ -576,7 +740,7 @@ $(document).ready(function () {
 
     $.Roulet.init();
 
-    $.Game.getuserpoints();
+    $.Game.init();
 
 
     $.fn.maphilight.defaults = {
@@ -1187,7 +1351,9 @@ $(document).ready(function () {
 
         $.User.CancelBet($.Game.mybets);
 
-        $.Game.mybets = []; $(".bets").remove()
+        $.Game.mybets = [];
+
+        $(".bets").remove();
 
         $.ui.cleartimerbetok();
     })
@@ -1203,8 +1369,6 @@ $(document).ready(function () {
         $("#takebtn").addClass("take");
 
         var winScore = $("#win_score").text();
-
-        console.log("winScore:" + winScore);
 
         var i = Number(winScore);
 
@@ -1321,31 +1485,44 @@ $(document).ready(function () {
 $.Roulet = {
     wheelStartEnd: function () {
         var first = new Audio('/sound/wheelStart.wav');
+
         var second = new Audio('/sound/wheelEnd.wav');
+
         first.addEventListener('ended', function () {
+
             setTimeout(() => second.play(), 1000);
+
         });
         //first.play();
     },
 
     betclicksound: function () {
+
         var betsound = new Audio('/sound/bet.wav');
+
         betsound.play();
     },
 
     takesound: function () {
+
         var betsound = new Audio('/sound/take.wav');
+
         betsound.play();
     },
 
     exitsound: function (callback) {
+
         var exit = new Audio('/sound/exit.wav');
+
         exit.play();
+
         exit.addEventListener('ended', callback);
     },
 
     winnersound: function () {
+
         var win = new Audio('/sound/win.wav');
+
         win.play();
     },
 
@@ -1381,12 +1558,17 @@ $.Roulet.last = [];
 $.Roulet.PushLast = function (id) {
 
     if ($.Roulet.last.length == 5) {
+
         $.Roulet.last = $.Roulet.last.splice(0, 1);
+
     }
 
     if ($.Roulet.last.length == 0) {
+
         $.Roulet.last[0] = id;
+
     } else {
+
         $.Roulet.last[$.Roulet.last.length] = id
 
     }
@@ -1400,18 +1582,23 @@ $.Roulet.PushLast = function (id) {
 
 
 function setcolor(val, btn) {
+
     var red = $(".red").attr("data-val").replace("[", "").replace("]", "").split(',');
+
     var black = $(".black").attr("data-val").replace("[", "").replace("]", "").split(',');
 
 
     var r = red.find((element) => { return element == val; }) ? true : false;
+
     var b = black.find((element) => { return element == val; }) ? true : false;
 
 
     if (r) {
+
         $("#" + btn).css("color", "red");
     }
     else if (b) {
+
         $("#" + btn).css("color", "white");
 
     }
@@ -1425,7 +1612,9 @@ function showlastfivetext() {
 
 
     var reversed = $.Roulet.last.reverse();
+
     var j = 5;
+
     for (var i = 0; i < 5; i++) {
 
         if (reversed[i] != null) {
@@ -1503,6 +1692,13 @@ $.Roulet.Higlite = function (id) {
             url: "/logs/log/",
             data: JSON.stringify(data)
         });
+
+    }
+
+    if ($.Game.mybets.length > 0) {
+
+        $.Game.prevbet = $.Game.mybets;
+
 
     }
 
@@ -1689,7 +1885,7 @@ $.Roulet.FirstRun = function (seconds) {
 
             $("#timer_text").text("0:" + current_sec);
 
-            $.Roulet.block(current_sec);
+            $.Roulet.showmessage(current_sec);
 
         } else {
 
@@ -1707,22 +1903,79 @@ $.Roulet.FirstRun = function (seconds) {
 
 }
 
-$.Roulet.block = function (current_sec) {
+$.Roulet.showmessage = function (current_sec) {
 
     current_sec = Number(current_sec);
 
-    if (current_sec <= 10 || current_sec >= 50) {
+    if ($.User.wincurrentgame) {
+
+        $(".betguide").text($.messages.wingame);
+
+    }
+
+    if ($.Game.mybets.length> 0 && $.User.loosegame) {
+
+        $(".betguide").text($.messages.loosegame);
+
+
+    }
+
+    if ($.User.betaccepted) {
+
+        $(".betguide").text($.messages.betaccepted);
+
+    }
+
+    else if (current_sec <= 10 || current_sec >= 50) {
 
         $.User.canBet = false;
 
-        $(".betguide").text($.messages.bet_time_over);
+        if ($.User.betaccepted) {
 
-    } else {
+            $(".betguide").text($.messages.betaccepted);
+
+        }
+        else {
+
+            $(".betguide").text($.messages.bet_time_over);
+
+        }
+        
+
+        if (current_sec >= 50) {
+
+            $(".betguide").text($.messages.whenrouletterolling);
+
+        }
+
+        $.ui.cleartimerbetok();
+
+    }
+
+    else {
 
         $.User.canBet = true;
 
-        $(".betguide").text("You can Bet Now");
+        $(".betguide").text($.messages.makebet);
 
+
+        if ($.Game.mybets.length > 0) {
+
+            $.User.IsPrevBetBtn = false;
+
+            $.ui.betok.text("Bet Ok");
+
+            
+
+        }
+        else if ($.Game.prevbet.length> 0 ) {
+
+            $.User.IsPrevBetBtn = true;
+
+            $.ui.betok.text("Prev Bet");
+
+            $.ui.blinkbetokbtn();
+        }
 
     }
 
@@ -1730,10 +1983,12 @@ $.Roulet.block = function (current_sec) {
 
 
     if (current_sec <= 15 && current_sec >= 10) {
+
         $.ui.blinktimer();
 
     }
     else {
+
         $.ui.cleartimerblink();
     }
 }
@@ -1752,7 +2007,7 @@ $.Roulet.Run = function () {
 
             $("#timer_text").text("0:" + current_sec);
 
-            $.Roulet.block(current_sec);
+            $.Roulet.showmessage(current_sec);
 
         } else {
 
