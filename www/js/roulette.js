@@ -120,8 +120,12 @@ $.Game = {
                 'myArray': $.Game.mybets,
                 "must_bet": must_bet,
                 "userid": user_id
-            }),
-            success: function (response) {
+            })
+            
+            
+
+        })
+            .done(function (response) {
 
                 if (response) {
                     console.log(response);
@@ -130,21 +134,29 @@ $.Game = {
 
                         $.User.wincurrentgame = true;
 
+                        $(".betguide").text($.messages.wingame);
+
+                        $.Roulet.winnersound();
 
                     }
-                    else {
 
-                        $.User.loosegame = true;
-
-                    }
 
                     $("#win_score").text(response);
+                } else if ($.Game.mybets.length > 0){
+
+                    $.User.loosegame = true;
+
+                    $(".betguide").text($.messages.loosegame);
+
+                    $.Roulet.loosesound();
+
+                    $.User.wincurrentgame = false;
+
                 }
 
-            },
-            error: (status, err) => { console.log(status); }
-
-        }).always(function () {
+            })
+            .fail((status, err) => { console.log(status); })
+            .always(function () {
 
             if ($.Game.mybets.length> 0){
 
@@ -339,7 +351,7 @@ $.User = {
 
         this.IsPrevBetBtn = false;
 
-        this.wincurrentgame = false;
+        
 
         this.canBet = true;
 
@@ -1521,9 +1533,17 @@ $.Roulet = {
 
     winnersound: function () {
 
+       
         var win = new Audio('/sound/win.wav');
 
         win.play();
+    },
+
+    loosesound: function () {
+
+        var loose = new Audio('/sound/lose.wav');
+
+        loose.play();
     },
 
     init: function () {
@@ -1768,6 +1788,7 @@ $.Roulet.GetNumber = function (gradus) {
     $("#roulet").css({ "transform": "rotate(" + midle + "deg)" });
 
     $.Roulet.Higlite(section.id);
+
     $.Game.calcultepoints($.Roulet.must);
 
 }
@@ -1913,14 +1934,9 @@ $.Roulet.showmessage = function (current_sec) {
 
     }
 
-    if ($.Game.mybets.length> 0 && $.User.loosegame) {
-
-        $(".betguide").text($.messages.loosegame);
 
 
-    }
-
-    if ($.User.betaccepted) {
+    else if ($.User.betaccepted) {
 
         $(".betguide").text($.messages.betaccepted);
 
