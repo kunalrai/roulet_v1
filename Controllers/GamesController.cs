@@ -22,5 +22,10 @@ namespace crm.Controllers
             return View();
         }
 
+        public ActionResult PinAndPassword(string userid)
+        {
+            return View();
+        }
+
     }
 }

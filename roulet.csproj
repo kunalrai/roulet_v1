@@ -2904,6 +2904,7 @@
     <Content Include="Views\Roulet\changepassword.cshtml" />
     <Content Include="Views\Roulet\changepin.cshtml" />
     <Content Include="Views\Roulet\drawdetails.cshtml" />
+    <Content Include="Views\Games\pinandpassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

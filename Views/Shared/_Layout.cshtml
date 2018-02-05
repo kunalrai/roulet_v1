@@ -188,6 +188,15 @@
                         </a>
 
                     </li>
+
+                    <li class="nav-item   @{if(controllerName == "games" && actionName =="pinandpassword" ) { @activeCss; } }">
+                        <a href="/games/pinandpassword/" class="nav-link nav-toggle">
+                            <i class="icon-shield"></i>
+                            <span class="title">Pin And  Password</span>
+                            <span class="selected"></span>
+                            <span class="arrow open"></span>
+                        </a>
+                    </li>
                     <li class="nav-item   @{if(controllerName == "logs") { @activeCss; } }">
                         <a href="/logs/index/" class="nav-link nav-toggle">
                             <i class="icon-trophy"></i>
