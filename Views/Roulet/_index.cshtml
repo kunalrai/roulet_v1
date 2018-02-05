@@ -1,0 +1,36 @@
+﻿@{
+    Layout = null;
+
+    Newtonsoft.Json.Linq.JObject user = System.Web.Security.Authentication.UserFromCookie();
+
+    string name = String.Empty;
+    string userid = string.Empty;
+    if ((user != null) && (user["name"] != null))
+    {
+
+        name = user.Value<string>("name");
+        userid = user.Value<string>("id");
+    }
+
+
+}
+<!DOCTYPE html>
+<html lang="en" class="home-body">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="~/www/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/www/css/style.css">
+</head>
+<body>
+    @Html.Partial("navbar")
+    <div class="page-content-wrapper">
+        <div class="page-content">
+
+        @RenderBody()
+
+            
+        </div>
+    </div>
+</body>
+</html>

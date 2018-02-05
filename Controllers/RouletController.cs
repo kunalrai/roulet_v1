@@ -11,19 +11,37 @@ namespace crm.Controllers
     public class rouletController : Controller
     {
         // GET: Roulet
-        public ActionResult index()
+        public ActionResult Index()
         {
             return View();
         }
 
-        public ActionResult game() {
+        public ActionResult Game() {
           
 
             return View();
 
         }
 
-        public ActionResult profile(string userid)
+        public ActionResult UserProfile(string userid)
+        {
+            return View();
+        }
+
+        public ActionResult Managepoints(string userid)
+        {
+            return View();
+        }
+
+        public ActionResult ChangePassword(string userid)
+        {
+            return View();
+        }
+        public ActionResult ChangePin(string userid)
+        {
+            return View();
+        }
+        public ActionResult DrawDetails(string userid)
         {
             return View();
         }

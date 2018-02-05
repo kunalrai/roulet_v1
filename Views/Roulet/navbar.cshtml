@@ -1,0 +1,53 @@
+﻿@{
+    Layout = null;
+
+    Newtonsoft.Json.Linq.JObject user = System.Web.Security.Authentication.UserFromCookie();
+
+    string name = String.Empty;
+    string userid = string.Empty;
+    if ((user != null) && (user["name"] != null))
+    {
+
+        name = user.Value<string>("name");
+        userid = user.Value<string>("id");
+    }
+
+    int current_user_access = user.Value<int>("access_level");
+}
+
+<nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <div class="row">
+                <div class="col-md-1">
+                    <a href="/roulet/index" class="logo">
+                        <img src="~/www/i/logo-default.png" alt="Alternate Text" />
+                    </a>
+                </div>
+                <div class="col-md-10">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item"><a href="#">About us</a></li>
+                        <li class="nav-item"><a href="@Url.Action("managepoints","roulet",  new { userid = userid }))">Manage My Points</a></li>
+                        <li class="nav-item"><a href="@Url.Action("changepassword","roulet", new { userid = userid }))">Change Password</a></li>
+                        <li class="nav-item"><a href="@Url.Action("changepin","roulet", new { userid = userid }))">Change Pin</a></li>
+                        <li class="nav-item"><a href="@Url.Action("DrawDetails","roulet", new { userid = userid }))">Draw Details</a></li>
+
+                      
+                        <li class="nav-item"><a href="#">Games</a></li>
+                        <li class="nav-item"><a href="/users/login">Logout</a></li>
+
+                    </ul>
+                </div>
+                <div class="col-md-1 profile-column">
+                    <div class="avatar">
+                        <img src="~/www/i/photo1.jpg" alt="Alternate Text" />
+                    </div>
+                    <a href="@Url.Action("UserProfile", "roulet",new { userid = userid })" class="profile">
+                        @name
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

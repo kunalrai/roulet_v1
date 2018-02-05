@@ -2715,6 +2715,7 @@
     <Content Include="www\js\profile.js" />
     <Content Include="www\js\logs.js" />
     <Content Include="www\js\binded.js" />
+    <Content Include="www\js\roulette.js" />
     <Content Include="www\js\users.js" />
     <Content Include="www\js\xdr.js" />
     <None Include="Scripts\jquery-3.1.1.intellisense.js" />
@@ -2896,7 +2897,13 @@
     <Content Include="Views\Users\forgot.cshtml" />
     <Content Include="Views\Users\binded.cshtml" />
     <Content Include="Views\Filter\filter.cshtml" />
-    <Content Include="Views\Roulet\profile.cshtml" />
+    <Content Include="Views\Roulet\userprofile.cshtml" />
+    <Content Include="Views\Roulet\managepoints.cshtml" />
+    <Content Include="Views\Roulet\_index.cshtml" />
+    <Content Include="Views\Roulet\navbar.cshtml" />
+    <Content Include="Views\Roulet\changepassword.cshtml" />
+    <Content Include="Views\Roulet\changepin.cshtml" />
+    <Content Include="Views\Roulet\drawdetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
