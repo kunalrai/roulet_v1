@@ -2,7 +2,121 @@
     Layout = "~/Views/Roulet/_index.cshtml";
 }
 
+<style>
+    .myheading {
+        width: 50vw;
+        margin: 4px;
+    }
+    .solidborder{
+        border:1px solid;
+    }
+    .headingtop {
+        background: #990000;
+        height: 40px;
+        padding: 9px
+    }
+    .subheading {
+        margin-left: 4px;
+        color: white
+    }
+    .tablesubheading {
+        border: 1px solid #DDDDDD;
+        height: 30px;
+        background: #F5F5F5;
+    }
+</style>
+<div class="">
+    <div class="solidborder">
+     <div class="headingtop"><span class="subheading">Manage My Points</span> </div>  
+        <div class="table-container" style="display:flex;">
 
-<h1>
-    Manage My Points
-</h1>
+            <div class="myheading">
+                <div class="tablesubheading">
+                    <span>Receivables</span>
+                    <button style="float:right"><i class="fa fa-refresh"></i></button>
+                </div>
+                <div style="border:1px solid #DDDDDD">
+                    <table class="table table-striped table-bordered table-hover table-checkable" id="Receivables">
+                        <thead>
+
+                            <tr role="row" class="heading">
+                                <th width="20vw"> Select</th>
+                                <th width="20vw">From MemberID</th>
+                                <th width="20vw">Amount</th>
+                                <th width="20vw">Type</th>
+
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+                <div style="border:1px solid #DDDDDD;height:30px;background:#DCDCDC">
+                    <input type="checkbox" />
+                    <span>Select All</span>
+                    <button style="float:right">Receive</button>
+                    <button style="float:right">Reject</button>
+
+                </div>
+            </div>
+            <div class="myheading">
+                <div class="tablesubheading">
+
+                    <span>Transferables</span>
+                    <button style="float:right"><i class="fa fa-refresh"></i></button>
+                </div>
+                <div style="border:1px solid #DDDDDD">
+                    <table class="table table-striped table-bordered table-hover table-checkable" id="transferables">
+                        <thead>
+
+                            <tr role="row" class="heading">
+                                <th width="20vw"> Select</th>
+                                <th width="20vw">From MemberID</th>
+                                <th width="20vw">Amount</th>
+                                <th width="20vw">Type</th>
+
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+                <div style="border:1px solid #DDDDDD;height:30px;background:#DCDCDC">
+                    <input type="checkbox" />
+                    <span>Select All</span>
+                    <button style="float:right">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="solidborder">
+        <div class="headingtop"><span class="subheading">Point Transfer</span> </div>
+        <div class="table-container" style="display:flex;">
+
+            <div class="myheading">
+
+                <div style="border:1px solid #DDDDDD">
+                    <table class="table table-striped table-bordered table-hover table-checkable" id="Receivables">
+                        <thead>
+
+                            <tr role="row" class="heading">
+                                <th width="20vw"> Select</th>
+                                <th width="20vw">From MemberID</th>
+                                <th width="20vw">Amount</th>
+                                <th width="20vw">Type</th>
+
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+                <div style="border:1px solid #DDDDDD;height:30px;background:#DCDCDC">
+                   
+                    <button style="float:right">Transfer</button>
+                    <button style="float:right">Close</button>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
