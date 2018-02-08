@@ -94,14 +94,7 @@ $.Game = {
                        
                     }
 
-                    if (response.pointuser <= 0) {
-
-                        $.User.hasEnoughPoints = false;
-
-                    }
-                    else {
-                        $.User.hasEnoughPoints = true;
-                    }
+                   
                 }
 
             }
@@ -359,10 +352,10 @@ $.User = {
 
     },
 
-    usercanbet: function () {
+    usercanbet: function (bet) {
 
-        if ($.User.canBet && $.User.hasEnoughPoints
-            && this.userhasEnoughPoints() && !$.User.wincurrentgame && !$.User.betaccepted) {
+        if ($.User.canBet 
+            && this.userhasEnoughPoints(bet) && !$.User.wincurrentgame && !$.User.betaccepted) {
 
             $.ui.blinkbetokbtn();
 
@@ -376,7 +369,7 @@ $.User = {
 
     },
 
-    hasEnoughPoints: true,
+   
 
     Bet: function () {
 
@@ -443,13 +436,11 @@ $.User = {
 
     },
 
-    userhasEnoughPoints:function () {
-
-    var balavailable = true;
+    userhasEnoughPoints:function (bet) {
 
     var bal = $("#pointuser").text();
 
-    var balSufficient = Number(bal) >= Number($.Roulet.bet);
+    var balSufficient = Number(bal) >= Number(bet);
 
     if (!balSufficient) {
 
@@ -538,9 +529,13 @@ $.ui = {
 
         var arr = [];
 
+        var sumofcoins = 0;
+
         $.Game.prevbet.map((value, index, obj) => {
 
             var data = undefined;
+           
+
             arr.map((v, i, o) => {
 
                 if (v.bet_pos == value.bet_pos) {
@@ -549,7 +544,9 @@ $.ui = {
 
                     data.bet_pos = value.bet_pos;
 
-                    data.coin = data.coin + value.coin;
+                    data.coin = Number(data.coin) + Number(value.coin);
+
+                   
 
                     arr[i] = data;
                 }
@@ -557,13 +554,20 @@ $.ui = {
 
             if (data == undefined) {
 
+                sumofcoins = sumofcoins + Number(value.coin);
+
                 arr.push(value);
             }
             
 
         });
 
-        
+        if (!$.User.userhasEnoughPoints(sumofcoins)) {
+
+            console.log("sum of coins: " + sumofcoins);
+            $.Game.prevbet = [];
+            return;
+        }
 
         arr.map((value, index, obj) => {
             if (Array.isArray(value.bet_pos)) {
@@ -615,6 +619,8 @@ $.ui = {
 
             }
         });
+
+        $.Roulet.bet = $('.coin.coin-active button').val();
     },
 
     onbetok: function () {
@@ -628,8 +634,10 @@ $.ui = {
         else {
 
             $.ui.cleartimerbetok();
+            if ($.Game.mybets.length > 0) {
 
-            $.User.betaccepted = true;
+                $.User.betaccepted = true;
+            }
 
             this.isbetokblinking = false;
 
@@ -1147,7 +1155,7 @@ $(document).ready(function () {
     $(".cube").click(function (event) {
 
         event.preventDefault();
-        if ($.User.usercanbet()) {
+        if ($.User.usercanbet($.Roulet.bet)) {
 
             var top = parseInt($(this).css("top"));
 
@@ -1193,7 +1201,7 @@ $(document).ready(function () {
     $(".square").click(function (e) {
 
         e.preventDefault();
-        if ($.User.usercanbet()) {
+        if ($.User.usercanbet($.Roulet.bet)) {
 
 
 
@@ -1292,7 +1300,7 @@ $(document).ready(function () {
             bets = "<div class='bets' style='left:" + left + ";top:" + top + "px;' data-val='" + value + "'>" + coin + "</div>"
         }
 
-        if ($.User.usercanbet()) {
+        if ($.User.usercanbet($.Roulet.bet)) {
 
             $.Game.Bet(value);
 
@@ -1312,7 +1320,7 @@ $(document).ready(function () {
 
         value = JSON.parse($(this).attr("data-val"));
 
-        if ($.User.usercanbet()) {
+        if ($.User.usercanbet($.Roulet.bet)) {
 
             $.Game.MyBet(value);
 
@@ -1336,7 +1344,7 @@ $(document).ready(function () {
 
         e.preventDefault();
 
-        if ($.User.usercanbet()) {
+        if ($.User.usercanbet($.Roulet.bet)) {
 
             var top = parseInt($(this).css("top"));
 
@@ -1381,7 +1389,7 @@ $(document).ready(function () {
     })
 
     $("#takebtn").click(function () {
-
+        $(".bets").remove();
         clearInterval($.removetakeinterval);
 
         $.count = 0;
@@ -1395,14 +1403,26 @@ $(document).ready(function () {
         var i = Number(winScore);
 
         var interval = setInterval(function () {
-            if (i != 0) {
-                $("#win_score").text(i);
-                if (i > 1000)
+
+            var i = Number($("#win_score").text());
+
+            if (i > 0) {
+               
+                if (i > 1000) {
+
                     i = i - 100;
+
+                }
+                   
                 else if (i > 100)
+                {
                     i = i - 10;
-                else
+                }
+                else {
                     i = i - 1;
+                }
+
+                $("#win_score").text(i);
             }
             else {
                 clearInterval(interval);
@@ -1613,7 +1633,7 @@ $.Roulet.PushLast = function (id) {
 
     }
 
-
+    $.Roulet.UpdateLastFive($.Roulet.last);
 
 
     showlastfivetext();
@@ -1689,7 +1709,45 @@ $.Roulet.randomInteger = function (min, max) {
 }
 
 $.Roulet.sections = [{ "id": 2, "min": 0, "max": 9.47 }, { "id": 14, "min": 9.47, "max": 18.94 }, { "id": 35, "min": 18.94, "max": 28.410000000000004 }, { "id": 23, "min": 28.410000000000004, "max": 37.88 }, { "id": 4, "min": 37.88, "max": 47.35 }, { "id": 16, "min": 47.35, "max": 56.82 }, { "id": 33, "min": 56.82, "max": 66.29 }, { "id": 21, "min": 66.29, "max": 75.76 }, { "id": 6, "min": 75.76, "max": 85.23 }, { "id": 18, "min": 85.23, "max": 94.7 }, { "id": 31, "min": 94.7, "max": 104.17 }, { "id": 19, "min": 104.17, "max": 113.64 }, { "id": 8, "min": 113.64, "max": 123.11 }, { "id": 12, "min": 123.11, "max": 132.58 }, { "id": 29, "min": 132.58, "max": 142.05 }, { "id": 25, "min": 142.05, "max": 151.52 }, { "id": 10, "min": 151.52, "max": 160.99 }, { "id": 27, "min": 160.99, "max": 170.46 }, { "id": "00", "min": 170.46, "max": 179.93 }, { "id": 1, "min": 179.93, "max": 189.4 }, { "id": 13, "min": 189.4, "max": 198.87 }, { "id": 36, "min": 198.87, "max": 208.34 }, { "id": 24, "min": 208.34, "max": 217.81 }, { "id": 3, "min": 217.81, "max": 227.28 }, { "id": 15, "min": 227.28, "max": 236.75 }, { "id": 34, "min": 236.75, "max": 246.22 }, { "id": 22, "min": 246.22, "max": 255.69 }, { "id": 5, "min": 255.69, "max": 265.16 }, { "id": 17, "min": 265.16, "max": 274.63000000000005 }, { "id": 32, "min": 274.63000000000005, "max": 284.1000000000001 }, { "id": 20, "min": 284.1000000000001, "max": 293.5700000000001 }, { "id": 7, "min": 293.5700000000001, "max": 303.04000000000013 }, { "id": 11, "min": 303.04000000000013, "max": 312.51000000000016 }, { "id": 30, "min": 312.51000000000016, "max": 321.9800000000002 }, { "id": 26, "min": 321.9800000000002, "max": 331.4500000000002 }, { "id": 9, "min": 331.4500000000002, "max": 340.92000000000024 }, { "id": 28, "min": 340.92000000000024, "max": 350.39000000000027 }, { "id": 0, "min": 350.39000000000027, "max": 359.8600000000003 }];
+$.Roulet.SaveDrawDetails = function (drawno) {
 
+    var gameid = $("#game_id").val();
+
+    var userid = $("#user_id").val();
+
+    var data = {
+        gameid: gameid,
+        userid: userid,
+        drawno: drawno,
+    }
+
+    $.ajax({
+        type: "POST",
+        url: "/games/drawdetails",
+        data: JSON.stringify(data)
+    });
+
+}
+
+$.Roulet.UpdateLastFive = function (last) {
+
+    var gameid = $("#game_id").val();
+
+    var userid = $("#user_id").val();
+
+    var data = {
+        gameid: gameid,
+        userid: userid,
+        last: last,
+    }
+
+    $.ajax({
+        type: "POST",
+        url: " /games/updatelastfive",
+        data: JSON.stringify(data)
+    });
+    console.log("save last five");
+}
 $.Roulet.Higlite = function (id) {
 
     $.Roulet.PushLast(id);
@@ -1714,6 +1772,7 @@ $.Roulet.Higlite = function (id) {
             data: JSON.stringify(data)
         });
 
+        
 
 
     }
@@ -1732,8 +1791,10 @@ $.Roulet.Higlite = function (id) {
             url: "/logs/log/",
             data: JSON.stringify(data)
         });
-
+        $(".bets").remove();
     }
+
+    this.SaveDrawDetails(id);
 
     if ($.Game.mybets.length > 0) {
 
@@ -1744,7 +1805,7 @@ $.Roulet.Higlite = function (id) {
 
     $.Game.bets = [];
 
-    $(".bets").remove();
+   
 
     for (var i = 1; i <= 20; i++) {
 
@@ -1975,6 +2036,13 @@ $.Roulet.showmessage = function (current_sec) {
 
             $(".betguide").text($.messages.bet_time_over);
 
+            if ($.Game.mybets.length > 0) {
+
+
+                $(".betguide").text($.messages.betaccepted);
+
+            }
+
         }
         
 
@@ -1992,8 +2060,15 @@ $.Roulet.showmessage = function (current_sec) {
 
         $.User.canBet = true;
 
-        $(".betguide").text($.messages.makebet);
+        if ($.User.userhasEnoughPoints($.Roulet.bet)) {
 
+            $(".betguide").text($.messages.makebet);
+
+        }
+        else {
+
+            $(".betguide").text($.messages.hasenoughpoints);
+        }
 
         if ($.Game.mybets.length > 0) {
 
