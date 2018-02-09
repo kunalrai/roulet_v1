@@ -7,8 +7,12 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
+if exists(select * from sys.objects where type = 'u' and name ='Receivables')
+begin
+ drop table Receivables
 
-CREATE TABLE [dbo].Receivables(
+end
+Create TABLE [dbo].Receivables(
 	[id] [uniqueidentifier] NOT NULL,
 	from_member_id [uniqueidentifier] NOT NULL,
 	[amount] [int] not NULL,
@@ -22,14 +26,35 @@ CREATE TABLE [dbo].Receivables(
 
 GO
 
+if exists(select * from sys.objects where type = 'u' and name ='Transferable')
+begin
+ drop table Transferable
 
-CREATE TABLE [dbo].Transferable(
+end
+Create TABLE [dbo].Transferable(
 	[id] [uniqueidentifier] NOT NULL,
 	from_member_id [uniqueidentifier] NOT NULL,
 	[amount] [int] not NULL,
 	[access_level] [int] not NULL,
 	[Transfer_on] datetime not NULL,
- CONSTRAINT [PK_Receivables] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_Transferable] PRIMARY KEY CLUSTERED 
+(
+	[id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+if exists(select * from sys.objects where type = 'u' and name ='DrawDetails')
+begin
+ drop table DrawDetails
+
+end
+Create TABLE [dbo].DrawDetails(
+	[id] [uniqueidentifier] NOT NULL,
+	DrawNo [int] NOT NULL,
+	[access_level] [int] not NULL,
+	DrawTime datetime not NULL,
+ CONSTRAINT [PK_DrawDetails] PRIMARY KEY CLUSTERED 
 (
 	[id] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -37,3 +62,5 @@ CREATE TABLE [dbo].Transferable(
 
 GO
 
+
+--Select GetUtcDate()

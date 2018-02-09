@@ -2711,6 +2711,7 @@
     <Content Include="www\js\jquery.maphilight.js" />
     <Content Include="www\js\login.js" />
     <Content Include="www\js\game.js" />
+    <Content Include="www\js\managemypoints.js" />
     <Content Include="www\js\register.js" />
     <Content Include="www\js\profile.js" />
     <Content Include="www\js\logs.js" />

@@ -24,6 +24,19 @@
         height: 30px;
         background: #F5F5F5;
     }
+    .lablewidth {
+       width:100px;
+       text-align:right;
+    }
+    .centera{
+        margin-left:34vw;
+    }
+    .centerbtn{
+        margin-left:104px
+    }
+    .formheading {
+        width: 47vw;
+    }
 </style>
 <div class="">
     <div class="solidborder">
@@ -92,31 +105,28 @@
         <div class="headingtop"><span class="subheading">Point Transfer</span> </div>
         <div class="table-container" style="display:flex;">
 
-            <div class="myheading">
-
-                <div style="border:1px solid #DDDDDD">
-                    <table class="table table-striped table-bordered table-hover table-checkable" id="Receivables">
-                        <thead>
-
-                            <tr role="row" class="heading">
-                                <th width="20vw"> Select</th>
-                                <th width="20vw">From MemberID</th>
-                                <th width="20vw">Amount</th>
-                                <th width="20vw">Type</th>
-
-                            </tr>
-                        </thead>
-
-                    </table>
-                </div>
-                <div style="border:1px solid #DDDDDD;height:30px;background:#DCDCDC">
-                   
-                    <button style="float:right">Transfer</button>
-                    <button style="float:right">Close</button>
-
-                </div>
+            <div class="formheading centera">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label for="toaccountno" class="lablewidth" >To Account No</label>
+                        <input type="text" name="toaccountno" id="toaccountno" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="pin" class="lablewidth" >Your Pin</label>
+                        <input type="text" name="pin" id="pin" class="form-control" />
+                    </div>
+                    <div class="form-group">
+                        <label for="amount" class="lablewidth">Amount</label>
+                        <input type="text" name="amount" id="amount" class="form-control"/>
+                    </div>
+                    <div class="centerbtn">
+                        <button type="submit" class="form-control" id="transfer">Transfer</button>
+                        <button class="form-control">Close</button>
+                    </div>
+                </form>
             </div>
             
         </div>
     </div>
 </div>
+<script type="text/javascript" src=""></script>

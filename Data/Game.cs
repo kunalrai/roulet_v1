@@ -60,6 +60,24 @@ namespace database
 
         }
 
+        public static bool UpdateLastFive(JObject args)
+        {
+
+            SQL query = @"
+
+                   UPDATE [dbo].[games] 
+                   
+                   set  last_five_must_bet= @last
+                   WHERE [id] = '07fe02e9-5ba8-4bd1-8f72-b1dd4336418c'
+
+            ";
+
+           
+            query.Parameters.Add("last", args["last"].ToString());
+            return query.Execute(true) > 0;
+
+        }
+
         public static bool RandomUpdate(int must_bet)
         {
 
@@ -296,6 +314,69 @@ namespace database
 
         }
 
+        internal static JArray GetDrawDetails(string userid,string gameid)
+        {
+
+         
+
+
+            var now = DateTime.UtcNow;
+
+
+            SQL query = @"
+                          Select  userid , gameid,drawno,drawtime ,Row_Number() over(order by drawtime desc) SrNo
+                          from DrawDetails 
+                          where DrawTime   >=  CONVERT (date, GETutcDATE()) 
+                          and userid = @userid and gameid = @gameid
+                   
+            ";
+
+            query.Parameters.Add("gameid", gameid);
+            query.Parameters.Add("userid", userid);
+
+            query.Parameters.Add("time", UnixTimeNow());
+
+            return query.ExecuteQuery<JArray>((reader) => {
+
+                JArray list = new JArray();
+
+                while (reader.Read())
+                {
+
+                    JObject details = new JObject();
+
+                    //if (!reader.IsDBNull(0))
+                    //{
+                    //    details["userid"] = reader.GetGuid(0);
+                    //}
+
+                    //if (!reader.IsDBNull(1))
+                    //{
+                    //    details["gameid"] = reader.GetGuid(1);
+                    //}
+                    if (!reader.IsDBNull(2))
+                    {
+                        details["drawno"] = reader.GetInt32(2);
+                    }
+
+                    if (!reader.IsDBNull(3))
+                    {
+                        details["drawtime"] = reader.GetDateTime(3).ToShortDateString() +" "+ reader.GetDateTime(3).AddMinutes(330).ToLongTimeString();
+                    }
+                    if (!reader.IsDBNull(4))
+                    {
+                        details["SrNo"] = reader.GetInt64(4);
+                    }
+
+                    list.Add(details);
+
+                }
+
+                return list;
+
+            });
+        }
+
         internal static void UpdateWiningPoints(int totalamount, string user_id)
         {
             SQL query = @"
@@ -370,6 +451,41 @@ namespace database
             });
 
         }
+
+
+
+        public static bool SaveDrawDetails(JObject args)
+        {
+            
+            var drawno = args.Value<string>("drawno");
+
+            var gameid = args.Value<string>("gameid");
+            var userid = args.Value<string>("userid");
+
+
+            var now = DateTime.UtcNow;
+
+
+            SQL query = @"
+
+                
+                  
+                          INSERT INTO [dbo].[drawdetails]([id],[gameid],userid,[drawno], [DrawTime])
+                                      VALUES(NEWID(),@gameid,@userid, @drawno, GetUtcDate())
+                   
+            ";
+
+            query.Parameters.Add("drawno", drawno);
+            query.Parameters.Add("gameid", gameid);
+            query.Parameters.Add("userid", userid);
+
+            query.Parameters.Add("time", UnixTimeNow());
+
+            return query.Execute(true) > 0;
+
+        }
+
+
 
         public static int UnixTimeNow()
         {

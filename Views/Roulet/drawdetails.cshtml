@@ -1,5 +1,16 @@
 ﻿@{
     Layout = "~/Views/Roulet/_index.cshtml";
+
+    Newtonsoft.Json.Linq.JObject user = System.Web.Security.Authentication.UserFromCookie();
+
+    string name = String.Empty;
+    string userid = string.Empty;
+    if ((user != null) && (user["name"] != null))
+    {
+
+        name = user.Value<string>("name");
+        userid = user.Value<string>("id");
+    }
 }
 
 
@@ -7,7 +18,7 @@
     <div class="table-container">
         <span>Fun Roulette </span>
 
-        <table class="table table-striped table-bordered table-hover table-checkable" id="users-table">
+        <table class="table table-striped table-bordered table-hover table-checkable" id="draw-table">
             <thead>
                 <tr role="row" class="heading">
                     <th width="20vw"> Sr. No. </th>
@@ -19,3 +30,78 @@
         </table>
     </div>
 </div>
+@section Scripts{
+   <script type="text/javascript">
+
+       var Main = function () {
+           grid = null;
+           data = {
+                   gameid: '07FE02E9-5BA8-4BD1-8F72-B1DD4336418C',
+                   userid: '@userid'
+
+               };
+           url = '/games/getdrawdetails?userid=@userid&gameid=' + data.gameid;
+           responseUsers = [];
+           return {
+
+
+               init: function () {
+                   grid = new Datatable();
+                   grid.init({
+                       src: $("#draw-table"),
+                       onSuccess: function (e) { },
+                       onError: function (e) { },
+                       loadingMessage: "Loading...",
+                       dataTable: {
+                           "columns": [
+                               { "data": "SrNo" },
+                               { "data": "drawno" },
+                               { "data": "drawtime" }
+
+                           ],
+                           ajax: {
+
+                               url: '/games/getdrawdetails?userid=@userid&gameid=' +data.gameid,
+                               data: null,
+                               dataSrc: function (response) {
+                                   console.log(response)
+                                   responseUsers = response.data;
+                                   return response;
+
+                               }
+                           },
+                           "columnDefs": [{
+                               "searchable": false,
+                               "orderable": false,
+                               "targets": 0,
+                               
+                           }],
+                           "paging": false,
+                           "ordering": false,
+                           "info": false
+                       }
+                   });
+
+
+
+               },
+
+               reloadTable: function (state, district) {
+
+                   grid.getDataTable().ajax.url(url).load();
+
+               }
+
+           }
+
+       }();
+
+
+       $(document).ready(function () {
+
+           Main.init();
+
+           setInterval(() => Main.reloadTable(), 60000);
+       });
+</script>
+}

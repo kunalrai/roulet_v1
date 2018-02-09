@@ -117,6 +117,11 @@ public partial class _Owin
             handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.Update); });
         });
 
+        host.MapAndLog("/games/updatelastfive", (handler) =>
+        {
+            handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.UpdateLatFive); });
+        });
+
         host.MapAndLog("/games/find", (handler) =>
         {
             handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.Find); });
@@ -163,6 +168,16 @@ public partial class _Owin
         host.MapAndLog("/user/transferwinningpoints", (handler) =>
         {
             handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.TransferWinningPoints); });
+        });
+
+        host.MapAndLog("/games/drawdetails", (handler) =>
+        {
+            handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.SaveDrawDetails); });
+        });
+
+        host.MapAndLog("/games/getdrawdetails", (handler) =>
+        {
+            handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.GetDrawDetails); });
         });
     }
 

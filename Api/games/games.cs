@@ -143,6 +143,32 @@ namespace crm
 
         }
 
+        public static Task UpdateLatFive(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+
+            var args = ctx.Parse();
+
+            if (args["last"] == null)
+            {
+                return ctx.Error(401);
+            }
+
+            if (database.Games.UpdateLastFive(args))
+            {
+                return ctx.OK();
+            }
+            else
+            {
+                return ctx.Error(400);
+            }
+
+        }
+
         public static Task Bet(IOwinContext ctx)
         {
 
@@ -344,6 +370,37 @@ namespace crm
             return ctx.JSON(true);
 
         }
+
+        public static Task SaveDrawDetails(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+            var args = ctx.Parse();
+
+            database.Games.SaveDrawDetails(args);
+            return ctx.JSON(true);
+
+        }
+
+        public static Task GetDrawDetails(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+            string userid = Convert.ToString(ctx.Parametr("userid"));
+            string gameid = Convert.ToString(ctx.Parametr("gameid"));
+
+            JArray details = database.Games.GetDrawDetails(userid, gameid);
+
+            return ctx.JSON(details);
+
+        }
+        
 
         public class MyArray
         {
