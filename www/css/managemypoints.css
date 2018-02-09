@@ -1,0 +1,58 @@
+﻿.myheading {
+    width: 50vw;
+    margin: 4px;
+}
+
+.table-container {
+    display:flex;
+}
+
+.solidborder {
+    border: 1px solid;
+}
+
+.headingtop {
+    background: #990000;
+    height: 40px;
+    padding: 9px
+}
+
+.subheading {
+    margin-left: 4px;
+    color: white
+}
+
+.tablesubheading {
+    border: 1px solid #DDDDDD;
+    height: 30px;
+    background: #F5F5F5;
+}
+
+.lablewidth {
+    width: 100px;
+    text-align: right;
+}
+
+.centera {
+    margin-left: 34vw;
+}
+
+.centerbtn {
+    margin-left: 104px
+}
+
+.formheading {
+    width: 47vw;
+}
+@media (max-width: 768px) {
+
+    .myheading {
+        width: 100%;
+        margin: 4px;
+        padding-right: 5px;
+    }
+
+    .table-container {
+        display: block;
+    }
+}

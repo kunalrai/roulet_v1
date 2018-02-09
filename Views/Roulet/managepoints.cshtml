@@ -1,47 +1,27 @@
 ﻿@{
     Layout = "~/Views/Roulet/_index.cshtml";
+    Newtonsoft.Json.Linq.JObject user = System.Web.Security.Authentication.UserFromCookie();
+
+    string name = String.Empty;
+    string userid = string.Empty;
+    if ((user != null) && (user["name"] != null))
+    {
+
+        name = user.Value<string>("name");
+        userid = user.Value<string>("id");
+    }
 }
 
-<style>
-    .myheading {
-        width: 50vw;
-        margin: 4px;
-    }
-    .solidborder{
-        border:1px solid;
-    }
-    .headingtop {
-        background: #990000;
-        height: 40px;
-        padding: 9px
-    }
-    .subheading {
-        margin-left: 4px;
-        color: white
-    }
-    .tablesubheading {
-        border: 1px solid #DDDDDD;
-        height: 30px;
-        background: #F5F5F5;
-    }
-    .lablewidth {
-       width:100px;
-       text-align:right;
-    }
-    .centera{
-        margin-left:34vw;
-    }
-    .centerbtn{
-        margin-left:104px
-    }
-    .formheading {
-        width: 47vw;
-    }
-</style>
+@section Styles{
+
+        <link rel="stylesheet" href="~/www/css/managemypoints.css">
+
+}
 <div class="">
+    <input type="hidden" id="userid" value="@userid" />
     <div class="solidborder">
      <div class="headingtop"><span class="subheading">Manage My Points</span> </div>  
-        <div class="table-container" style="display:flex;">
+        <div class="table-container" >
 
             <div class="myheading">
                 <div class="tablesubheading">
@@ -56,7 +36,7 @@
                                 <th width="20vw"> Select</th>
                                 <th width="20vw">From MemberID</th>
                                 <th width="20vw">Amount</th>
-                                <th width="20vw">Type</th>
+                               
 
                             </tr>
                         </thead>
@@ -71,11 +51,12 @@
 
                 </div>
             </div>
+           
             <div class="myheading">
                 <div class="tablesubheading">
 
                     <span>Transferables</span>
-                    <button style="float:right"><i class="fa fa-refresh"></i></button>
+                    <button style="float:right" id="tRefresh"><i class="fa fa-refresh"></i></button>
                 </div>
                 <div style="border:1px solid #DDDDDD">
                     <table class="table table-striped table-bordered table-hover table-checkable" id="transferables">
@@ -85,7 +66,7 @@
                                 <th width="20vw"> Select</th>
                                 <th width="20vw">From MemberID</th>
                                 <th width="20vw">Amount</th>
-                                <th width="20vw">Type</th>
+                                
 
                             </tr>
                         </thead>
@@ -103,7 +84,7 @@
     </div>
     <div class="solidborder">
         <div class="headingtop"><span class="subheading">Point Transfer</span> </div>
-        <div class="table-container" style="display:flex;">
+        <div class="table-container" >
 
             <div class="formheading centera">
                 <form class="form-inline">
@@ -129,4 +110,9 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src=""></script>
+
+@section Scripts{
+
+    <script type="text/javascript" src="~/www/js/managemypoints.js"></script>
+
+}

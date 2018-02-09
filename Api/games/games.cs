@@ -400,7 +400,40 @@ namespace crm
             return ctx.JSON(details);
 
         }
-        
+
+
+        public static Task SaveTransferable(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+            var args = ctx.Parse();
+           
+
+            int details = database.Games.SaveTransferrable(args);
+
+            return ctx.JSON(details);
+
+        }
+
+        public static Task GetTransferable(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+            string userid = Convert.ToString(ctx.Parametr("userid"));
+            string gameid = Convert.ToString(ctx.Parametr("gameid"));
+
+            JArray details = database.Games.GetTransferrable(userid, gameid);
+
+            return ctx.JSON(details);
+
+        }
+
 
         public class MyArray
         {

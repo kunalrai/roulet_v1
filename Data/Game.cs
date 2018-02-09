@@ -479,12 +479,140 @@ namespace database
             query.Parameters.Add("gameid", gameid);
             query.Parameters.Add("userid", userid);
 
-            query.Parameters.Add("time", UnixTimeNow());
 
             return query.Execute(true) > 0;
 
         }
 
+
+        public static int SaveTransferrable(JObject args)
+        {
+
+            var gameid = args.Value<string>("gameid");
+            var from_member_id = args.Value<string>("from_member_id");
+            var to_member_id = args.Value<string>("to_member_id");
+            var amount = args.Value<string>("amount");
+            //Check if to_member_id is on same hierarcy 
+            //1. for User can transfer to its main and users under its main
+            SQL query = @"
+                
+                         if exists( select 1 from (
+                         select * from Users 
+                         where main = (select main from users where id =@from_member_id )
+                         and   id !=@from_member_id
+                          or 
+ 
+                         id = (select main from users where id =@from_member_id)
+
+
+                         )
+                          as t
+                         where id = @to_member_id
+                         )
+
+                         begin
+                           
+                                INSERT INTO [dbo].[Transferable]([id],gameId,[from_member_id],to_member_id,[amount],
+                                                     [Transfered_on],IsCancelled,IsReceived)
+                                              VALUES(NEWID(),@gameid,@from_member_id,@to_member_id, @amount, GetUtcDate(),0,0)
+
+                                Update Users 
+                                Set PointUser = PointUser - @amount
+                                where id = @from_user_id
+                                Select 1 as Output
+                         end
+                         else
+                             begin
+                               select 0 as Output
+                             end
+
+                   
+            ";
+
+            query.Parameters.Add("gameid", gameid);
+            query.Parameters.Add("from_member_id", from_member_id);
+            query.Parameters.Add("to_member_id", to_member_id);
+            query.Parameters.Add("amount", amount);
+
+
+            return query.ExecuteQuery<int>((reader) => {
+
+                JObject details = new JObject();
+
+                while (reader.Read()) {
+
+                    if (!reader.IsDBNull(0)) {
+
+                        details["Output"] = reader.GetInt32(0);
+                    }
+                }
+
+                return details;
+            });
+
+        }
+
+        internal static JArray GetTransferrable(string from_member_id, string gameid)
+        {
+            var now = DateTime.UtcNow;
+
+
+            SQL query = @"
+                        
+                        
+                         select  [id],[from_member_id],
+
+                        (select email from users where id = to_member_id) as to_member_id,[amount],
+                                  [Transfered_on]
+                          from Transferable 
+                          where from_member_id   =  @from_member_id
+                            and gameid = @gameid
+                          and IsCancelled = 0 and IsReceived =0 
+                   
+            ";
+
+            query.Parameters.Add("gameid", gameid);
+            query.Parameters.Add("from_member_id", from_member_id);
+
+
+            return query.ExecuteQuery<JArray>((reader) => {
+
+                JArray list = new JArray();
+
+                while (reader.Read())
+                {
+
+                    JObject details = new JObject();
+
+                    if (!reader.IsDBNull(0))
+                    {
+                        details["id"] = reader.GetGuid(0);
+                    }
+
+                    if (!reader.IsDBNull(2))
+                    {
+                        details["to_member_id"] = reader.GetString(2);
+                    }
+                    if (!reader.IsDBNull(3))
+                    {
+                        details["amount"] = reader.GetInt32(3);
+                    }
+
+                    if (!reader.IsDBNull(4))
+                    {
+                        var datetimedata = reader.GetDateTime(4);
+                        details["Transfered_on"] = datetimedata.ToShortDateString() + " " + datetimedata.AddMinutes(330).ToLongTimeString();
+                    }
+                    
+
+                    list.Add(details);
+
+                }
+
+                return list;
+
+            });
+        }
 
 
         public static int UnixTimeNow()

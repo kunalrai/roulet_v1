@@ -179,6 +179,16 @@ public partial class _Owin
         {
             handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.GetDrawDetails); });
         });
+
+        host.MapAndLog("/games/savetransferable", (handler) =>
+        {
+            handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.SaveTransferable); });
+        });
+
+        host.MapAndLog("/games/gettransferable", (handler) =>
+        {
+            handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.GetTransferable); });
+        });
     }
 
     static void UseLogs(IAppBuilder host)
