@@ -1,6 +1,7 @@
 ﻿@{
     Layout = "~/Views/Roulet/_index.cshtml";
     Newtonsoft.Json.Linq.JObject user = System.Web.Security.Authentication.UserFromCookie();
+    string date = DateTime.Now.Ticks.ToString();
 
     string name = String.Empty;
     string userid = string.Empty;
@@ -19,6 +20,9 @@
 }
 <div class="">
     <input type="hidden" id="userid" value="@userid" />
+    <label   >Current Balance:</label>
+    <label id="pointbalance" name="pointbalance" ></label>
+
     <div class="solidborder">
      <div class="headingtop"><span class="subheading">Manage My Points</span> </div>  
         <div class="table-container" >
@@ -43,11 +47,11 @@
 
                     </table>
                 </div>
-                <div style="border:1px solid #DDDDDD;height:30px;background:#DCDCDC">
+                <div class="table-footer">
                     <input type="checkbox" />
                     <span>Select All</span>
-                    <button style="float:right">Receive</button>
-                    <button style="float:right">Reject</button>
+                    <button style="float:right" class="btn btn-default btn-primary">Receive</button>
+                    <button style="float:right" class="btn btn-primary">Reject</button>
 
                 </div>
             </div>
@@ -73,10 +77,10 @@
 
                     </table>
                 </div>
-                <div style="border:1px solid #DDDDDD;height:30px;background:#DCDCDC">
+                <div class="table-footer">
                     <input type="checkbox" />
                     <span>Select All</span>
-                    <button style="float:right">Cancel</button>
+                    <button style="float:right" class="btn btn-primary">Cancel</button>
 
                 </div>
             </div>
@@ -86,23 +90,23 @@
         <div class="headingtop"><span class="subheading">Point Transfer</span> </div>
         <div class="table-container" >
 
-            <div class="formheading centera">
-                <form class="form-inline">
-                    <div class="form-group">
-                        <label for="toaccountno" class="lablewidth" >To Account No</label>
-                        <input type="text" name="toaccountno" id="toaccountno" class="form-control"/>
+            <div class="">
+                <form class="cmxform" id="form1">
+                    <div class="">
+                        <label for="toaccountno" class="control-label visible-ie8 visible-ie9" >To Account No</label>
+                        <input type="text" name="toaccountno" id="toaccountno" class="form-control form-control-solid placeholder-no-fix" required/>
                     </div>
-                    <div class="form-group">
-                        <label for="pin" class="lablewidth" >Your Pin</label>
-                        <input type="text" name="pin" id="pin" class="form-control" />
+                    <div class="">
+                        <label for="pin" class="control-label visible-ie8 visible-ie9" >Your Pin</label>
+                        <input type="text" name="pin" id="pin" class="form-control form-control-solid placeholder-no-fix" required/>
                     </div>
-                    <div class="form-group">
-                        <label for="amount" class="lablewidth">Amount</label>
-                        <input type="text" name="amount" id="amount" class="form-control"/>
+                    <div class="">
+                        <label for="amount" class="control-label visible-ie8 visible-ie9">Amount</label>
+                        <input type="text" name="amount" id="amount" class="form-control form-control-solid placeholder-no-fix" required/>
                     </div>
                     <div class="centerbtn">
-                        <button type="submit" class="form-control" id="transfer">Transfer</button>
-                        <button class="form-control">Close</button>
+                        <button type="submit" class="btn btn-primary" id="transfer">Transfer</button>
+                        <button class="btn btn-primary">Close</button>
                     </div>
                 </form>
             </div>
@@ -114,5 +118,6 @@
 @section Scripts{
 
     <script type="text/javascript" src="~/www/js/managemypoints.js"></script>
-
+    <script src="~/www/assets/global/plugins/jquery-validation/js/jquery.validate.min.js"></script>
+    <script src="~/www/assets/global/plugins/jquery-validation/js/additional-methods.min.js"></script>
 }

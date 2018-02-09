@@ -519,6 +519,7 @@ namespace database
                                 Update Users 
                                 Set PointUser = PointUser - @amount
                                 where id = @from_user_id
+                                
                                 Select 1 as Output
                          end
                          else

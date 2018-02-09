@@ -56,3 +56,13 @@
         display: block;
     }
 }
+
+.table-footer {
+    border: 1px solid #DDDDDD;
+    height: 40px;
+    background: #DCDCDC;
+    line-height: 40px;
+}
+.cmxform span.error {
+    color: red;
+}
