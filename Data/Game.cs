@@ -377,6 +377,28 @@ namespace database
             });
         }
 
+        internal static int DeleteTransfer(JObject args)
+        {
+            Guid from_member_id = Guid.Parse(args.Value<string>("from_member_id"));
+
+            string ids = args.Value<string>("ids");
+
+            string gameid = args.Value<string>("gameid");
+
+            SQL query = @"
+
+               exec DeleteTransferables @from_member_id,@gameid,@ids
+                
+            ";
+            query.Parameters.Add("from_member_id", from_member_id);
+
+            query.Parameters.Add("gameid", gameid);
+
+            query.Parameters.Add("ids", ids);
+
+            return query.Execute(true);
+        }
+
         internal static void UpdateWiningPoints(int totalamount, string user_id)
         {
             SQL query = @"
@@ -388,6 +410,7 @@ namespace database
             query.Execute(true);
            
         }
+
         internal static void TransferWiningPoints(string user_id)
         {
             SQL query = @"
@@ -452,8 +475,6 @@ namespace database
 
         }
 
-
-
         public static bool SaveDrawDetails(JObject args)
         {
             
@@ -491,42 +512,11 @@ namespace database
             var gameid = args.Value<string>("gameid");
             var from_member_id = args.Value<string>("from_member_id");
             var to_member_id = args.Value<string>("to_member_id");
-            var amount = args.Value<string>("amount");
+            var amount = args.Value<int>("amount");
             //Check if to_member_id is on same hierarcy 
             //1. for User can transfer to its main and users under its main
             SQL query = @"
-                
-                         if exists( select 1 from (
-                         select * from Users 
-                         where main = (select main from users where id =@from_member_id )
-                         and   id !=@from_member_id
-                          or 
- 
-                         id = (select main from users where id =@from_member_id)
-
-
-                         )
-                          as t
-                         where id = @to_member_id
-                         )
-
-                         begin
-                           
-                                INSERT INTO [dbo].[Transferable]([id],gameId,[from_member_id],to_member_id,[amount],
-                                                     [Transfered_on],IsCancelled,IsReceived)
-                                              VALUES(NEWID(),@gameid,@from_member_id,@to_member_id, @amount, GetUtcDate(),0,0)
-
-                                Update Users 
-                                Set PointUser = PointUser - @amount
-                                where id = @from_user_id
-                                
-                                Select 1 as Output
-                         end
-                         else
-                             begin
-                               select 0 as Output
-                             end
-
+                exec savetransferables @gameid,@from_member_id ,@to_member_id ,@amount   
                    
             ";
 
@@ -538,18 +528,18 @@ namespace database
 
             return query.ExecuteQuery<int>((reader) => {
 
-                JObject details = new JObject();
+                int result = -1;
 
                 while (reader.Read()) {
 
                     if (!reader.IsDBNull(0)) {
 
-                        details["Output"] = reader.GetInt32(0);
+                        result = reader.GetInt32(0);
                     }
                 }
 
-                return details;
-            });
+                return (result);
+            },true);
 
         }
 

@@ -435,6 +435,22 @@ namespace crm
         }
 
 
+        public static Task DeleteTransfer(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+            var args = ctx.Parse();
+
+            int details = database.Games.DeleteTransfer(args);
+
+            return ctx.JSON(details);
+
+        }
+
+
         public class MyArray
         {
             public int coin { get; set; }

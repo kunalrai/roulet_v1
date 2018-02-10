@@ -71,63 +71,150 @@ Create TABLE [dbo].DrawDetails(
 GO
 
 
---Select GetUtcDate()
+if exists(select * from sys.objects where type = 'p' and name ='savetransferables')
+begin
+drop procedure savetransferables
+end
 
-----select * from games
---truncate table drawdetails
---select * from drawdetails
---select CONVERT (date, GETutcDATE()) 
 
---Select Row_Number() over(order by drawtime desc) SrNo, userid , gameid,drawno,drawtime from DrawDetails where DrawTime   >=  CONVERT (date, GETutcDATE()) 
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE savetransferables
+	-- Add the parameters for the stored procedure here
+	@gameid nvarchar(36),
+	@from_member_id nvarchar(36), 
+	
+	@to_member_id nvarchar(8),
+	@amount int
+AS
+BEGIN
+	-- SET NOCOUNT ON added to prevent extra result sets from
+	-- interfering with SELECT statements.
+	SET NOCOUNT ON;
 
-----select * from users where id  ='5B56412A-B1C4-4177-B6CE-BFAE40968594'
-
---select * from games
-
---select * from Users where id ='5b56412a-b1c4-4177-b6ce-bfae40968594'
-
---select * from Users where main = '19F83DE7-609E-41B8-A7E8-47CF85FD2FD7'
+    -- Insert statements for procedure here
+	if exists( select 1 from (
+                         select * from Users 
+                         where main = (select main from users where id =@from_member_id )
+                         and   id !=@from_member_id
+                          or 
  
- if exists( select 1 from (
- select * from Users 
- where main = (select main from users where id ='5b56412a-b1c4-4177-b6ce-bfae40968594' )
- and   id !='5b56412a-b1c4-4177-b6ce-bfae40968594'
-  or 
+                         id = (select main from users where id =@from_member_id)
+
+
+                         )
+                          as t
+                         where email = @to_member_id
+                         )
+
+                         begin
+                                
+                                
+                                INSERT INTO [dbo].[Transferable]([id],gameId,[from_member_id],to_member_id,[amount],
+                                                     [Transfered_on],IsCancelled,IsReceived)
+                                              VALUES(NEWID(),@gameid,@from_member_id,(select id from users where email = @to_member_id), @amount, GetUtcDate(),0,0)
+
+                                Update Users 
+                                Set PointUser = PointUser - @amount
+                                where id = @from_member_id
+                                
+                                Select 1 as Output
+                         end
+                         else
+                             begin
+                               select 0 as Output
+                             end
+
+END
+GO
+
+if exists(select * from sys.objects where type = 'TF' and name ='SplitString')
+begin
+ drop function SplitString
+end
+go
+CREATE FUNCTION SplitString
+(    
+      @Input NVARCHAR(MAX),
+      @Character CHAR(1)
+)
+RETURNS @Output TABLE (
+      Item NVARCHAR(1000)
+)
+AS
+BEGIN
+      DECLARE @StartIndex INT, @EndIndex INT
  
- id = (select main from users where id ='5b56412a-b1c4-4177-b6ce-bfae40968594')
-
-
- )
-  as t
- where id = '2EC105EE-4ADF-43F9-9A07-E4E15DBC7969'
- )
-
- begin
-    select 1
- end
- else
- begin
-   select 0
- end
-
-
---update users
---set pointuser= 100
---where id ='5b56412a-b1c4-4177-b6ce-bfae40968594'
-
---select * from Transferable
-
---insert into Transferable(id,from_member_id,gameId,to_member_id,amount,Transfered_on,IsCancelled,IsReceived) values(newid(),'5b56412a-b1c4-4177-b6ce-bfae40968594',
---'07FE02E9-5BA8-4BD1-8F72-B1DD4336418C','2EC105EE-4ADF-43F9-9A07-E4E15DBC7969',100,GETUTCDATE(),0,0)
+      SET @StartIndex = 1
+      IF SUBSTRING(@Input, LEN(@Input) - 1, LEN(@Input)) <> @Character
+      BEGIN
+            SET @Input = @Input + @Character
+      END
+ 
+      WHILE CHARINDEX(@Character, @Input) > 0
+      BEGIN
+            SET @EndIndex = CHARINDEX(@Character, @Input)
+           
+            INSERT INTO @Output(Item)
+            SELECT SUBSTRING(@Input, @StartIndex, @EndIndex - 1)
+           
+            SET @Input = SUBSTRING(@Input, @EndIndex + 1, LEN(@Input))
+      END
+ 
+      RETURN
+END
+GO
 
 
 
-Select  [id],[from_member_id],(select email from users where id = to_member_id) as to_member_id,[amount],
-        [Transfered_on]
-from Transferable 
-where from_member_id   =  '5b56412a-b1c4-4177-b6ce-bfae40968594'
-and gameid = '07FE02E9-5BA8-4BD1-8F72-B1DD4336418C'
-and IsCancelled = 0 and IsReceived =0 
 
 
 
+if exists(select * from sys.objects where type = 'p' and name ='DeleteTransferables')
+begin
+drop procedure DeleteTransferables
+end
+
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- =============================================
+-- Author:		<Author,,Name>
+-- Create date: <Create Date,,>
+-- Description:	<Description,,>
+-- =============================================
+CREATE PROCEDURE DeleteTransferables
+	-- Add the parameters for the stored procedure here
+	  @from_member_id nvarchar(36),
+	  @gameid nvarchar(36),
+	  @ids nvarchar(max)
+	
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+	declare @amount int
+    select @amount = sum(amount) 
+	from Transferable
+	where id in(SELECT Item	FROM dbo.SplitString( @ids, ',') )
+	and from_member_id =@from_member_id and gameId = @gameid
+	group by from_member_id
+
+	Update users
+	set PointUser = PointUser+ isnull(@amount,0)
+	where id = @from_member_id
+
+	
+	delete Transferable
+	where id in (SELECT Item	FROM dbo.SplitString( @ids, ',') )
+	
+END
+GO

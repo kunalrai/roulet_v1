@@ -189,6 +189,10 @@ public partial class _Owin
         {
             handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.GetTransferable); });
         });
+        host.MapAndLog("/games/canceltransfer", (handler) =>
+        {
+            handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, crm.Games.DeleteTransfer); });
+        });
     }
 
     static void UseLogs(IAppBuilder host)

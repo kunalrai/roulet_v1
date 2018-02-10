@@ -22,7 +22,7 @@
     <input type="hidden" id="userid" value="@userid" />
     <label   >Current Balance:</label>
     <label id="pointbalance" name="pointbalance" ></label>
-
+  
     <div class="solidborder">
      <div class="headingtop"><span class="subheading">Manage My Points</span> </div>  
         <div class="table-container" >
@@ -78,9 +78,9 @@
                     </table>
                 </div>
                 <div class="table-footer">
-                    <input type="checkbox" />
+                    <input type="checkbox" id="selectallT"/>
                     <span>Select All</span>
-                    <button style="float:right" class="btn btn-primary">Cancel</button>
+                    <button style="float:right" class="btn btn-primary" id="cancelTransfer">Cancel</button>
 
                 </div>
             </div>
@@ -94,11 +94,11 @@
                 <form class="cmxform" id="form1">
                     <div class="">
                         <label for="toaccountno" class="control-label visible-ie8 visible-ie9" >To Account No</label>
-                        <input type="text" name="toaccountno" id="toaccountno" class="form-control form-control-solid placeholder-no-fix" required/>
+                        <input type="text" name="toaccountno" id="toaccountno" autocomplete="off" class="form-control form-control-solid placeholder-no-fix" required/>
                     </div>
                     <div class="">
                         <label for="pin" class="control-label visible-ie8 visible-ie9" >Your Pin</label>
-                        <input type="text" name="pin" id="pin" class="form-control form-control-solid placeholder-no-fix" required/>
+                        <input type="password" autocomplete="off" name="pin" id="pin" class="form-control form-control-solid placeholder-no-fix" required/>
                     </div>
                     <div class="">
                         <label for="amount" class="control-label visible-ie8 visible-ie9">Amount</label>

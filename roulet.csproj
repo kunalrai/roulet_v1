@@ -2656,6 +2656,7 @@
     <Content Include="www\assets\pages\media\works\img6.jpg" />
     <Content Include="www\css\bootstrap.min.css" />
     <Content Include="www\css\custom.css" />
+    <Content Include="www\css\managemypoints.css" />
     <Content Include="www\css\multiple-select.png" />
     <Content Include="www\css\style.css" />
     <Content Include="www\i\ajax-loading.gif" />
