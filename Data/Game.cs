@@ -377,27 +377,7 @@ namespace database
             });
         }
 
-        internal static int DeleteTransfer(JObject args)
-        {
-            Guid from_member_id = Guid.Parse(args.Value<string>("from_member_id"));
-
-            string ids = args.Value<string>("ids");
-
-            string gameid = args.Value<string>("gameid");
-
-            SQL query = @"
-
-               exec DeleteTransferables @from_member_id,@gameid,@ids
-                
-            ";
-            query.Parameters.Add("from_member_id", from_member_id);
-
-            query.Parameters.Add("gameid", gameid);
-
-            query.Parameters.Add("ids", ids);
-
-            return query.Execute(true);
-        }
+      
 
         internal static void UpdateWiningPoints(int totalamount, string user_id)
         {
@@ -551,14 +531,14 @@ namespace database
             SQL query = @"
                         
                         
-                         select  [id],[from_member_id],
+                         select  [id],(select email from users where id = from_member_id) as [from_member_id],
 
                         (select email from users where id = to_member_id) as to_member_id,[amount],
                                   [Transfered_on]
                           from Transferable 
                           where from_member_id   =  @from_member_id
                             and gameid = @gameid
-                          and IsCancelled = 0 and IsReceived =0 
+                          
                    
             ";
 
@@ -578,6 +558,11 @@ namespace database
                     if (!reader.IsDBNull(0))
                     {
                         details["id"] = reader.GetGuid(0);
+                    }
+
+                    if (!reader.IsDBNull(1))
+                    {
+                        details["from_member_id"] = reader.GetString(1);
                     }
 
                     if (!reader.IsDBNull(2))
@@ -605,6 +590,116 @@ namespace database
             });
         }
 
+        internal static int DeleteTransfer(JObject args)
+        {
+            Guid from_member_id = Guid.Parse(args.Value<string>("from_member_id"));
+
+            string ids = args.Value<string>("ids");
+
+            string gameid = args.Value<string>("gameid");
+
+            SQL query = @"
+
+               exec DeleteTransferables @from_member_id,@gameid,@ids
+                
+            ";
+            query.Parameters.Add("from_member_id", from_member_id);
+
+            query.Parameters.Add("gameid", gameid);
+
+            query.Parameters.Add("ids", ids);
+
+            return query.Execute(true);
+        }
+
+        internal static JArray GetRecievables(string to_member_id, string gameid)
+        {
+            var now = DateTime.UtcNow;
+
+
+            SQL query = @"
+                        
+                        
+                         select  [id],(select email from users where id = from_member_id) as [from_member_id],
+
+                        (select email from users where id = to_member_id) as to_member_id,[amount],
+                                  [Transfered_on]
+                          from Transferable 
+                          where to_member_id   =  @to_member_id
+                            and gameid = @gameid
+                          
+                   
+            ";
+
+            query.Parameters.Add("gameid", gameid);
+            query.Parameters.Add("to_member_id", to_member_id);
+
+
+            return query.ExecuteQuery<JArray>((reader) => {
+
+                JArray list = new JArray();
+
+                while (reader.Read())
+                {
+
+                    JObject details = new JObject();
+
+                    if (!reader.IsDBNull(0))
+                    {
+                        details["id"] = reader.GetGuid(0);
+                    }
+
+                    if (!reader.IsDBNull(1))
+                    {
+                        details["from_member_id"] = reader.GetString(1);
+                    }
+
+                    if (!reader.IsDBNull(2))
+                    {
+                        details["to_member_id"] = reader.GetString(2);
+                    }
+                    if (!reader.IsDBNull(3))
+                    {
+                        details["amount"] = reader.GetInt32(3);
+                    }
+
+                    if (!reader.IsDBNull(4))
+                    {
+                        var datetimedata = reader.GetDateTime(4);
+                        details["Transfered_on"] = datetimedata.ToShortDateString() + " " + datetimedata.AddMinutes(330).ToLongTimeString();
+                    }
+
+
+                    list.Add(details);
+
+                }
+
+                return list;
+
+            });
+        }
+
+        internal static int ReceiveTransferredPoints(JObject args)
+        {
+            Guid to_member_id = Guid.Parse(args.Value<string>("to_member_id"));
+
+            string ids = args.Value<string>("ids");
+
+            string gameid = args.Value<string>("gameid");
+
+            SQL query = @"
+
+               exec ReceiveTransferredPoints @to_member_id,@gameid,@ids
+                
+            ";
+            query.Parameters.Add("to_member_id", to_member_id);
+
+            query.Parameters.Add("gameid", gameid);
+
+            query.Parameters.Add("ids", ids);
+
+            return query.Execute(true);
+        }
 
         public static int UnixTimeNow()
         {

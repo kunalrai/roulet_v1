@@ -61,6 +61,8 @@
     <!-- BEGIN PAGE LEVEL STYLES -->
     <link href="~/www/css/custom.css" rel="stylesheet" type="text/css" />
     <link rel="shortcut icon" href="~/www/i/favicon.ico" />
+
+    @RenderSection("Styles", false)
 </head>
 <!-- END HEAD -->
 
@@ -197,6 +199,15 @@
                             <span class="arrow open"></span>
                         </a>
                     </li>
+
+                    <li class="nav-item   @{if(controllerName == "roulet" && actionName =="managemypoints" ) { @activeCss; } }">
+                        <a href="/roulet/managepoints/" class="nav-link nav-toggle">
+                            <i class="icon-shield"></i>
+                            <span class="title">Manage My Points</span>
+                            <span class="selected"></span>
+                            <span class="arrow open"></span>
+                        </a>
+                    </li>
                     <li class="nav-item   @{if(controllerName == "logs") { @activeCss; } }">
                         <a href="/logs/index/" class="nav-link nav-toggle">
                             <i class="icon-trophy"></i>
@@ -323,7 +334,7 @@
         }
 
         <!-- END PAGE LEVEL SCRIPTS -->
-
+    @RenderSection("Scripts", false)
 
 </body>
 

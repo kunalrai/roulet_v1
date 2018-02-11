@@ -1,12 +1,19 @@
 ﻿$.main = {
     gameid: '07FE02E9-5BA8-4BD1-8F72-B1DD4336418C',
     userid: $("#userid").val(),
-    selectedTransferables:[]
+    selectedTransferables: [],
+    selectedreceivables:[],
 }
+
+
+
+
 $(document).ready(function () {
 
-    Main.init();
-    Main.getBalance();
+   Tranferables.init();
+    User.getBalance();
+
+    Receivables.init();
     
     $("#tRefresh").click(
         (e) => {
@@ -14,7 +21,19 @@ $(document).ready(function () {
             e.preventDefault();
 
             console.log("refresh");
-            Main.reloadTable();
+            Tranferables.reloadTable();
+
+        }
+
+    );
+
+    $("#btnRecRefresh").click(
+        (e) => {
+
+            e.preventDefault();
+
+            console.log("refresh");
+            Receivables.reloadTable();
 
         }
 
@@ -23,36 +42,30 @@ $(document).ready(function () {
 
     $("#selectallT").click(function () {
 
-            $(this).checked = !this.checked;
+        $.main.selectedTransferables = CommonFunctions.selectAll('transferables', $.main.selectedTransferables);
 
-            if (!$(this).checked) {
-
-
-                $.main.selectedTransferables = [];
-            }
-
-            $('#transferables tbody tr td input[type="checkbox"]').each(
-                function (a, chkbox) {
-                    chkbox.checked = !chkbox.checked
-
-                    if (chkbox.checked) {
-
-                        $.main.selectedTransferables.push(chkbox.value);
-
-                    }
-
-                }
-            )
-
+        console.log($.main.selectedTransferables);
     });
 
+    $("#selectAllR").click(function () {
 
-    $("#cancelTransfer").click(() => Main.oncancel());
+        $.main.selectedreceivables = CommonFunctions.selectAll('receivables', $.main.selectedreceivables);
+
+        console.log($.main.selectedreceivables);
+    });
+    
+
+    $("#cancelTransfer").click(() => Tranferables.oncancel());
+
+
+    $("#receive").click(() => Receivables.onreceive());
+
+    $("#reject").click(() => Receivables.onreject());
 
     $.validator.setDefaults({
         submitHandler: function (e) {
             
-            Main.ontransferclick(e);
+            Tranferables.ontransferclick(e);
         }
     });    
     $.validator.methods.equalTo= function( value, element, param) {
@@ -68,22 +81,108 @@ $(document).ready(function () {
         return value == param;
     }
 
-    $('#transferables tbody').on('click', 'tr', function () {
 
-        $(this).toggleClass('selected');
+
+    CommonFunctions.rowClick('transferables', $.main.selectedTransferables)
+
+    CommonFunctions.rowClick('receivables', $.main.selectedreceivables)
+});
+
+var CommonFunctions = CommonFunctions || {};
+
+CommonFunctions.rowClick = function (table_name,main_arr) {
+
+    $('#' + table_name+' tbody').on('click', 'tr', function () {
+
 
         var checkbox = $(this)[0].firstChild.firstChild;
 
         checkbox.checked = !checkbox.checked;
 
 
-        $.main.selectedTransferables.push(checkbox.value);
+        $(this).toggleClass("selected", checkbox.checked );
+
+
+        if (checkbox.checked && !main_arr.includes(checkbox.value)) {
+
+           
+            main_arr.push(checkbox.value);
+
+
+        }
+        else if (!checkbox.checked) {
+
+               main_arr.splice(main_arr.findIndex((x) => x == checkbox.value), 1);
+
+        }
+
+
+        console.log(main_arr);
+  
+
+       
 
     });
-    
-});
+}
 
-var Main = function (data) {
+CommonFunctions.selectAll = function (table_name,main_arr) {
+
+    $(this).checked = !this.checked;
+
+    if (!$(this).checked) {
+
+       main_arr = [];
+    }
+
+    $('#' + table_name + ' tbody tr td input[type="checkbox"]').each(
+        function (a, chkbox) {
+
+            chkbox.checked = !chkbox.checked
+
+            if (chkbox.checked) {
+
+                main_arr.push(chkbox.value);
+
+            }
+
+        }
+
+    );
+    console.log(main_arr);
+
+    return main_arr;
+}
+
+var User = User ||
+    {};
+
+User.getBalance= function () {
+    var data = {
+        id: $("#userid").val()
+    }
+    $.ajax({
+        type: "POST",
+        url: "/user/get/",
+        data: JSON.stringify(data),
+        success: function (response) {
+            if (response) {
+
+                $("#pointbalance").text(response.pointuser);
+            }
+
+        }
+    }).then(function (d) {
+        console.log(d.pin);
+
+        $("#form1").validate(Tranferables.validate(d.pointuser, d.pin));
+
+    });
+
+
+}
+
+
+var Tranferables = function (data) {
     var grid = null;
     
     var url = '/games/gettransferable?userid='+data.userid+'&gameid=' + data.gameid;
@@ -109,7 +208,10 @@ var Main = function (data) {
                                 return '<input type="checkbox" class="btn btn-default" id="' + row.id + '" value="' +row.id+  '" />';
                             }
                         },
-                        { "data": "to_member_id" },
+                        {
+                            "title":"To Member Id",
+                            "data": "to_member_id"
+                        },
                         { "data": "amount" },
 
 
@@ -149,30 +251,7 @@ var Main = function (data) {
         },
 
         
-        getBalance: function () {
-            var data = {
-                id: $("#userid").val()
-            }
-            $.ajax({
-                type: "POST",
-                url: "/user/get/",
-                data: JSON.stringify(data),
-                success: function (response) {
-                    if (response) {
-
-                        $("#pointbalance").text(response.pointuser);
-                    }
-
-                }
-            }).then(function (d) {
-                console.log(d.pin);
-                
-                $("#form1").validate(Main.validate(d.pointuser,d.pin)); 
-
-                });
-
-
-        },
+       
        
         validate: function (bal,pin) {
 
@@ -192,7 +271,9 @@ var Main = function (data) {
                     },
                     amount: {
                         required: " (required)",
-                        number: "  Please enter number only"
+                        number: "  Please enter number only",
+                        min: (bal == 0) ? "  Balance Insufficient" : "  Please enter minimum 1 points",
+                        range: (bal == 0) ? "  Balance Insufficient" : "  Please enter a value between 0 and " + bal+".",
                     },
                     pin: {
                         required: " (required)",
@@ -205,7 +286,7 @@ var Main = function (data) {
                         required: true,
                         number: true,
                         range: [0, bal],
-                        
+                        min:1
                     },
                     pin: {
                         equalTo: pin
@@ -235,9 +316,11 @@ var Main = function (data) {
                 .then(function (d) {
 
                     console.log(d);
-                    Main.reloadTable();
+                    Tranferables.reloadTable();
 
-                    Main.getBalance();
+                    User.getBalance();
+
+                   // window.location.reload();
                 });
 
             }
@@ -269,9 +352,9 @@ var Main = function (data) {
                 })
                     .then(function (d) {
 
-                        Main.reloadTable();
+                        Tranferables.reloadTable();
 
-                        Main.getBalance();
+                        User.getBalance();
                     });
 
             }
@@ -285,3 +368,98 @@ var Main = function (data) {
     }
 
 }($.main);
+
+
+
+var Receivables = function (data) {
+    var grid = null;
+
+    var url = '/games/getreceivables?userid=' + data.userid + '&gameid=' + data.gameid;
+    var responseUsers = [];
+
+    return {
+        init: function () {
+            grid = $('#receivables').DataTable({
+                "paging": false,
+                "ordering": false,
+                "info": false,
+                loadingMessage: "Loading...",
+                searching: false,
+                ajax: {
+
+                    url: url,
+                    data: null,
+                    dataSrc: function (response) {
+
+                        console.log(response)
+
+                        responseUsers = response.data;
+
+                        return response;
+
+                    }
+                }, "columns": [
+                    {
+
+                        "data": "null",
+                        render: (data, type, row) => {
+
+                            return '<input type="checkbox" class="btn btn-default" id="' + row.id + '" value="' + row.id + '" />';
+                        }
+                    },
+                    {
+
+                        "data": "from_member_id"
+                    },
+                    { "data": "amount" },
+
+
+                ],
+            });
+
+        },
+
+        reloadTable: function () {
+
+            grid.ajax.url(url).load();
+
+        },
+
+ 
+        onreceive: function () {
+
+            try {
+
+                var data = {
+                    to_member_id: $.main.userid,
+                    gameid: $.main.gameid,
+                    ids: $.main.selectedreceivables.join(','),
+                }
+
+                $.ajax({
+                    type: "POST",
+                    url: " /games/receivetransferred",
+                    data: JSON.stringify(data),
+
+                })
+                    .then(function (d) {
+
+                        Receivables.reloadTable();
+
+                        User.getBalance();
+                    });
+
+            }
+            catch (e) {
+
+                console.log(e);
+
+            }
+        },
+
+        onreject: function () { }
+
+    }
+
+}($.main);
+

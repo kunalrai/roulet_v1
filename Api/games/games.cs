@@ -434,6 +434,22 @@ namespace crm
 
         }
 
+        public static Task GetReceivables(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+            string userid = Convert.ToString(ctx.Parametr("userid"));
+            string gameid = Convert.ToString(ctx.Parametr("gameid"));
+
+            JArray details = database.Games.GetRecievables(userid, gameid);
+
+            return ctx.JSON(details);
+
+        }
+
 
         public static Task DeleteTransfer(IOwinContext ctx)
         {
@@ -445,6 +461,22 @@ namespace crm
             var args = ctx.Parse();
 
             int details = database.Games.DeleteTransfer(args);
+
+            return ctx.JSON(details);
+
+        }
+
+
+        public static Task ReceiveTransferredPoints(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+            var args = ctx.Parse();
+
+            int details = database.Games.ReceiveTransferredPoints(args);
 
             return ctx.JSON(details);
 

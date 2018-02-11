@@ -1,7 +1,10 @@
 ﻿@{
-    Layout = "~/Views/Roulet/_index.cshtml";
+
+
+
     Newtonsoft.Json.Linq.JObject user = System.Web.Security.Authentication.UserFromCookie();
     string date = DateTime.Now.Ticks.ToString();
+    int current_user_access = user.Value<int>("access_level");
 
     string name = String.Empty;
     string userid = string.Empty;
@@ -11,6 +14,15 @@
         name = user.Value<string>("name");
         userid = user.Value<string>("id");
     }
+    if (current_user_access == 0)
+    {
+        Layout = "~/Views/Roulet/_index.cshtml";
+    }
+    else {
+
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
 }
 
 @section Styles{
@@ -30,15 +42,15 @@
             <div class="myheading">
                 <div class="tablesubheading">
                     <span>Receivables</span>
-                    <button style="float:right"><i class="fa fa-refresh"></i></button>
+                    <button style="float:right" id="btnRecRefresh"><i class="fa fa-refresh"></i></button>
                 </div>
                 <div style="border:1px solid #DDDDDD">
-                    <table class="table table-striped table-bordered table-hover table-checkable" id="Receivables">
+                    <table class="table table-striped table-bordered table-hover table-checkable" id="receivables">
                         <thead>
 
                             <tr role="row" class="heading">
                                 <th width="20vw"> Select</th>
-                                <th width="20vw">From MemberID</th>
+                                <th width="20vw">From Member ID</th>
                                 <th width="20vw">Amount</th>
                                
 
@@ -48,10 +60,11 @@
                     </table>
                 </div>
                 <div class="table-footer">
-                    <input type="checkbox" />
-                    <span>Select All</span>
-                    <button style="float:right" class="btn btn-default btn-primary">Receive</button>
-                    <button style="float:right" class="btn btn-primary">Reject</button>
+                    <input type="checkbox" id="selectAllR"/>
+                    <label for="selectAllR">Select All</label>
+
+                    <button  class="btn btn-default btn-primary" id="receive">Receive</button>
+                    <button class="btn btn-primary btn-danger" id="reject">Reject</button>
 
                 </div>
             </div>
@@ -68,7 +81,7 @@
 
                             <tr role="row" class="heading">
                                 <th width="20vw"> Select</th>
-                                <th width="20vw">From MemberID</th>
+                                <th width="20vw">To Member Id</th>
                                 <th width="20vw">Amount</th>
                                 
 
@@ -79,7 +92,7 @@
                 </div>
                 <div class="table-footer">
                     <input type="checkbox" id="selectallT"/>
-                    <span>Select All</span>
+                    <label for="selectallT">Select All</label>
                     <button style="float:right" class="btn btn-primary" id="cancelTransfer">Cancel</button>
 
                 </div>
@@ -93,15 +106,15 @@
             <div class="">
                 <form class="cmxform" id="form1">
                     <div class="">
-                        <label for="toaccountno" class="control-label visible-ie8 visible-ie9" >To Account No</label>
+                        <label for="toaccountno" class="control-label" >To Account No</label>
                         <input type="text" name="toaccountno" id="toaccountno" autocomplete="off" class="form-control form-control-solid placeholder-no-fix" required/>
                     </div>
                     <div class="">
-                        <label for="pin" class="control-label visible-ie8 visible-ie9" >Your Pin</label>
+                        <label for="pin" class="control-label" >Your Pin</label>
                         <input type="password" autocomplete="off" name="pin" id="pin" class="form-control form-control-solid placeholder-no-fix" required/>
                     </div>
                     <div class="">
-                        <label for="amount" class="control-label visible-ie8 visible-ie9">Amount</label>
+                        <label for="amount" class="control-label">Amount</label>
                         <input type="text" name="amount" id="amount" class="form-control form-control-solid placeholder-no-fix" required/>
                     </div>
                     <div class="centerbtn">

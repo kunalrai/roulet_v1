@@ -65,4 +65,8 @@
 }
 .cmxform span.error {
     color: red;
+}
+
+#receivables {
+    width:100% !important;
 }
