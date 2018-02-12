@@ -221,7 +221,37 @@ namespace Auth
             return ctx.Error();
 
         }
-        
+
+        public static Task ChangePin(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+
+            var args = ctx.Parse();
+
+            if (Validator.GetGuid(args["id"]) == null)
+            {
+                return ctx.Missing("id");
+            }
+            if (args["newpin"] == null)
+            {
+                return ctx.Missing("newpin");
+            }
+
+            JObject response = database.Users.ChangePin(args);
+
+            if (response != null)
+            {
+                return ctx.JSON(response);
+            }
+
+            return ctx.Error();
+
+        }
+
 
         public static string CreatePassword()
         {

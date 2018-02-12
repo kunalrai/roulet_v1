@@ -193,7 +193,38 @@ namespace database
             return null;
 
         }
-        
+
+        public static JObject ChangePin(JObject args)
+        {
+
+            string pin = args.Value<string>("newpin");
+
+
+            SQL query = @"
+               UPDATE [dbo].[users] 
+               SET [pin] = @pin
+               WHERE [id] = @id
+            ";
+
+            query.Parameters.Add("id", Guid.Parse(args.Value<string>("id")));
+            query.Parameters.Add("pin", pin);
+
+            int result = query.Execute(true);
+
+            if (result > 0)
+            {
+                JObject response = new JObject();
+
+                response["pin"] = pin;
+
+                return response;
+
+            }
+
+            return null;
+
+        }
+
 
         public static JObject List(int ? level) {
 

@@ -2704,6 +2704,7 @@
     <Content Include="www\i\sidebar_toggler_icon_light2.png" />
     <Content Include="www\js\app.js" />
     <Content Include="www\js\changepassword.js" />
+    <Content Include="www\js\changepin.js" />
     <Content Include="www\js\changepinpassword.js" />
     <Content Include="www\js\cookie.js" />
     <Content Include="www\js\filter.js" />

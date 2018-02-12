@@ -98,6 +98,11 @@ public partial class _Owin
             handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, Auth.Users.ChangePassword); });
         });
 
+        host.MapAndLog("/auth/changepin", (handler) =>
+        {
+            handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, Auth.Users.ChangePin); });
+        });
+
         host.MapAndLog("/auth/register", (handler) =>
         {
             handler.Run((IOwinContext ctx) => { return _Owin.CatchAll(ctx, Auth.Users.Register); });
