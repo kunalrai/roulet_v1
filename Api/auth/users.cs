@@ -192,6 +192,37 @@ namespace Auth
 
         }
 
+        public static Task ChangePassword(IOwinContext ctx)
+        {
+
+            if (!Authentication.Check(ctx))
+            {
+                return ctx.Error(403);
+            }
+
+            var args = ctx.Parse();
+
+            if (Validator.GetGuid(args["id"]) == null)
+            {
+                return ctx.Missing("id");
+            }
+            if (args["newpwd"] == null)
+            {
+                return ctx.Missing("newpwd");
+            }
+
+            JObject response = database.Users.ChangePassword(args);
+
+            if (response != null)
+            {
+                return ctx.JSON(response);
+            }
+
+            return ctx.Error();
+
+        }
+        
+
         public static string CreatePassword()
         {
             string path = Path.GetRandomFileName();

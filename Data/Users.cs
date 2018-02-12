@@ -163,6 +163,38 @@ namespace database
 
         }
 
+        public static JObject ChangePassword(JObject args)
+        {
+
+            string password = args.Value<string>("newpwd");
+            
+
+            SQL query = @"
+               UPDATE [dbo].[users] 
+               SET [password] = @password
+               WHERE [id] = @id
+            ";
+
+            query.Parameters.Add("id", Guid.Parse(args.Value<string>("id")));
+            query.Parameters.Add("password", password);
+
+            int result = query.Execute(true);
+
+            if (result > 0)
+            {
+                JObject response = new JObject();
+
+                response["password"] = password;
+
+                return response;
+
+            }
+
+            return null;
+
+        }
+        
+
         public static JObject List(int ? level) {
 
             SQL query = @"

@@ -17,6 +17,9 @@
 
 <nav class="navbar navbar-expand-md fixed-top navbar-dark bg-dark">
     <div class="container">
+        <button class="btn btn-link bd-search-docs-toggle d-md-none p-0 ml-3 collapsed " id="btn-toggle" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="bd-docs-nav" aria-expanded="false" aria-label="Toggle docs navigation">
+                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30" width="30" height="30" focusable="false"><title>Menu</title><path stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-miterlimit="10" d="M4 7h22M4 15h22M4 23h22"></path></svg>
+        </button>
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
             <div class="row">
                 <div class="col-md-1">
@@ -26,17 +29,17 @@
                 </div>
                 <div class="col-md-10">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item"><a href="#">About us</a></li>
-                        <li class="nav-item"><a href="@Url.Action("managepoints","roulet", null)">Manage My Points</a></li>
-                        <li class="nav-item"><a href="@Url.Action("changepassword","roulet", new { userid = userid })">Change Password</a></li>
-                        <li class="nav-item"><a href="@Url.Action("changepin","roulet", new { userid = userid })">Change Pin</a></li>
-                        <li class="nav-item"><a href="@Url.Action("DrawDetails","roulet", new { userid = userid })">Draw Details</a></li>
-                        <li class="nav-item"><a href="/roulet/index">Games</a></li>
-                        <li class="nav-item"><a href="/users/login">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link " href="#">About us</a></li>
+                        <li class="nav-item"><a class="nav-link " href="@Url.Action("managepoints","roulet", null)">Manage My Points</a></li>
+                        <li class="nav-item"><a class="nav-link " href="@Url.Action("changepassword","roulet", null)">Change Password</a></li>
+                        <li class="nav-item"><a class="nav-link " href="@Url.Action("changepin","roulet", null)">Change Pin</a></li>
+                        <li class="nav-item"><a class="nav-link " href="@Url.Action("DrawDetails","roulet",null)">Draw Details</a></li>
+                        <li class="nav-item"><a class="nav-link " href="/roulet/index">Games</a></li>
+                        <li class="nav-item"><a class="nav-link " href="/users/login">Logout</a></li>
 
                     </ul>
                 </div>
-                <div class="col-md-1 profile-column">
+                <div class="profile-column">
                     <div class="avatar">
                         <img src="~/www/i/photo1.jpg" alt="Alternate Text" />
                     </div>

@@ -857,7 +857,7 @@ h1{
   list-style: none;
 }
 .nav-item a{
-   padding: 20px 20px 20px 20px!important;
+   padding: 0px 20px 20px 20px!important;
    color: #fff;
 }
 .logo{
@@ -867,6 +867,7 @@ h1{
 .profile-column{
    text-align: center;
    padding-top: 10px;
+   line-height:10px;
 }
 .avatar{
   width: 40px;
@@ -879,9 +880,10 @@ h1{
   width: 100%;
   height: auto;
 }
-.profile{
-  display: block;
-  color: #fff;
+.profile {
+    display: block;
+    color: #fff;
+    margin: 10px 0px 0px 0px;
 }
 .bets {
     width: 55px;
@@ -961,4 +963,15 @@ h1{
     top: 630px;
     left: 0;
     margin: -8px 0px 0px 153px;
+}
+
+@media (max-width: 768px) {
+
+    #btn-toggle {
+        display:block!important;
+    }
+}
+
+#btn-toggle {
+    display: none;
 }
