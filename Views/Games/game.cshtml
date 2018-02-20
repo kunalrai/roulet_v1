@@ -2,8 +2,19 @@
 @{
     ViewBag.Title = "game";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    Newtonsoft.Json.Linq.JObject user = System.Web.Security.Authentication.UserFromCookie();
+    int current_user_access = user.Value<int>("access_level");
 }
 
+@if (current_user_access != 3)
+{
+
+
+
+
+}
+else
+{
 <div class="row">
     <div class="col-md-12 ">
         <div class="portlet box green" id="timer-box">
@@ -536,3 +547,4 @@
     </div>
 </div>
 
+}

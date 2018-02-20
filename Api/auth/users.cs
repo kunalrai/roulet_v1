@@ -302,5 +302,18 @@ namespace Auth
             return ctx.JSON(result);
 
         }
+
+    }
+
+    public enum AccessLevel {
+
+        Admin =3,
+
+        AreaManager = 2,
+
+        Main = 1,
+
+        User =0
+
     }
 }

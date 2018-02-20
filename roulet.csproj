@@ -2910,6 +2910,7 @@
     <Content Include="Views\Roulet\changepin.cshtml" />
     <Content Include="Views\Roulet\drawdetails.cshtml" />
     <Content Include="Views\Games\pinandpassword.cshtml" />
+    <Content Include="Views\Games\_accessdenied.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

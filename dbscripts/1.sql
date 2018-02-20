@@ -12,20 +12,7 @@ begin
  drop table Receivables
 
 end
-Create TABLE [dbo].Receivables(
-	[id] [uniqueidentifier] NOT NULL,
-	gameId [uniqueidentifier] NOT NULL,
-	from_member_id [uniqueidentifier] NOT NULL,
-	to_member_id [uniqueidentifier] NOT NULL,
-	[amount] [int] not NULL,
-	[received_on] datetime not NULL,
- CONSTRAINT [PK_Receivables] PRIMARY KEY CLUSTERED 
-(
-	[id] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
 
-GO
 
 if exists(select * from sys.objects where type = 'u' and name ='Transferable')
 begin
@@ -134,7 +121,7 @@ BEGIN
 	declare @amount int
     select @amount = sum(amount) 
 	from Transferable
-	where id in(SELECT Item	FROM dbo.SplitString( @ids, ',') )
+	where id in(SELECT Item	FROM SplitString( @ids, ',') )
 	and from_member_id =@from_member_id and gameId = @gameid
 	group by from_member_id
 
@@ -144,7 +131,7 @@ BEGIN
 
 	
 	delete Transferable
-	where id in (SELECT Item	FROM dbo.SplitString( @ids, ',') )
+	where id in (SELECT Item	FROM SplitString( @ids, ',') )
 	
 END
 GO
@@ -176,7 +163,7 @@ BEGIN
 	declare @amount int
     select @amount = sum(amount) 
 	from Transferable
-	where id in(SELECT Item	FROM dbo.SplitString( @ids, ',') )
+	where id in(SELECT Item	FROM SplitString( @ids, ',') )
 	and to_member_id =@to_member_id and gameId = @gameid
 	group by from_member_id
 
@@ -186,7 +173,7 @@ BEGIN
 
 	
 	delete Transferable
-	where id in (SELECT Item	FROM dbo.SplitString( @ids, ',') )
+	where id in (SELECT Item	FROM SplitString( @ids, ',') )
 	
 END
 GO
@@ -212,7 +199,7 @@ CREATE PROCEDURE savetransferables
 	@gameid nvarchar(36),
 	@from_member_id nvarchar(36), 
 	
-	@to_member_id nvarchar(8),
+	@to_member_id nvarchar(16),
 	@amount int
 AS
 BEGIN
@@ -221,19 +208,21 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	if exists( select 1 from (
-								 select * from Users 
-								 where (main = (select main from users where id =@from_member_id )
-								 and   id !=@from_member_id)
-								 or  email = @to_member_id 
-							 )
-                          as t
-                          
-                         ) and @amount  <= ( select pointuser from users where id = @from_member_id)
+	if exists( 
+	
+	   Select * from Users 
+	   Where id != @from_member_id and (main = (select main from users where id = @from_member_id)
+	    
+	   or id = (select id from users where email = @to_member_id))
+	  
+	
+	) and @amount  <= ( select pointuser from users where id = @from_member_id)
 
         begin
-                                
-                                
+         
+		 
+
+                      
             INSERT INTO [dbo].[Transferable]([id],gameId,[from_member_id],to_member_id,[amount],
                                     [Transfered_on])
                             VALUES(NEWID(),@gameid,@from_member_id,(select id from users where email = @to_member_id), @amount, GetUtcDate())

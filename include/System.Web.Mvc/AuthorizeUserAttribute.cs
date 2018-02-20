@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Routing;
 using Newtonsoft.Json.Linq;
+using Auth;
 
 namespace System.Web.Mvc
 {
@@ -70,9 +71,8 @@ namespace System.Web.Mvc
                     return true;
 
                 }
-                else if ((controller == "games") && (Convert.ToInt32(user_access_level) == 3 ||
-                   Convert.ToInt32(user_access_level) == 1 ||
-                   Convert.ToInt32(user_access_level) == 2))
+                else if ((controller == "games") && 
+                  (Convert.ToInt32(user_access_level) ==(int)AccessLevel.Admin))
                 {
 
                     return true;
@@ -95,6 +95,13 @@ namespace System.Web.Mvc
 
                    return true;
                 }
+
+                else if ((controller == "games" && action == "managepoints"))
+                {
+
+                    return true;
+                }
+
 
 
                 return false;
